@@ -109,3 +109,6 @@ def trends():
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
+    
+if platform.system() == "Windows":
+    pytesseract.pytesseract.tesseract_cmd = os.getenv("TESSERACT_PATH")

@@ -4,3 +4,4 @@ groq
 pillow
 pytesseract
 python-dotenv
+tesseract
