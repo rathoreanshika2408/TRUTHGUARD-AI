@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TruthGuard AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --white: #ffffff;
+  --bg: #F2F4F8;
+  --surface: #ffffff;
+  --border: #E4E8F0;
+  --text: #0D1117;
+  --muted: #6B7A99;
+  --red: #E63946;
+  --red-light: #FFF0F1;
+  --red-mid: #FFD6D8;
+  --amber: #FF9F1C;
+  --amber-light: #FFF7ED;
+  --green: #2EC4B6;
+  --green-light: #EDFAF9;
+  --blue: #3B82F6;
+  --blue-light: #EFF6FF;
+  --purple: #8B5CF6;
+  --purple-light: #F5F3FF;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+  --radius: 20px;
+  --radius-sm: 12px;
+}
+ 
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+h1,h2,h3,h4 { font-family: 'Sora', sans-serif; }
+ 
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+ 
+/* ── NAV ── */
+nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 68px;
+  position: sticky; top: 0; z-index: 200;
+  box-shadow: var(--shadow-sm);
+}
+.nav-brand { display: flex; align-items: center; gap: 12px; }
+.nav-logo {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, var(--red) 0%, #C1121F 100%);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px rgba(230,57,70,0.35);
+}
+.nav-logo svg { width: 22px; height: 22px; fill: white; }
+.nav-name { font-family: 'Sora', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
+.nav-name span { color: var(--red); }
+.nav-pill { background: var(--red-light); color: var(--red); font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 20px; letter-spacing: 1px; border: 1px solid var(--red-mid); margin-left: 4px; }
+.nav-tabs { display: flex; gap: 4px; }
+.tab-btn {
+  background: none; border: none; color: var(--muted);
+  padding: 8px 18px; border-radius: 10px;
+  cursor: pointer; font-size: .88rem; font-weight: 500;
+  transition: all .2s; font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; gap: 6px;
+}
+.tab-btn.active { background: var(--red-light); color: var(--red); font-weight: 600; }
+.tab-btn:hover:not(.active) { background: var(--bg); color: var(--text); }
+ 
+/* ── LIVE TICKER ── */
+.ticker {
+  background: var(--text);
+  padding: 9px 2rem;
+  display: flex; align-items: center; gap: 24px;
+  font-size: 11px; color: #9CA3AF; overflow: hidden;
+}
+.ticker-live { display: flex; align-items: center; gap: 6px; }
+.ticker-dot { width: 6px; height: 6px; background: var(--red); border-radius: 50%; animation: blink 1.5s infinite; flex-shrink: 0; }
+@keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(0.8)} }
+.ticker-text { color: #E5E7EB; font-weight: 500; font-size: 11px; }
+.ticker-text strong { color: #FF9F1C; font-weight: 700; }
+.ticker-sep { color: #374151; font-size: 14px; }
+ 
+/* ── HERO ── */
+.hero {
+  background: var(--white);
+  padding: 3rem 2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% -20%, rgba(230,57,70,0.06) 0%, transparent 70%);
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--red-light); color: var(--red);
+  font-size: .78rem; font-weight: 700; padding: 6px 16px;
+  border-radius: 20px; border: 1px solid var(--red-mid);
+  margin-bottom: 1.2rem; letter-spacing: .5px;
+}
+.hero h1 {
+  font-size: 2.4rem; font-weight: 800; color: var(--text);
+  letter-spacing: -1.5px; line-height: 1.1;
+  margin-bottom: .8rem;
+}
+.hero h1 span { color: var(--red); }
+.hero p { color: var(--muted); font-size: 1rem; max-width: 520px; margin: 0 auto 2rem; line-height: 1.7; }
+.hero-stats {
+  display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;
+}
+.hero-stat {
+  background: var(--bg); border-radius: var(--radius-sm);
+  padding: 14px 24px; border: 1px solid var(--border);
+}
+.hero-stat-num { font-family: 'Sora', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--red); }
+.hero-stat-label { font-size: .72rem; color: var(--muted); margin-top: 2px; font-weight: 500; }
+ 
+/* ── MAIN ── */
+.main { max-width: 1120px; margin: 0 auto; padding: 2rem 1.5rem; }
+.layout { display: grid; grid-template-columns: 1fr 300px; gap: 1.5rem; align-items: start; }
+.page { display: none; }
+.page.active { display: block; }
+ 
+/* ── CARDS ── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.2rem;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow .2s;
+}
+.card:hover { box-shadow: var(--shadow); }
+.card-tag {
+  font-size: .68rem; font-weight: 700; letter-spacing: 1.5px;
+  color: var(--red); text-transform: uppercase; margin-bottom: .6rem;
+  display: flex; align-items: center; gap: 6px;
+}
+.card-tag::before { content:''; display:inline-block; width:3px; height:12px; background:var(--red); border-radius:2px; }
+ 
+/* ── INPUT SECTION ── */
+.input-top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 1.2rem; }
+.input-icon-wrap {
+  width: 48px; height: 48px; flex-shrink: 0;
+  background: var(--red-light); border-radius: 14px;
+  display: flex; align-items: center; justify-content: center; font-size: 22px;
+}
+.input-heading { font-family: 'Sora', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.input-sub { font-size: .82rem; color: var(--muted); }
+textarea {
+  width: 100%; background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text);
+  padding: 1rem 1.1rem; font-size: .92rem; resize: vertical; min-height: 110px;
+  font-family: 'DM Sans', sans-serif; transition: all .2s; line-height: 1.6;
+}
+textarea:focus { outline: none; border-color: var(--red); background: var(--white); box-shadow: 0 0 0 3px rgba(230,57,70,0.08); }
+textarea::placeholder { color: #BCC5D6; }
+ 
+/* ── UPLOAD ── */
+.upload-zone {
+  border: 2px dashed var(--border); border-radius: var(--radius-sm);
+  padding: 1.2rem; text-align: center; cursor: pointer;
+  transition: all .25s; background: var(--bg); margin: 1rem 0;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.upload-zone:hover { border-color: var(--red); background: var(--red-light); }
+.upload-zone-icon { font-size: 28px; }
+.upload-zone-text { font-size: .85rem; font-weight: 600; color: var(--muted); }
+.upload-zone-sub { font-size: .74rem; color: #BCC5D6; }
+ 
+/* ── BUTTONS ── */
+.btn-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--red); color: white; border: none;
+  padding: 11px 26px; border-radius: 12px; font-size: .9rem; font-weight: 700;
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+  display: inline-flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 14px rgba(230,57,70,0.3);
+  transition: all .2s;
+}
+.btn-primary:hover { background: #C1121F; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(230,57,70,0.4); }
+.btn-primary:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-secondary {
+  background: var(--bg); color: var(--muted); border: 1.5px solid var(--border);
+  padding: 11px 20px; border-radius: 12px; font-size: .88rem; font-weight: 500;
+  cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .2s;
+}
+.btn-secondary:hover { background: var(--border); color: var(--text); }
+ 
+/* ── RESULT ── */
+.result-top {
+  display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+}
+.score-circle {
+  width: 90px; height: 90px; border-radius: 50%;
+  border: 6px solid var(--border);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all .5s;
+}
+.score-num { font-family: 'Sora', sans-serif; font-size: 1.8rem; font-weight: 800; line-height: 1; }
+.score-sub { font-size: .58rem; color: var(--muted); font-weight: 500; margin-top: 2px; }
+.verdict-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 16px; border-radius: 20px; font-weight: 700;
+  font-size: .78rem; letter-spacing: .5px; border: 1.5px solid;
+  font-family: 'Sora', sans-serif;
+}
+.verdict-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+ 
+/* ── TAGS ── */
+.tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: .6rem; }
+.tag {
+  padding: 5px 13px; border-radius: 20px; font-size: .74rem; font-weight: 600;
+  border: 1.5px solid; display: inline-flex; align-items: center; gap: 5px;
+}
+.tag-red { background: var(--red-light); color: #C1121F; border-color: var(--red-mid); }
+.tag-amber { background: var(--amber-light); color: #B45309; border-color: #FDE68A; }
+.tag-green { background: var(--green-light); color: #0D8A82; border-color: #A7F3D0; }
+ 
+/* ── RED FLAGS ── */
+.flag-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: #FFFBF0; border: 1.5px solid #FDE68A;
+  border-radius: 12px; padding: 11px 14px; margin-bottom: 8px;
+}
+.flag-emoji { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.flag-text { font-size: .83rem; color: #92400E; line-height: 1.5; }
+ 
+/* ── EXPLANATION BOXES ── */
+.explain-box {
+  background: #F8FAFF; border: 1.5px solid #E0E7FF;
+  border-radius: var(--radius-sm); padding: 1rem 1.1rem; margin-bottom: .8rem;
+}
+.explain-text { font-size: .88rem; color: #374151; line-height: 1.75; }
+.hindi-box {
+  background: #FFFBF5; border: 1.5px solid #FDE68A;
+  border-radius: var(--radius-sm); padding: 1rem 1.1rem;
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.hindi-text { font-size: .85rem; color: #92400E; line-height: 1.7; }
+ 
+/* ── ACTION BOX ── */
+.action-box {
+  background: var(--text); border-radius: var(--radius-sm);
+  padding: 1rem 1.2rem; display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;
+}
+.action-text { font-size: .88rem; color: #E5E7EB; line-height: 1.6; font-weight: 500; }
+ 
+/* ── SOURCE LINKS ── */
+.source-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--green-light); color: #0D8A82;
+  border: 1.5px solid #A7F3D0; padding: 6px 14px;
+  border-radius: 10px; font-size: .8rem; font-weight: 600;
+  margin: 4px; text-decoration: none; transition: all .2s;
+}
+.source-link:hover { background: #D1FAF7; }
+ 
+/* ── SIDEBAR ── */
+.sidebar-section { margin-bottom: 1.2rem; }
+.stat-row { margin-bottom: 12px; }
+.stat-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.stat-name { font-size: .8rem; font-weight: 500; color: var(--text); }
+.stat-change { font-size: .74rem; font-weight: 700; }
+.stat-bar-bg { background: var(--bg); border-radius: 6px; height: 7px; overflow: hidden; }
+.stat-bar { height: 7px; border-radius: 6px; transition: width 1.2s cubic-bezier(.22,1,.36,1); }
+.kw-pill {
+  display: inline-block; background: var(--bg); color: var(--muted);
+  border: 1px solid var(--border); padding: 4px 11px;
+  border-radius: 20px; font-size: .74rem; margin: 3px; font-weight: 500;
+}
+ 
+/* ── TRUSTED SOURCES LIST ── */
+.source-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 0; border-bottom: 1px solid var(--border);
+}
+.source-row:last-child { border-bottom: none; padding-bottom: 0; }
+.source-avatar {
+  width: 38px; height: 38px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800; flex-shrink: 0;
+  font-family: 'Sora', sans-serif;
+}
+.source-name { font-size: .85rem; font-weight: 600; color: var(--text); }
+.source-desc { font-size: .74rem; color: var(--muted); margin-top: 1px; }
+.source-official { font-size: .65rem; font-weight: 700; color: var(--green); background: var(--green-light); padding: 2px 7px; border-radius: 10px; margin-left: 6px; }
+ 
+/* ── FEATURE ICONS ROW ── */
+.feature-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.feature-item {
+  background: var(--bg); border-radius: var(--radius-sm);
+  padding: 14px 10px; text-align: center; border: 1.5px solid var(--border);
+  transition: all .2s; cursor: default;
+}
+.feature-item:hover { border-color: var(--red); background: var(--red-light); }
+.feature-icon { font-size: 22px; margin-bottom: 6px; }
+.feature-label { font-size: .72rem; font-weight: 600; color: var(--muted); line-height: 1.3; }
+ 
+/* ── CHAT ── */
+.chat-box {
+  height: 360px; overflow-y: auto;
+  background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 1rem;
+  margin-bottom: 1rem; display: flex; flex-direction: column; gap: .75rem;
+}
+.msg { max-width: 80%; padding: .75rem 1rem; border-radius: 16px; font-size: .88rem; line-height: 1.6; }
+.msg.user { background: var(--red); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+.msg.bot { background: white; color: var(--text); align-self: flex-start; border-bottom-left-radius: 4px; border: 1.5px solid var(--border); }
+.chat-row { display: flex; gap: 8px; }
+.chat-row input {
+  flex: 1; background: white; border: 1.5px solid var(--border);
+  border-radius: 12px; color: var(--text); padding: 10px 14px;
+  font-size: .9rem; font-family: 'DM Sans', sans-serif; transition: all .2s;
+}
+.chat-row input:focus { outline: none; border-color: var(--red); }
+ 
+/* ── SUGGESTED ── */
+.suggest-btn {
+  width: 100%; background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: 10px; color: var(--text); padding: 10px 14px;
+  margin-bottom: 7px; cursor: pointer; text-align: left;
+  font-size: .82rem; font-weight: 500; font-family: 'DM Sans', sans-serif;
+  transition: all .2s; display: flex; align-items: center; gap: 8px;
+}
+.suggest-btn:hover { border-color: var(--red); background: var(--red-light); color: var(--red); }
+ 
+/* ── TRENDS ── */
+.stat-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.2rem; }
+.stat-card { border-radius: var(--radius-sm); padding: 16px; text-align: center; border: 1.5px solid; }
+.stat-card-num { font-family: 'Sora', sans-serif; font-size: 1.6rem; font-weight: 800; }
+.stat-card-label { font-size: .72rem; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+.total-band {
+  background: var(--text); border-radius: var(--radius);
+  padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.total-band-num { font-family: 'Sora', sans-serif; font-size: 2.2rem; font-weight: 800; color: white; }
+.total-band-label { font-size: .78rem; color: #9CA3AF; margin-top: 2px; }
+.live-badge { background: var(--red); color: white; font-size: .68rem; font-weight: 700; padding: 5px 12px; border-radius: 20px; letter-spacing: .5px; }
+ 
+/* ── LEARN ── */
+.learn-card {
+  background: white; border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 1.4rem;
+  margin-bottom: 1rem; overflow: hidden; position: relative;
+  box-shadow: var(--shadow-sm);
+}
+.learn-stripe {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+}
+.learn-num { font-size: .68rem; font-weight: 700; letter-spacing: 1.5px; color: var(--muted); margin-bottom: .4rem; text-transform: uppercase; }
+.learn-title { font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: .7rem; }
+.learn-body { font-size: .85rem; color: var(--muted); line-height: 1.75; }
+ 
+/* ── QUIZ ── */
+.quiz-opt {
+  width: 100%; background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: 12px; color: var(--text); padding: 11px 14px;
+  margin-bottom: .6rem; cursor: pointer; text-align: left;
+  font-size: .85rem; font-weight: 500; transition: all .2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.quiz-opt:hover:not(:disabled) { border-color: var(--red); background: var(--red-light); color: var(--red); }
+.quiz-opt.correct { border-color: var(--green); background: var(--green-light); color: #0D8A82; }
+.quiz-opt.wrong { border-color: var(--red); background: var(--red-light); color: var(--red); }
+.quiz-opt:disabled { cursor: not-allowed; opacity: .7; }
+ 
+/* ── RULES LIST ── */
+.rule-item { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+.rule-num {
+  width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .78rem; font-weight: 700; font-family: 'Sora', sans-serif;
+}
+.rule-text { font-size: .83rem; color: var(--muted); line-height: 1.6; }
+.rule-text strong { color: var(--text); }
+ 
+/* ── MISC ── */
+.spinner {
+  display: inline-block; width: 16px; height: 16px;
+  border: 2px solid var(--red-mid); border-top-color: var(--red);
+  border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.hidden { display: none !important; }
+.section-label { font-size: .68rem; font-weight: 700; letter-spacing: 1.5px; color: var(--red); text-transform: uppercase; margin-bottom: .5rem; }
+ 
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .layout { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 1.7rem; }
+  .hero-stats { gap: 1rem; }
+  .tab-btn { padding: 7px 10px; font-size: .8rem; }
+  .ticker { gap: 12px; }
+  .feature-grid { grid-template-columns: repeat(3,1fr); }
+}
+</style>
+</head>
+<body>
+ 
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo">
+      <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 14l-3-3 1.41-1.41L11 12.17l4.59-4.58L17 9l-6 6z"/></svg>
+    </div>
+    <div>
+      <div class="nav-name">Truth<span>Guard</span></div>
+    </div>
+    <span class="nav-pill">BETA</span>
+  </div>
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab('check',this)">🔍 Verify</button>
+    <button class="tab-btn" onclick="showTab('chat',this)">💬 Chatbot</button>
+    <button class="tab-btn" onclick="showTab('trends',this)">📊 Trends</button>
+    <button class="tab-btn" onclick="showTab('learn',this)">📚 Learn</button>
+  </div>
+</nav>
+ 
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-live">
+    <div class="ticker-dot"></div>
+    <span class="ticker-text">LIVE</span>
+  </div>
+  <span class="ticker-text"><strong>14,823</strong> messages analyzed today</span>
+  <span class="ticker-sep">·</span>
+  <span class="ticker-text">Top threat: <strong>Govt scheme scams +41%</strong></span>
+  <span class="ticker-sep">·</span>
+  <span class="ticker-text">Supports <strong>Hindi · English · Hinglish</strong></span>
+  <span class="ticker-sep">·</span>
+  <span class="ticker-text">Powered by <strong>Llama 3.1 AI</strong></span>
+</div>
+ 
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">
+    <span>🇮🇳</span> India's AI Misinformation Shield
+  </div>
+  <h1>Don't share. <span>Verify first.</span></h1>
+  <p>AI-powered fact-checking for WhatsApp forwards, fake news & government scheme scams — in Hindi and English.</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">500M+</div>
+      <div class="hero-stat-label">WhatsApp users in India</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">64%</div>
+      <div class="hero-stat-label">Indians encountered fake news</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">56</div>
+      <div class="hero-stat-label">Deaths from WA misinformation</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">&lt;3s</div>
+      <div class="hero-stat-label">AI analysis time</div>
+    </div>
+  </div>
+</div>
+ 
+<!-- MAIN -->
+<div class="main">
+ 
+<!-- ══ VERIFY PAGE ══ -->
+<div id="tab-check" class="page active">
+  <div class="layout">
+    <div>
+      <!-- Feature icons -->
+      <div class="feature-grid" style="margin-bottom:1.2rem">
+        <div class="feature-item">
+          <div class="feature-icon">🔍</div>
+          <div class="feature-label">Text Analysis</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📷</div>
+          <div class="feature-label">Screenshot OCR</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🇮🇳</div>
+          <div class="feature-label">Hindi Support</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-label">Credibility Score</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🚨</div>
+          <div class="feature-label">Scam Detection</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">💡</div>
+          <div class="feature-label">AI Explanation</div>
+        </div>
+      </div>
+ 
+      <!-- Input card -->
+      <div class="card">
+        <div class="input-top">
+          <div class="input-icon-wrap">🔍</div>
+          <div>
+            <div class="input-heading">Verify a message or forward</div>
+            <div class="input-sub">Paste text or upload a WhatsApp screenshot — Hindi & English supported</div>
+          </div>
+        </div>
+        <textarea id="inputText" placeholder="Paste any suspicious message, news article, or WhatsApp forward here...&#10;&#10;Example: 'सरकार दे रही है ₹5000 फ्री, अभी आवेदन करें'"></textarea>
+        <div class="upload-zone" onclick="document.getElementById('imgInput').click()" id="uploadZone">
+          <div class="upload-zone-icon">📷</div>
+          <div class="upload-zone-text">Drop a WhatsApp screenshot here or click to upload</div>
+          <div class="upload-zone-sub">PNG, JPG supported · Text extracted automatically via OCR</div>
+        </div>
+        <input type="file" id="imgInput" accept="image/*" style="display:none" onchange="handleImage(this)"/>
+        <div class="btn-row">
+          <button class="btn-primary" id="analyzeBtn" onclick="analyze()">
+            <span>🔍</span> Analyze Now
+          </button>
+          <button class="btn-secondary" onclick="loadSample()">Try a sample</button>
+          <span id="loadingSpinner" class="hidden" style="font-size:.85rem;color:var(--muted)">
+            <span class="spinner"></span> Analyzing...
+          </span>
+        </div>
+      </div>
+ 
+      <!-- Result -->
+      <div id="resultSection" class="hidden">
+        <div class="card">
+          <div class="card-tag">Analysis result</div>
+          <div class="result-top">
+            <div class="score-circle" id="scoreRing">
+              <span class="score-num" id="scoreNum">--</span>
+              <span class="score-sub">/ 100</span>
+            </div>
+            <div style="flex:1">
+              <div style="margin-bottom:.8rem">
+                <span class="verdict-chip" id="verdictBadge">
+                  <span class="verdict-dot" id="verdictDot"></span>
+                  <span id="verdictText">--</span>
+                </span>
+              </div>
+              <div style="font-size:.72rem;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:.4rem">Manipulation Techniques</div>
+              <div id="techTags" class="tags"></div>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="card">
+          <div class="card-tag">Red flags detected</div>
+          <div id="redFlags"></div>
+        </div>
+ 
+        <div class="card">
+          <div class="card-tag">Why is this suspicious?</div>
+          <div class="explain-box">
+            <p class="explain-text" id="explanation"></p>
+          </div>
+          <div class="hindi-box">
+            <span style="font-size:1.2rem;flex-shrink:0">🇮🇳</span>
+            <span class="hindi-text" id="explanationHindi"></span>
+          </div>
+        </div>
+ 
+        <div class="card">
+          <div class="card-tag">What should you do?</div>
+          <div class="action-box">
+            <span style="font-size:20px">💡</span>
+            <span class="action-text" id="recommendedAction"></span>
+          </div>
+          <div style="font-size:.72rem;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:.6rem">Verify with trusted sources</div>
+          <div id="factSources"></div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- SIDEBAR -->
+    <div>
+      <div class="card">
+        <div class="card-tag">India threat radar</div>
+        <div>
+          <div class="stat-row">
+            <div class="stat-head"><span class="stat-name">Health misinformation</span><span class="stat-change" style="color:var(--red)">+12%</span></div>
+            <div class="stat-bar-bg"><div class="stat-bar" style="background:var(--red);width:85%"></div></div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-head"><span class="stat-name">Financial scams</span><span class="stat-change" style="color:var(--amber)">+28%</span></div>
+            <div class="stat-bar-bg"><div class="stat-bar" style="background:var(--amber);width:65%"></div></div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-head"><span class="stat-name">Govt scheme scams</span><span class="stat-change" style="color:var(--amber)">+41%</span></div>
+            <div class="stat-bar-bg"><div class="stat-bar" style="background:var(--amber);width:50%"></div></div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-head"><span class="stat-name">Political propaganda</span><span class="stat-change" style="color:var(--muted)">+5%</span></div>
+            <div class="stat-bar-bg"><div class="stat-bar" style="background:#CBD5E1;width:35%"></div></div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-head"><span class="stat-name">Communal messages</span><span class="stat-change" style="color:var(--muted)">+8%</span></div>
+            <div class="stat-bar-bg"><div class="stat-bar" style="background:#CBD5E1;width:25%"></div></div>
+          </div>
+        </div>
+        <div style="margin-top:1.2rem">
+          <div style="font-size:.68rem;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:.6rem">Trending keywords</div>
+          <div>
+            <span class="kw-pill">free recharge</span>
+            <span class="kw-pill">PM Yojana</span>
+            <span class="kw-pill">cancer cure</span>
+            <span class="kw-pill">OTP scam</span>
+            <span class="kw-pill">आयुष्मान</span>
+            <span class="kw-pill">free laptop</span>
+          </div>
+        </div>
+      </div>
+ 
+      <div class="card">
+        <div class="card-tag">Trusted fact-checkers</div>
+        <div class="source-row">
+          <div class="source-avatar" style="background:#FFF0F1;color:var(--red)">PIB</div>
+          <div>
+            <div class="source-name">pib.gov.in/factcheck <span class="source-official">OFFICIAL</span></div>
+            <div class="source-desc">Government of India</div>
+          </div>
+        </div>
+        <div class="source-row">
+          <div class="source-avatar" style="background:var(--amber-light);color:#B45309">BL</div>
+          <div>
+            <div class="source-name">boomlive.in</div>
+            <div class="source-desc">India's #1 fact-checker</div>
+          </div>
+        </div>
+        <div class="source-row">
+          <div class="source-avatar" style="background:var(--green-light);color:#0D8A82">AN</div>
+          <div>
+            <div class="source-name">altnews.in</div>
+            <div class="source-desc">Independent fact-checking</div>
+          </div>
+        </div>
+        <div class="source-row">
+          <div class="source-avatar" style="background:var(--blue-light);color:var(--blue)">VN</div>
+          <div>
+            <div class="source-name">vishvasnews.com</div>
+            <div class="source-desc">Hindi fact-checking</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- ══ CHATBOT PAGE ══ -->
+<div id="tab-chat" class="page">
+  <div class="layout">
+    <div>
+      <div class="card">
+        <div class="input-top" style="margin-bottom:1rem">
+          <div class="input-icon-wrap">💬</div>
+          <div>
+            <div class="input-heading">AI Fact-Check Assistant</div>
+            <div class="input-sub">Ask about any claim, forward, or news story in Hindi or English</div>
+          </div>
+        </div>
+        <div class="chat-box" id="chatBox">
+          <div class="msg bot">👋 Hi! I'm TruthGuard AI. Paste any suspicious message or ask me to fact-check a claim — in Hindi or English.</div>
+        </div>
+        <div class="chat-row">
+          <input type="text" id="chatInput" placeholder="Ask me to fact-check something..." onkeydown="if(event.key==='Enter')sendChat()"/>
+          <button class="btn-primary" onclick="sendChat()">Send</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-tag">Suggested questions</div>
+        <button class="suggest-btn" onclick="askSuggested('Is the PM Kisan ₹8000 bonus scheme real?')">
+          <span>🏛️</span> Is the PM Kisan ₹8000 bonus real?
+        </button>
+        <button class="suggest-btn" onclick="askSuggested('How do I identify a WhatsApp scam message?')">
+          <span>📱</span> How to identify a WhatsApp scam?
+        </button>
+        <button class="suggest-btn" onclick="askSuggested('What is boomlive.in and how do I use it?')">
+          <span>🔎</span> What is boomlive.in?
+        </button>
+        <button class="suggest-btn" onclick="askSuggested('How can I verify a government scheme in India?')">
+          <span>✅</span> How to verify a govt scheme?
+        </button>
+        <button class="suggest-btn" onclick="askSuggested('क्या यह सच है कि सरकार फ्री मोबाइल दे रही है?')">
+          <span>🇮🇳</span> क्या सरकार फ्री मोबाइल दे रही है?
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- ══ TRENDS PAGE ══ -->
+<div id="tab-trends" class="page">
+  <div class="layout">
+    <div>
+      <div class="total-band">
+        <div>
+          <div class="total-band-num">14,823</div>
+          <div class="total-band-label">Messages analyzed today across India</div>
+        </div>
+        <div class="live-badge">● LIVE</div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Misinformation categories · India</div>
+        <div id="trendsContent">
+          <div class="stat-row" style="margin-bottom:16px">
+            <div class="stat-head"><span class="stat-name">Health misinformation</span><span class="stat-change" style="color:var(--red)">2,847 · +12%</span></div>
+            <div class="stat-bar-bg"><div class="stat-bar" style="background:var(--red);width:85%"></div></div>
+          </div>
+          <div class="stat-row" style="margin-bottom:16px">
+            <div class="stat-head"><span class="stat-name">Financial scams</span><span class="stat-change" style="color:var(--amber)">2,103 · +28%</span></div>
+            <div class="stat-bar-bg"><div class="stat-bar" style="background:var(--amber);width:65%"></div></div>
+          </div>
+          <div class="stat-row" style="margin-bottom:16px">
+            <div class="stat-head"><span class="stat-name">Political propaganda</span><span class="stat-change" style="color:var(--muted)">1,876 · +5%</span></div>
+            <div class="stat-bar-bg"><div class="stat-bar" style="background:#CBD5E1;width:55%"></div></div>
+          </div>
+          <div class="stat-row" style="margin-bottom:16px">
+            <div class="stat-head"><span class="stat-name">Govt scheme scams</span><span class="stat-change" style="color:var(--amber)">1,654 · +41%</span></div>
+            <div class="stat-bar-bg"><div class="stat-bar" style="background:var(--amber);width:48%"></div></div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-head"><span class="stat-name">Communal messages</span><span class="stat-change" style="color:var(--muted)">1,203 · +8%</span></div>
+            <div class="stat-bar-bg"><div class="stat-bar" style="background:#CBD5E1;width:35%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Trending keywords right now</div>
+        <div>
+          <span class="kw-pill">free recharge</span>
+          <span class="kw-pill">PM Yojana</span>
+          <span class="kw-pill">cancer cure</span>
+          <span class="kw-pill">OTP scam</span>
+          <span class="kw-pill">आयुष्मान</span>
+          <span class="kw-pill">free laptop</span>
+          <span class="kw-pill">WhatsApp forward</span>
+          <span class="kw-pill">बीमारी का इलाज</span>
+          <span class="kw-pill">5G radiation</span>
+          <span class="kw-pill">Aadhaar scam</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="stat-card-grid">
+        <div class="stat-card" style="background:var(--red-light);border-color:var(--red-mid)">
+          <div class="stat-card-num" style="color:var(--red)">64%</div>
+          <div class="stat-card-label">Indians encountered fake news in 2023</div>
+        </div>
+        <div class="stat-card" style="background:var(--amber-light);border-color:#FDE68A">
+          <div class="stat-card-num" style="color:var(--amber)">500M+</div>
+          <div class="stat-card-label">WhatsApp users in India</div>
+        </div>
+        <div class="stat-card" style="background:var(--green-light);border-color:#A7F3D0">
+          <div class="stat-card-num" style="color:var(--green)">56</div>
+          <div class="stat-card-label">Deaths linked to WA misinformation</div>
+        </div>
+        <div class="stat-card" style="background:var(--blue-light);border-color:#BFDBFE">
+          <div class="stat-card-num" style="color:var(--blue)">12+</div>
+          <div class="stat-card-label">Indian languages coming soon</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Most scammed states</div>
+        <div style="font-size:.82rem;color:var(--muted);line-height:2">
+          🔴 Uttar Pradesh — Financial scams<br>
+          🟠 Maharashtra — Health misinformation<br>
+          🟡 Bihar — Govt scheme scams<br>
+          🟡 Rajasthan — Communal messages<br>
+          🟢 Karnataka — Political propaganda
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- ══ LEARN PAGE ══ -->
+<div id="tab-learn" class="page">
+  <div class="layout">
+    <div>
+      <div class="learn-card">
+        <div class="learn-stripe" style="background:var(--red)"></div>
+        <div style="padding-left:16px">
+          <div class="learn-num">Tactic 01</div>
+          <div class="learn-title">🚨 Urgency triggers</div>
+          <div class="learn-body">Fake messages create artificial time pressure to stop you from thinking critically. Phrases like <em>"Share in 2 hours"</em>, <em>"अभी करें वरना मौका जाएगा"</em>, or <em>"BREAKING — expires tonight"</em> are classic red flags. Real important news doesn't disappear in 2 hours. If a message pressures you to act immediately — pause and verify first.</div>
+        </div>
+      </div>
+      <div class="learn-card">
+        <div class="learn-stripe" style="background:var(--amber)"></div>
+        <div style="padding-left:16px">
+          <div class="learn-num" style="color:var(--amber)">Tactic 02</div>
+          <div class="learn-title">😱 Fear-based messaging</div>
+          <div class="learn-body">Content designed to scare you overrides rational thinking. Fake health cures, disease outbreak hoaxes, crime exaggeration, and religious threat messages all weaponize fear. The formula: create panic → bypass critical thinking → get shares. Always ask: does a verified news source confirm this?</div>
+        </div>
+      </div>
+      <div class="learn-card">
+        <div class="learn-stripe" style="background:var(--green)"></div>
+        <div style="padding-left:16px">
+          <div class="learn-num" style="color:var(--green)">Tactic 03</div>
+          <div class="learn-title">🏛️ Fake government schemes</div>
+          <div class="learn-body">India's most dangerous scam category. Messages claim the government is giving free money, phones, gas cylinders, or laptops. Real government schemes are announced only on <strong>pib.gov.in</strong> — never through WhatsApp forwards. Never click unofficial links or share your Aadhaar, OTP, or bank details.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:1.2rem">
+        <div class="card-tag">Quick quiz</div>
+        <div style="font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:1rem;line-height:1.6;font-family:'Sora',sans-serif">You receive: "PM Modi announces ₹8000 for all families — share this link in 1 hour to apply." What do you do?</div>
+        <button class="quiz-opt" onclick="quizAnswer(this,false)">Share immediately — sounds official</button>
+        <button class="quiz-opt" onclick="quizAnswer(this,false)">Click the link to verify</button>
+        <button class="quiz-opt" onclick="quizAnswer(this,true)">Check pib.gov.in — do not share or click</button>
+        <button class="quiz-opt" onclick="quizAnswer(this,false)">Forward only to family, not publicly</button>
+        <div id="quizFeedback" class="hidden" style="margin-top:1rem;padding:.9rem 1rem;border-radius:12px;font-size:.85rem;font-weight:500;line-height:1.6"></div>
+      </div>
+ 
+      <div class="card">
+        <div class="card-tag">5 golden rules</div>
+        <div class="rule-item">
+          <div class="rule-num" style="background:var(--red-light);color:var(--red)">1</div>
+          <div class="rule-text">Always check <strong>pib.gov.in</strong> for government scheme claims</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-num" style="background:var(--amber-light);color:var(--amber)">2</div>
+          <div class="rule-text">Never share your <strong>Aadhaar, OTP, or bank details</strong> from a forward</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-num" style="background:var(--green-light);color:var(--green)">3</div>
+          <div class="rule-text">If it says <strong>"forward to 10 people"</strong> — it's almost certainly fake</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-num" style="background:var(--blue-light);color:var(--blue)">4</div>
+          <div class="rule-text">Check <strong>boomlive.in</strong> or <strong>altnews.in</strong> before believing viral claims</div>
+        </div>
+        <div class="rule-item" style="margin-bottom:0">
+          <div class="rule-num" style="background:var(--purple-light);color:var(--purple)">5</div>
+          <div class="rule-text">When in doubt — <strong style="color:var(--red)">don't share</strong>. Sharing fake news makes you part of the problem</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+</div><!-- end main -->
+ 
+<script>
+  const API = "http://127.0.0.1:5000";
+  let chatHistory = [];
+ 
+  function showTab(name, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+ 
+  function loadSample() {
+    document.getElementById('inputText').value = "🚨 URGENT: सरकार दे रही है सभी परिवारों को ₹8500! PM Kisan Yojana के तहत आज रात 12 बजे से पहले इस लिंक पर क्लिक करें और अपना Aadhaar नंबर दर्ज करें। यह ऑफर सिर्फ 2 घंटे के लिए है। 10 लोगों को forward करें वरना पैसे नहीं मिलेंगे। http://pmkisan-apply.xyz/free-money";
+  }
+ 
+  async function handleImage(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const zone = document.getElementById('uploadZone');
+    zone.innerHTML = '<div class="upload-zone-icon"><span class="spinner"></span></div><div class="upload-zone-text">Extracting text from image...</div>';
+    const form = new FormData();
+    form.append('image', file);
+    try {
+      const res = await fetch(API + '/ocr', { method: 'POST', body: form });
+      const data = await res.json();
+      if (data.extracted_text) {
+        document.getElementById('inputText').value = data.extracted_text;
+        zone.innerHTML = '<div class="upload-zone-icon">✅</div><div class="upload-zone-text">Text extracted! Review above and click Analyze.</div>';
+      } else {
+        zone.innerHTML = '<div class="upload-zone-icon">❌</div><div class="upload-zone-text">Could not extract text. Try a clearer image.</div>';
+      }
+    } catch {
+      zone.innerHTML = '<div class="upload-zone-icon">❌</div><div class="upload-zone-text">OCR failed. Make sure app.py is running.</div>';
+    }
+  }
+ 
+  async function analyze() {
+    const text = document.getElementById('inputText').value.trim();
+    if (!text) { alert('Please paste some text first.'); return; }
+    document.getElementById('analyzeBtn').disabled = true;
+    document.getElementById('loadingSpinner').classList.remove('hidden');
+    document.getElementById('resultSection').classList.add('hidden');
+    try {
+      const res = await fetch(API + '/analyze', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ text })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      renderResult(data);
+    } catch(e) {
+      alert('Analysis failed: ' + e.message + '\n\nMake sure app.py is running.');
+    } finally {
+      document.getElementById('analyzeBtn').disabled = false;
+      document.getElementById('loadingSpinner').classList.add('hidden');
+    }
+  }
+ 
+  function renderResult(d) {
+    const score = Number(d.credibility_score) || 0;
+    const palettes = {
+      red:    { border:'#E63946', bg:'#FFF0F1', text:'#C1121F', dot:'#E63946', chipBorder:'#FFD6D8' },
+      orange: { border:'#FF9F1C', bg:'#FFF7ED', text:'#B45309', dot:'#FF9F1C', chipBorder:'#FDE68A' },
+      yellow: { border:'#EAB308', bg:'#FEFCE8', text:'#854D0E', dot:'#EAB308', chipBorder:'#FEF08A' },
+      green:  { border:'#2EC4B6', bg:'#EDFAF9', text:'#0D8A82', dot:'#2EC4B6', chipBorder:'#A7F3D0' }
+    };
+    const c = palettes[d.verdict_color] || palettes.orange;
+ 
+    const ring = document.getElementById('scoreRing');
+    ring.style.borderColor = c.border;
+    ring.style.color = c.text;
+    document.getElementById('scoreNum').textContent = score;
+ 
+    const badge = document.getElementById('verdictBadge');
+    badge.style.cssText = `background:${c.bg};color:${c.text};border-color:${c.chipBorder};display:inline-flex;align-items:center;gap:7px;padding:7px 16px;border-radius:20px;font-weight:700;font-size:.78rem;letter-spacing:.5px;border:1.5px solid;font-family:'Sora',sans-serif`;
+    document.getElementById('verdictDot').style.cssText = `width:7px;height:7px;border-radius:50%;background:${c.dot};flex-shrink:0`;
+    document.getElementById('verdictText').textContent = d.verdict || 'UNKNOWN';
+ 
+    document.getElementById('techTags').innerHTML =
+      (d.manipulation_techniques && d.manipulation_techniques.length)
+        ? d.manipulation_techniques.map(t => `<span class="tag tag-red">⚠️ ${t}</span>`).join('')
+        : '<span style="font-size:.82rem;color:var(--muted)">None detected</span>';
+ 
+    document.getElementById('redFlags').innerHTML =
+      (d.red_flags && d.red_flags.length)
+        ? d.red_flags.map(f => `<div class="flag-item"><span class="flag-emoji">⚠️</span><span class="flag-text">"${f}"</span></div>`).join('')
+        : '<div style="font-size:.85rem;color:var(--muted);padding:.5rem 0">No specific red flags found</div>';
+ 
+    document.getElementById('explanation').textContent = d.explanation || '';
+    document.getElementById('explanationHindi').textContent = d.explanation_hindi || '';
+    document.getElementById('recommendedAction').textContent = d.recommended_action || '';
+ 
+    document.getElementById('factSources').innerHTML =
+      (d.fact_check_sources && d.fact_check_sources.length)
+        ? d.fact_check_sources.map(s => {
+            const url = s.startsWith('http') ? s : 'https://' + s;
+            const label = s.replace(/https?:\/\//,'').split('/')[0];
+            return `<a href="${url}" target="_blank" class="source-link">✅ ${label}</a>`;
+          }).join('')
+        : '';
+ 
+    document.getElementById('resultSection').classList.remove('hidden');
+    document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+  }
+ 
+  async function sendChat() {
+    const input = document.getElementById('chatInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+    input.value = '';
+    appendChat(msg, 'user');
+    const typingId = 'typing_' + Date.now();
+    const box = document.getElementById('chatBox');
+    box.innerHTML += `<div class="msg bot" id="${typingId}"><span class="spinner"></span> Thinking...</div>`;
+    box.scrollTop = box.scrollHeight;
+    chatHistory.push({ role: 'user', content: msg });
+    try {
+      const res = await fetch(API + '/chat', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ message: msg, history: chatHistory })
+      });
+      const data = await res.json();
+      const reply = data.reply || 'Sorry, no response. Try again.';
+      document.getElementById(typingId)?.remove();
+      chatHistory.push({ role: 'assistant', content: reply });
+      appendChat(reply, 'bot');
+    } catch {
+      document.getElementById(typingId)?.remove();
+      appendChat('⚠️ Backend not reachable. Run: python app.py', 'bot');
+    }
+  }
+ 
+  function appendChat(msg, type) {
+    const box = document.getElementById('chatBox');
+    box.innerHTML += `<div class="msg ${type}">${msg}</div>`;
+    box.scrollTop = box.scrollHeight;
+  }
+ 
+  function askSuggested(q) {
+    document.getElementById('chatInput').value = q;
+    sendChat();
+  }
+ 
+  function quizAnswer(btn, correct) {
+    document.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
+    btn.classList.add(correct ? 'correct' : 'wrong');
+    if (!correct) document.querySelectorAll('.quiz-opt')[2].classList.add('correct');
+    const fb = document.getElementById('quizFeedback');
+    fb.classList.remove('hidden');
+    fb.style.cssText = `background:${correct?'#EDFAF9':'#FFF0F1'};border:1.5px solid ${correct?'#A7F3D0':'#FFD6D8'};color:${correct?'#0D8A82':'#C1121F'};margin-top:1rem;padding:.9rem 1rem;border-radius:12px;font-size:.85rem;font-weight:500;line-height:1.6`;
+    fb.textContent = correct
+      ? '✅ Correct! Always verify on pib.gov.in. Never share unverified forwards.'
+      : '❌ This is a scam pattern. Real government schemes never ask you to share WhatsApp messages or click unofficial links.';
+  }
+</script>
+</body>
+</html>
