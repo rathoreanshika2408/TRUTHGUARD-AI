@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "TruthGuard AI",
+  "version": "1.0",
+  "description": "Detects scam messages on WhatsApp Web automatically",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": ["https://web.whatsapp.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://web.whatsapp.com/*"],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ]
+}
