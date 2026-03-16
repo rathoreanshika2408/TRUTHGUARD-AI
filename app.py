@@ -12,7 +12,7 @@ from twilio.rest import Client
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, origins=["https://trustguardai-rose.vercel.app", "http://127.0.0.1:5500", "http://localhost:5500"])
+CORS(app)
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 twilio_client = Client(os.getenv("TWILIO_ACCOUNT_SID"), os.getenv("TWILIO_AUTH_TOKEN"))
 
