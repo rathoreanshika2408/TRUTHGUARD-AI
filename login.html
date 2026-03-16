@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TruthGuard AI — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#F4F6FB;font-family:'Inter',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+.top-bar{background:#1A1A2E;padding:14px 2rem;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{width:32px;height:32px;background:#E63946;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:14px}
+.logo-text{font-size:1rem;font-weight:800;color:#fff}.logo-text span{color:#E63946}
+.back-link{color:#9CA3AF;font-size:.85rem;text-decoration:none;transition:color .2s}.back-link:hover{color:#fff}
+.main{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem}
+.auth-card{background:#fff;border:1px solid #E8ECF4;border-radius:20px;padding:2.5rem;width:100%;max-width:440px}
+.auth-header{text-align:center;margin-bottom:2rem}
+.auth-icon{width:56px;height:56px;background:#FFF0F0;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 1rem}
+.auth-title{font-size:1.5rem;font-weight:800;color:#1A1A2E;margin-bottom:.3rem}
+.auth-sub{font-size:.88rem;color:#9CA3AF;line-height:1.5}
+.tabs{display:flex;background:#F4F6FB;border-radius:10px;padding:4px;margin-bottom:1.5rem}
+.tab{flex:1;padding:9px;border:none;background:none;border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer;color:#9CA3AF;transition:all .2s;font-family:'Inter',sans-serif}
+.tab.active{background:#fff;color:#E63946;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.form-group{margin-bottom:1.1rem}
+.form-label{display:block;font-size:.8rem;font-weight:600;color:#374151;margin-bottom:.4rem}
+.form-input{width:100%;background:#F8FAFC;border:1.5px solid #E8ECF4;border-radius:10px;color:#1A1A2E;padding:11px 14px;font-size:.9rem;font-family:'Inter',sans-serif;transition:border .2s}
+.form-input:focus{outline:none;border-color:#E63946;background:#fff}
+.form-input::placeholder{color:#CBD5E1}
+.phone-row{display:flex;gap:.5rem}
+.country-code{background:#F8FAFC;border:1.5px solid #E8ECF4;border-radius:10px;color:#374151;padding:11px 12px;font-size:.9rem;font-family:'Inter',sans-serif;width:80px;text-align:center;font-weight:600}
+.btn-submit{width:100%;background:#E63946;color:#fff;border:none;padding:13px;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;margin-top:.5rem}
+.btn-submit:hover{background:#C1121F;transform:translateY(-1px)}
+.btn-submit:disabled{background:#E8ECF4;color:#9CA3AF;cursor:not-allowed;transform:none}
+.divider{display:flex;align-items:center;gap:.8rem;margin:1.2rem 0}
+.divider-line{flex:1;height:1px;background:#E8ECF4}
+.divider-text{font-size:.75rem;color:#CBD5E1;font-weight:500}
+.whatsapp-btn{width:100%;background:#25D366;color:#fff;border:none;padding:13px;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px}
+.whatsapp-btn:hover{background:#1EA952;transform:translateY(-1px)}
+.terms{font-size:.75rem;color:#9CA3AF;text-align:center;margin-top:1rem;line-height:1.5}
+.terms a{color:#E63946;text-decoration:none}
+.error-msg{background:#FFF0F0;border:1px solid #FFCDD2;color:#C1121F;padding:.7rem 1rem;border-radius:8px;font-size:.82rem;margin-bottom:1rem;display:none}
+.success-msg{background:#F0FDF4;border:1px solid #BBF7D0;color:#166534;padding:.7rem 1rem;border-radius:8px;font-size:.82rem;margin-bottom:1rem;display:none}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* WHATSAPP CONNECT SCREEN */
+.wa-connect{display:none;text-align:center}
+.wa-icon{width:80px;height:80px;background:#25D36615;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 1rem;border:2px solid #25D36630}
+.wa-title{font-size:1.3rem;font-weight:800;color:#1A1A2E;margin-bottom:.5rem}
+.wa-sub{font-size:.88rem;color:#9CA3AF;line-height:1.6;margin-bottom:1.5rem}
+.wa-number-display{background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:1rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:10px}
+.wa-number-text{font-size:1rem;font-weight:700;color:#166534}
+.wa-number-sub{font-size:.75rem;color:#9CA3AF;margin-top:2px}
+.wa-steps{text-align:left;margin-bottom:1.5rem}
+.wa-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:.8rem}
+.wa-step-num{width:22px;height:22px;background:#E63946;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px}
+.wa-step-text{font-size:.82rem;color:#374151;line-height:1.5}
+.btn-continue{width:100%;background:#E63946;color:#fff;border:none;padding:13px;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.btn-continue:hover{background:#C1121F}
+.btn-test{width:100%;background:#25D366;color:#fff;border:none;padding:13px;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;margin-bottom:.75rem;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-test:hover{background:#1EA952}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="index.html" class="logo">
+    <div class="logo-icon">T</div>
+    <div class="logo-text">Truth<span>Guard</span></div>
+  </a>
+  <a href="index.html" class="back-link">← Back to home</a>
+</div>
+
+<div class="main">
+  <div class="auth-card">
+
+    <!-- LOGIN / SIGNUP FORM -->
+    <div id="authForm">
+      <div class="auth-header">
+        <div class="auth-icon">🛡️</div>
+        <div class="auth-title">Welcome to TruthGuard</div>
+        <div class="auth-sub">Sign in to connect your WhatsApp and receive fact-check results instantly</div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('login',this)">Sign In</button>
+        <button class="tab" onclick="switchTab('signup',this)">Create Account</button>
+      </div>
+
+      <div id="errorMsg" class="error-msg"></div>
+      <div id="successMsg" class="success-msg"></div>
+
+      <!-- LOGIN FIELDS -->
+      <div id="loginFields">
+        <div class="form-group">
+          <label class="form-label">Email address</label>
+          <input type="email" class="form-input" id="loginEmail" placeholder="you@example.com"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password"/>
+        </div>
+        <button class="btn-submit" id="loginBtn" onclick="handleLogin()">Sign In →</button>
+      </div>
+
+      <!-- SIGNUP FIELDS -->
+      <div id="signupFields" style="display:none">
+        <div class="form-group">
+          <label class="form-label">Full name</label>
+          <input type="text" class="form-input" id="signupName" placeholder="Anshika Rathore"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email address</label>
+          <input type="email" class="form-input" id="signupEmail" placeholder="you@example.com"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">WhatsApp number</label>
+          <div class="phone-row">
+            <div class="country-code">🇮🇳 +91</div>
+            <input type="tel" class="form-input" id="signupPhone" placeholder="9876543210" style="flex:1"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" id="signupPassword" placeholder="Create a password"/>
+        </div>
+        <button class="btn-submit" id="signupBtn" onclick="handleSignup()">Create Account →</button>
+      </div>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-text">OR</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <button class="whatsapp-btn" onclick="handleWhatsAppLogin()">
+        <span style="font-size:18px">📱</span> Continue with WhatsApp Number
+      </button>
+
+      <div class="terms">
+        By continuing you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+
+    <!-- WHATSAPP CONNECT SCREEN -->
+    <div class="wa-connect" id="waConnect">
+      <div class="wa-icon">📱</div>
+      <div class="wa-title">Connect your WhatsApp</div>
+      <div class="wa-sub">You'll receive TruthGuard analysis results directly on WhatsApp after every fact-check</div>
+
+      <div class="wa-number-display">
+        <span style="font-size:24px">✅</span>
+        <div>
+          <div class="wa-number-text" id="waNumberDisplay">+91 XXXXXXXXXX</div>
+          <div class="wa-number-sub">WhatsApp number linked to your account</div>
+        </div>
+      </div>
+
+      <div class="wa-steps">
+        <div class="wa-step">
+          <div class="wa-step-num">1</div>
+          <div class="wa-step-text">Save <strong>+1 415 523 8886</strong> in your contacts as "TruthGuard AI"</div>
+        </div>
+        <div class="wa-step">
+          <div class="wa-step-num">2</div>
+          <div class="wa-step-text">Send <strong>"join primitive-round"</strong> to that number on WhatsApp</div>
+        </div>
+        <div class="wa-step">
+          <div class="wa-step-num">3</div>
+          <div class="wa-step-text">Click "Test Connection" below to verify it's working</div>
+        </div>
+      </div>
+
+      <button class="btn-test" onclick="testWhatsApp()">
+        <span>📲</span> Test WhatsApp Connection
+      </button>
+      <button class="btn-continue" onclick="goToApp()">
+        Continue to TruthGuard →
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const API = "http://127.0.0.1:5000";
+  let currentUser = null;
+
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('loginFields').style.display = tab === 'login' ? 'block' : 'none';
+    document.getElementById('signupFields').style.display = tab === 'signup' ? 'block' : 'none';
+    hideMessages();
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.style.display = 'block';
+    document.getElementById('successMsg').style.display = 'none';
+  }
+
+  function showSuccess(msg) {
+    const el = document.getElementById('successMsg');
+    el.textContent = msg;
+    el.style.display = 'block';
+    document.getElementById('errorMsg').style.display = 'none';
+  }
+
+  function hideMessages() {
+    document.getElementById('errorMsg').style.display = 'none';
+    document.getElementById('successMsg').style.display = 'none';
+  }
+
+  async function handleLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    if (!email || !password) { showError('Please fill in all fields.'); return; }
+    const btn = document.getElementById('loginBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Signing in...';
+    try {
+      const res = await fetch(API + '/login', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (data.success) {
+        currentUser = data.user;
+        localStorage.setItem('tg_user', JSON.stringify(data.user));
+        showWhatsAppConnect(data.user);
+      } else {
+        showError(data.error || 'Login failed. Try again.');
+      }
+    } catch {
+      showError('Cannot connect to backend. Make sure app.py is running.');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = 'Sign In →';
+    }
+  }
+
+  async function handleSignup() {
+    const name = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const phone = '+91' + document.getElementById('signupPhone').value.trim();
+    const password = document.getElementById('signupPassword').value.trim();
+    if (!name || !email || !phone || !password) { showError('Please fill in all fields.'); return; }
+    const btn = document.getElementById('signupBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Creating account...';
+    try {
+      const res = await fetch(API + '/signup', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ name, email, phone, password })
+      });
+      const data = await res.json();
+      if (data.success) {
+        currentUser = data.user;
+        localStorage.setItem('tg_user', JSON.stringify(data.user));
+        showWhatsAppConnect(data.user);
+      } else {
+        showError(data.error || 'Signup failed. Try again.');
+      }
+    } catch {
+      showError('Cannot connect to backend. Make sure app.py is running.');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = 'Create Account →';
+    }
+  }
+
+  function handleWhatsAppLogin() {
+    const phone = prompt('Enter your WhatsApp number (with country code):\nExample: +919876543210');
+    if (!phone) return;
+    currentUser = { name: 'User', email: '', whatsapp: phone };
+    localStorage.setItem('tg_user', JSON.stringify(currentUser));
+    showWhatsAppConnect(currentUser);
+  }
+
+  function showWhatsAppConnect(user) {
+    document.getElementById('authForm').style.display = 'none';
+    document.getElementById('waConnect').style.display = 'block';
+    const num = user.whatsapp || '+91XXXXXXXXXX';
+    document.getElementById('waNumberDisplay').textContent = num;
+  }
+
+  async function testWhatsApp() {
+    const btn = document.querySelector('.btn-test');
+    btn.innerHTML = '<span class="spinner"></span> Sending test message...';
+    btn.disabled = true;
+    try {
+      const res = await fetch(API + '/send-whatsapp', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          phone: currentUser?.whatsapp,
+          result: {
+            credibility_score: 95,
+            verdict: 'LIKELY TRUE ✅',
+            explanation: 'This is a test message from TruthGuard AI. Your WhatsApp is successfully connected!',
+            manipulation_techniques: [],
+            recommended_action: 'Your WhatsApp connection is working perfectly.'
+          }
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        btn.innerHTML = '✅ Message sent! Check your WhatsApp';
+        btn.style.background = '#166534';
+      } else {
+        btn.innerHTML = '❌ Failed — ' + (data.error || 'Try again');
+        btn.style.background = '#C1121F';
+        btn.disabled = false;
+      }
+    } catch {
+      btn.innerHTML = '❌ Backend not running';
+      btn.style.background = '#C1121F';
+      btn.disabled = false;
+    }
+  }
+
+  function goToApp() {
+    window.location.href = 'app.html';
+  }
+
+  // Auto redirect if already logged in
+  window.onload = () => {
+    const user = localStorage.getItem('tg_user');
+    if (user) {
+      const confirm = window.confirm('You are already logged in. Go to TruthGuard?');
+      if (confirm) window.location.href = 'app.html';
+    }
+  };
+</script>
+</body>
+</html>
