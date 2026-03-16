@@ -416,20 +416,61 @@ textarea::placeholder { color: #BCC5D6; }
       <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 14l-3-3 1.41-1.41L11 12.17l4.59-4.58L17 9l-6 6z"/></svg>
     </div>
     <div>
-      <div class="nav-name">Truth<span>Guard</span></div>
+      <div class="nav-name">Trust<span>Guard</span></div>
     </div>
     <span class="nav-pill">BETA</span>
   </div>
-  <div style="display:flex;align-items:center;gap:1rem">
-  <a href="login.html" style="background:#E63946;color:#fff;padding:8px 20px;border-radius:8px;font-size:.88rem;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:6px">
-    👤 Login
-  </a>
+  <div style="position:relative;display:inline-block">
+  <div id="profileBtn" onclick="toggleProfile()" style="width:36px;height:36px;background:#FFF0F0;border:2px solid #FFCDD2;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all .2s" title="My Profile">👤</div>
+
+  <!-- PROFILE DROPDOWN -->
+  <div id="profileDropdown" style="display:none;position:absolute;right:0;top:48px;background:#fff;border:1px solid #E8ECF4;border-radius:16px;padding:1.5rem;width:280px;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,.1)">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.2rem;padding-bottom:1.2rem;border-bottom:1px solid #F4F6FB">
+      <div style="width:48px;height:48px;background:#E63946;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.2rem;font-weight:700;flex-shrink:0" id="profileAvatar">A</div>
+      <div>
+        <div style="font-size:.95rem;font-weight:700;color:#1A1A2E" id="profileName">Anshika</div>
+        <div style="font-size:.75rem;color:#9CA3AF" id="profileEmail">user@email.com</div>
+      </div>
+    </div>
+
+    <!-- Details -->
+    <div style="display:flex;flex-direction:column;gap:.7rem;margin-bottom:1.2rem">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:28px;height:28px;background:#F4F6FB;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">📱</div>
+        <div>
+          <div style="font-size:.7rem;color:#9CA3AF;font-weight:600">WHATSAPP</div>
+          <div style="font-size:.82rem;font-weight:600;color:#1A1A2E" id="profilePhone">Not connected</div>
+        </div>
+        <div style="margin-left:auto;background:#F0FDF4;color:#166534;border:1px solid #BBF7D0;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:6px" id="waStatus">CONNECT</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:28px;height:28px;background:#F4F6FB;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🔍</div>
+        <div>
+          <div style="font-size:.7rem;color:#9CA3AF;font-weight:600">ANALYSES DONE</div>
+          <div style="font-size:.82rem;font-weight:600;color:#1A1A2E" id="profileAnalyses">0 messages verified</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:28px;height:28px;background:#F4F6FB;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">📅</div>
+        <div>
+          <div style="font-size:.7rem;color:#9CA3AF;font-weight:600">MEMBER SINCE</div>
+          <div style="font-size:.82rem;font-weight:600;color:#1A1A2E" id="profileJoined">Today</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <a href="login.html" style="display:flex;align-items:center;justify-content:center;gap:6px;background:#F4F6FB;color:#374151;border:1px solid #E8ECF4;padding:9px;border-radius:10px;font-size:.82rem;font-weight:600;text-decoration:none;margin-bottom:.5rem;transition:all .2s">⚙️ Edit Profile</a>
+    <button onclick="logout()" style="width:100%;background:#FFF0F0;color:#C1121F;border:1px solid #FFCDD2;padding:9px;border-radius:10px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">🚪 Sign Out</button>
+  </div>
 </div>
   <div class="nav-tabs">
-    <button class="tab-btn active" onclick="showTab('check',this)">🔍 Verify</button>
-    <button class="tab-btn" onclick="showTab('chat',this)">💬 Chatbot</button>
-    <button class="tab-btn" onclick="showTab('trends',this)">📊 Trends</button>
-    <button class="tab-btn" onclick="showTab('learn',this)">📚 Learn</button>
+    <button class="tab-btn active" onclick="showTab('check',this)">Verify</button>
+    <button class="tab-btn" onclick="showTab('chat',this)">Chatbot</button>
+    <button class="tab-btn" onclick="showTab('trends',this)">Trends</button>
+    <button class="tab-btn" onclick="showTab('learn',this)">Learn</button>
   </div>
 </nav>
  
@@ -908,7 +949,10 @@ textarea::placeholder { color: #BCC5D6; }
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
+      
       renderResult(data);
+      const count = parseInt(localStorage.getItem('tg_analyses') || '0');
+localStorage.setItem('tg_analyses', count + 1);
     } catch(e) {
       alert('Analysis failed: ' + e.message + '\n\nMake sure app.py is running.');
     } finally {
@@ -1013,6 +1057,45 @@ textarea::placeholder { color: #BCC5D6; }
       ? '✅ Correct! Always verify on pib.gov.in. Never share unverified forwards.'
       : '❌ This is a scam pattern. Real government schemes never ask you to share WhatsApp messages or click unofficial links.';
   }
+  function toggleProfile() {
+  const dd = document.getElementById('profileDropdown');
+  dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+  loadProfile();
+}
+
+function loadProfile() {
+  const user = JSON.parse(localStorage.getItem('tg_user') || '{}');
+  const analyses = parseInt(localStorage.getItem('tg_analyses') || '0');
+  if (user.name) {
+    document.getElementById('profileName').textContent = user.name;
+    document.getElementById('profileEmail').textContent = user.email || 'No email';
+    document.getElementById('profileAvatar').textContent = user.name.charAt(0).toUpperCase();
+    document.getElementById('profilePhone').textContent = user.whatsapp || 'Not connected';
+    document.getElementById('profileJoined').textContent = user.joined || 'Today';
+    document.getElementById('waStatus').textContent = user.whatsapp ? 'LINKED ✓' : 'CONNECT';
+    document.getElementById('waStatus').style.background = user.whatsapp ? '#F0FDF4' : '#FFF0F0';
+    document.getElementById('waStatus').style.color = user.whatsapp ? '#166534' : '#C1121F';
+    document.getElementById('waStatus').style.borderColor = user.whatsapp ? '#BBF7D0' : '#FFCDD2';
+  }
+  document.getElementById('profileAnalyses').textContent = analyses + ' messages verified';
+}
+
+function logout() {
+  localStorage.removeItem('tg_user');
+  window.location.href = 'login.html';
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  const btn = document.getElementById('profileBtn');
+  const dd = document.getElementById('profileDropdown');
+  if (btn && dd && !btn.contains(e.target) && !dd.contains(e.target)) {
+    dd.style.display = 'none';
+  }
+});
+
+// Track analyses count
+const origAnalyze = window.analyze;
 </script>
 </body>
 </html>

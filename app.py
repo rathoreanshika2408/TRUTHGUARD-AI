@@ -194,5 +194,80 @@ def signup():
         })
     return jsonify({"success": False, "error": "All fields required"}), 400
 
+@app.route("/whatsapp-webhook", methods=["GET", "POST"])
+def whatsapp_webhook():
+    incoming_msg = request.form.get("Body", "").strip()
+    sender = request.form.get("From", "")
+    
+    if not incoming_msg:
+        return "OK", 200
+
+    try:
+        response = groq_client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": f"Analyze this for misinformation. Reply with JSON only:\n\n{incoming_msg}"}
+            ],
+            temperature=0.2,
+            max_tokens=500,
+        )
+        raw = response.choices[0].message.content.strip()
+        if "```" in raw:
+            raw = raw.split("```")[1]
+            if raw.startswith("json"):
+                raw = raw[4:]
+        result = json.loads(raw.strip())
+
+        score = result.get("credibility_score", "?")
+        verdict = result.get("verdict", "UNKNOWN")
+        explanation = result.get("explanation", "")
+        techniques = "\n".join([f"• {t}" for t in result.get("manipulation_techniques", [])])
+        action = result.get("recommended_action", "")
+        hindi = result.get("explanation_hindi", "")
+
+        if score <= 25:
+            emoji = "🔴"
+        elif score <= 50:
+            emoji = "🟠"
+        elif score <= 75:
+            emoji = "🟡"
+        else:
+            emoji = "🟢"
+
+        reply = f"""{emoji} *TruthGuard AI Analysis*
+
+📊 *Credibility Score:* {score}/100
+⚠️ *Verdict:* {verdict}
+
+🔍 *Manipulation Techniques:*
+{techniques if techniques else "• None detected"}
+
+💡 *Why suspicious:*
+{explanation}
+
+🇮🇳 *Hindi:*
+{hindi}
+
+✅ *What to do:*
+{action}
+
+_TruthGuard AI · Fighting misinformation in India_"""
+
+        twilio_client.messages.create(
+            from_=f"whatsapp:{os.getenv('TWILIO_WHATSAPP_NUMBER')}",
+            to=sender,
+            body=reply
+        )
+
+    except Exception as e:
+        twilio_client.messages.create(
+            from_=f"whatsapp:{os.getenv('TWILIO_WHATSAPP_NUMBER')}",
+            to=sender,
+            body="⚠️ TruthGuard AI could not analyze this message. Please try again."
+        )
+
+    return "OK", 200
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5001)
