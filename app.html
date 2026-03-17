@@ -584,33 +584,18 @@ textarea::placeholder { color: #BCC5D6; }
   <span id="voiceStatus" style="margin-left:10px;font-size:13px;color:#666;"></span>
 </div>
         <textarea id="inputText" placeholder="Paste any suspicious message, news article, or WhatsApp forward here...&#10;&#10;Example: 'सरकार दे रही है ₹5000 फ्री, अभी आवेदन करें'"></textarea>
-
+        <div class="upload-zone" onclick="document.getElementById('imgInput').click()" id="uploadZone">
+          <div class="upload-zone-icon">📷</div>
 <div style="margin-bottom:12px;">
-  <div id="dropZone" style="border:2px dashed #ddd;border-radius:12px;padding:20px;text-align:center;cursor:pointer;" onclick="document.getElementById('fileInput').click()" ondrop="handleDrop(event)" ondragover="event.preventDefault()">
-    <div style="font-size:24px;">📷</div>
-    <div style="font-size:13px;color:#666;margin-top:6px;">Drop screenshot or click to upload</div>
+  <div id="dropZone" style="border:2px dashed #ddd;border-radius:12px;padding:30px;text-align:center;cursor:pointer;" 
+    onclick="document.getElementById('fileInput').click()"
+    ondrop="handleDrop(event)" ondragover="event.preventDefault()">
+    <div style="font-size:32px;">📷</div>
+    <div style="font-size:14px;color:#666;margin-top:8px;">Drop a screenshot or click to upload</div>
+    <div style="font-size:12px;color:#999;margin-top:4px;">PNG, JPG supported · OCR extracts text automatically</div>
   </div>
   <div style="display:flex;gap:8px;margin-top:8px;">
     <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFileSelect(event)"/>
-    <input type="file" id="imgInput" accept="image/*" style="display:none" onchange="handleImage(this)"/>
-    <button onclick="document.getElementById('fileInput').click()" style="flex:1;background:#f5f5f5;border:1px solid #ddd;padding:10px;border-radius:8px;cursor:pointer;font-size:13px;">🖼️ Upload Image</button>
-    <button onclick="openCamera()" style="flex:1;background:#f5f5f5;border:1px solid #ddd;padding:10px;border-radius:8px;cursor:pointer;font-size:13px;">📸 Take Photo</button>
-  </div>
-  <div id="imagePreview" style="display:none;margin-top:8px;">
-    <img id="previewImg" style="max-width:100%;border-radius:8px;max-height:180px;object-fit:cover;"/>
-    <div id="ocrStatus" style="font-size:13px;color:#666;margin-top:6px;"></div>
-  </div>
-  <video id="cameraVideo" style="display:none;width:100%;border-radius:8px;" autoplay></video>
-  <canvas id="cameraCanvas" style="display:none;"></canvas>
-  <button id="captureBtn" onclick="capturePhoto()" style="display:none;width:100%;margin-top:8px;background:#E63946;color:white;border:none;padding:10px;border-radius:8px;cursor:pointer;font-size:14px;">📸 Capture</button>
-</div>
-
-<div style="margin-bottom:12px;">
-  <input type="file" id="videoInput" accept="video/*" style="display:none" onchange="handleVideo(event)"/>
-  <button onclick="document.getElementById('videoInput').click()" style="width:100%;background:#f5f5f5;border:1px solid #ddd;padding:10px;border-radius:8px;cursor:pointer;font-size:13px;">🎥 Upload Video</button>
-  <div id="videoStatus" style="font-size:13px;color:#666;margin-top:6px;"></div>
-  <video id="videoPlayer" controls style="display:none;width:100%;border-radius:8px;margin-top:8px;max-height:200px;"></video>
-</div>
     <button onclick="document.getElementById('fileInput').click()" 
       style="flex:1;background:#f5f5f5;border:1px solid #ddd;padding:10px;border-radius:8px;cursor:pointer;font-size:13px;">
       🖼️ Upload Image
