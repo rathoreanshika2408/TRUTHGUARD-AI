@@ -569,8 +569,35 @@ textarea::placeholder { color: #BCC5D6; }
         <textarea id="inputText" placeholder="Paste any suspicious message, news article, or WhatsApp forward here...&#10;&#10;Example: 'सरकार दे रही है ₹5000 फ्री, अभी आवेदन करें'"></textarea>
         <div class="upload-zone" onclick="document.getElementById('imgInput').click()" id="uploadZone">
           <div class="upload-zone-icon">📷</div>
-          <div class="upload-zone-text">Drop a WhatsApp screenshot here or click to upload</div>
-          <div class="upload-zone-sub">PNG, JPG supported · Text extracted automatically via OCR</div>
+<div style="margin-bottom:12px;">
+  <div id="dropZone" style="border:2px dashed #ddd;border-radius:12px;padding:30px;text-align:center;cursor:pointer;" 
+    onclick="document.getElementById('fileInput').click()"
+    ondrop="handleDrop(event)" ondragover="event.preventDefault()">
+    <div style="font-size:32px;">📷</div>
+    <div style="font-size:14px;color:#666;margin-top:8px;">Drop a screenshot or click to upload</div>
+    <div style="font-size:12px;color:#999;margin-top:4px;">PNG, JPG supported · OCR extracts text automatically</div>
+  </div>
+  <div style="display:flex;gap:8px;margin-top:8px;">
+    <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFileSelect(event)"/>
+    <button onclick="document.getElementById('fileInput').click()" 
+      style="flex:1;background:#f5f5f5;border:1px solid #ddd;padding:10px;border-radius:8px;cursor:pointer;font-size:13px;">
+      🖼️ Upload Image
+    </button>
+    <button onclick="openCamera()" 
+      style="flex:1;background:#f5f5f5;border:1px solid #ddd;padding:10px;border-radius:8px;cursor:pointer;font-size:13px;">
+      📸 Take Photo
+    </button>
+  </div>
+  <div id="imagePreview" style="display:none;margin-top:8px;">
+    <img id="previewImg" style="max-width:100%;border-radius:8px;max-height:200px;object-fit:cover;"/>
+    <div id="ocrStatus" style="font-size:13px;color:#666;margin-top:6px;"></div>
+  </div>
+  <video id="cameraVideo" style="display:none;width:100%;border-radius:8px;" autoplay></video>
+  <canvas id="cameraCanvas" style="display:none;"></canvas>
+  <button id="captureBtn" onclick="capturePhoto()" style="display:none;width:100%;margin-top:8px;background:#E63946;color:white;border:none;padding:10px;border-radius:8px;cursor:pointer;font-size:14px;">
+    📸 Capture
+  </button>
+</div>          <div class="upload-zone-sub">PNG, JPG supported · Text extracted automatically via OCR</div>
         </div>
         <input type="file" id="imgInput" accept="image/*" style="display:none" onchange="handleImage(this)"/>
         <div class="btn-row">
@@ -1118,6 +1145,65 @@ function startVoice() {
   recognition.onerror = () => { status.textContent = '❌ Error. Try again.'; btn.textContent = '🎤 Record Voice'; };
   recognition.onend = () => { btn.textContent = '🎤 Record Voice'; };
   recognition.start();
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file) processImage(file);
+}
+
+function handleFileSelect(e) {
+  const file = e.target.files[0];
+  if (file) processImage(file);
+}
+
+function processImage(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    document.getElementById('previewImg').src = e.target.result;
+    document.getElementById('imagePreview').style.display = 'block';
+    document.getElementById('ocrStatus').textContent = '🔍 Extracting text...';
+  };
+  reader.readAsDataURL(file);
+  const form = new FormData();
+  form.append('image', file);
+  fetch(API + '/ocr', { method: 'POST', body: form })
+    .then(r => r.json())
+    .then(data => {
+      if (data.text) {
+        document.getElementById('inputText').value = data.text;
+        document.getElementById('ocrStatus').textContent = '✅ Text extracted! Click Analyze Now.';
+      } else {
+        document.getElementById('ocrStatus').textContent = '❌ Could not extract text. Try a clearer image.';
+      }
+    });
+}
+
+async function openCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+    const video = document.getElementById('cameraVideo');
+    video.srcObject = stream;
+    video.style.display = 'block';
+    document.getElementById('captureBtn').style.display = 'block';
+    document.getElementById('dropZone').style.display = 'none';
+  } catch(e) {
+    alert('Camera access denied. Please allow camera permission.');
+  }
+}
+
+function capturePhoto() {
+  const video = document.getElementById('cameraVideo');
+  const canvas = document.getElementById('cameraCanvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  video.srcObject.getTracks().forEach(t => t.stop());
+  video.style.display = 'none';
+  document.getElementById('captureBtn').style.display = 'none';
+  document.getElementById('dropZone').style.display = 'block';
+  canvas.toBlob(blob => processImage(new File([blob], 'photo.jpg', { type: 'image/jpeg' })));
 }
 </script>
 </body>
