@@ -564,14 +564,6 @@ textarea::placeholder { color: #BCC5D6; }
   <button id="voiceBtn" onclick="startVoice()" style="background:#E63946;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;">
     🎤 Record Voice
   </button>
-  <div style="margin-bottom:12px; display:flex; gap:8px;">
-  <input id="urlInput" type="url" placeholder="Paste a suspicious URL or link here..." 
-    style="flex:1; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:14px;"/>
-  <button onclick="verifyURL()" 
-    style="background:#E63946;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;">
-    🔗 Verify URL
-  </button>
-</div>
   <span id="voiceStatus" style="margin-left:10px;font-size:13px;color:#666;"></span>
 </div>
         <textarea id="inputText" placeholder="Paste any suspicious message, news article, or WhatsApp forward here...&#10;&#10;Example: 'सरकार दे रही है ₹5000 फ्री, अभी आवेदन करें'"></textarea>
@@ -1123,15 +1115,9 @@ function startVoice() {
     status.textContent = '✅ Got it! Click Analyze Now.';
     btn.textContent = '🎤 Record Voice';
   };
-  recognition.onerror = () => { status.textContent = ' Error. Try again.'; btn.textContent = ' Record Voice'; };
-  recognition.onend = () => { btn.textContent = 'Record Voice'; };
+  recognition.onerror = () => { status.textContent = '❌ Error. Try again.'; btn.textContent = '🎤 Record Voice'; };
+  recognition.onend = () => { btn.textContent = '🎤 Record Voice'; };
   recognition.start();
-}
-async function verifyURL() {
-  const url = document.getElementById('urlInput').value.trim();
-  if (!url) { alert('Please paste a URL first'); return; }
-  document.getElementById('inputText').value = url;
-  analyzeText();
 }
 </script>
 </body>
