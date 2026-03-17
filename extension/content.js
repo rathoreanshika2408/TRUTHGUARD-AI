@@ -70,7 +70,7 @@ function showWarning(messageEl, risk) {
         </div>` : ''}
         <div class="tg-actions">
           <span class="tg-tip">Verify before sharing</span>
-          <a href="https://trustguardai-rose.vercel.app/app.html" target="_blank" class="tg-btn">Verify now →</a>        </div>
+          <a href="https://truthguard-ai-sand.vercel.app/app.html"target="_blank" class="tg-btn">Verify now →</a>        </div>
       </div>
     </div>`;
 
