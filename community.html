@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Community — TruthGuard AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Sora',sans-serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh;}
+
+/* NAV */
+nav{background:#fff;border-bottom:1px solid #eee;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-icon{background:#E63946;color:#fff;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.nav-logo-text{font-weight:700;font-size:16px;color:#1a1a1a;}
+.nav-logo-beta{font-size:10px;background:#fff3f3;color:#E63946;border:1px solid #fcc;padding:2px 6px;border-radius:4px;font-weight:600;}
+.nav-links{display:flex;gap:4px;}
+.nav-links a{padding:6px 14px;border-radius:6px;text-decoration:none;font-size:14px;color:#666;transition:all 0.2s;}
+.nav-links a:hover{background:#f5f5f5;color:#1a1a1a;}
+.nav-links a.active{background:#fff3f3;color:#E63946;font-weight:500;}
+
+/* MARQUEE */
+.marquee-bar{background:#1a1a1a;color:#fff;padding:8px 0;font-size:12px;overflow:hidden;white-space:nowrap;}
+.marquee-bar marquee{display:inline-block;}
+
+/* HERO */
+.community-hero{background:#fff;border-bottom:1px solid #eee;padding:32px 24px;text-align:center;}
+.community-hero h1{font-size:28px;font-weight:700;margin-bottom:8px;}
+.community-hero h1 span{color:#E63946;}
+.community-hero p{color:#666;font-size:15px;max-width:500px;margin:0 auto 20px;}
+.write-btn{background:#E63946;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Sora',sans-serif;transition:opacity 0.2s;}
+.write-btn:hover{opacity:0.88;}
+
+/* LAYOUT */
+.page-layout{max-width:1100px;margin:0 auto;padding:24px;display:grid;grid-template-columns:1fr 300px;gap:24px;}
+@media(max-width:768px){.page-layout{grid-template-columns:1fr;}.sidebar{display:none;}}
+
+/* FEED */
+.feed-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.feed-header h2{font-size:16px;font-weight:600;}
+.filter-tabs{display:flex;gap:6px;}
+.filter-tab{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid #eee;background:#fff;color:#666;font-family:'Sora',sans-serif;transition:all 0.2s;}
+.filter-tab.active{background:#E63946;color:#fff;border-color:#E63946;}
+
+/* POST CARD */
+.post-card{background:#fff;border:1px solid #eee;border-radius:14px;padding:20px;margin-bottom:16px;transition:box-shadow 0.2s;}
+.post-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.08);}
+.post-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;}
+.post-meta{flex:1;}
+.post-author{font-size:13px;font-weight:600;}
+.post-time{font-size:11px;color:#999;}
+.post-category{font-size:11px;padding:3px 10px;border-radius:12px;font-weight:600;}
+.cat-scam{background:#fff3f3;color:#E63946;}
+.cat-health{background:#f0faf0;color:#2d8a4e;}
+.cat-political{background:#fff8e6;color:#b45309;}
+.cat-experience{background:#f0f4ff;color:#3b5bdb;}
+.post-title{font-size:16px;font-weight:700;margin-bottom:8px;line-height:1.4;}
+.post-excerpt{font-size:13px;color:#555;line-height:1.7;margin-bottom:14px;}
+.post-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.tag{font-size:11px;background:#f5f5f5;color:#666;padding:3px 10px;border-radius:12px;}
+.post-actions{display:flex;align-items:center;gap:16px;padding-top:12px;border-top:1px solid #f0f0f0;}
+.action-btn{display:flex;align-items:center;gap:5px;font-size:12px;color:#888;cursor:pointer;background:none;border:none;font-family:'Sora',sans-serif;padding:4px 8px;border-radius:6px;transition:all 0.2s;}
+.action-btn:hover{background:#f5f5f5;color:#1a1a1a;}
+.action-btn.liked{color:#E63946;}
+.read-more{margin-left:auto;font-size:12px;color:#E63946;font-weight:600;cursor:pointer;text-decoration:none;}
+
+/* SIDEBAR */
+.sidebar-card{background:#fff;border:1px solid #eee;border-radius:14px;padding:18px;margin-bottom:16px;}
+.sidebar-card h3{font-size:13px;font-weight:700;margin-bottom:14px;color:#1a1a1a;text-transform:uppercase;letter-spacing:0.5px;}
+.trending-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;cursor:pointer;}
+.trending-num{font-size:18px;font-weight:700;color:#eee;min-width:24px;line-height:1;}
+.trending-title{font-size:12px;font-weight:500;line-height:1.4;color:#444;}
+.trending-views{font-size:11px;color:#999;margin-top:2px;}
+.stat-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.stat-label{font-size:12px;color:#666;}
+.stat-value{font-size:13px;font-weight:700;color:#E63946;}
+
+/* WRITE MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center;padding:16px;}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;}
+.modal-header{padding:20px 24px;border-bottom:1px solid #eee;display:flex;align-items:center;justify-content:space-between;}
+.modal-header h2{font-size:16px;font-weight:700;}
+.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:#999;line-height:1;}
+.modal-body{padding:24px;}
+.form-group{margin-bottom:16px;}
+.form-label{font-size:13px;font-weight:600;color:#444;margin-bottom:6px;display:block;}
+.form-input{width:100%;padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Sora',sans-serif;outline:none;transition:border 0.2s;}
+.form-input:focus{border-color:#E63946;}
+textarea.form-input{min-height:140px;resize:vertical;line-height:1.6;}
+.category-select{display:flex;gap:8px;flex-wrap:wrap;}
+.cat-option{padding:6px 14px;border:1px solid #eee;border-radius:20px;font-size:12px;cursor:pointer;font-family:'Sora',sans-serif;transition:all 0.2s;}
+.cat-option.selected{background:#E63946;color:#fff;border-color:#E63946;}
+.modal-footer{padding:16px 24px;border-top:1px solid #eee;display:flex;justify-content:flex-end;gap:10px;}
+.btn-cancel{padding:10px 20px;border:1px solid #ddd;border-radius:8px;background:#fff;font-size:13px;cursor:pointer;font-family:'Sora',sans-serif;}
+.btn-publish{padding:10px 24px;background:#E63946;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Sora',sans-serif;}
+
+/* FULL POST MODAL */
+.full-post-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;}
+.full-post-modal.open{display:flex;}
+.full-post{background:#fff;border-radius:16px;width:100%;max-width:720px;margin:auto;}
+.full-post-header{padding:24px 28px 0;}
+.full-post-body{padding:20px 28px 28px;}
+.full-post-body p{font-size:15px;line-height:1.8;color:#444;margin-bottom:14px;}
+
+/* COMMENTS */
+.comments-section{border-top:1px solid #eee;padding:20px 28px;}
+.comment{display:flex;gap:10px;margin-bottom:14px;}
+.comment-content{flex:1;background:#f8f7f4;border-radius:10px;padding:10px 14px;}
+.comment-author{font-size:12px;font-weight:600;margin-bottom:4px;}
+.comment-text{font-size:13px;color:#555;line-height:1.5;}
+.comment-input-row{display:flex;gap:8px;margin-top:12px;}
+.comment-input{flex:1;padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:13px;font-family:'Sora',sans-serif;outline:none;}
+.comment-input:focus{border-color:#E63946;}
+.comment-submit{background:#E63946;color:#fff;border:none;padding:10px 18px;border-radius:8px;font-size:13px;cursor:pointer;font-family:'Sora',sans-serif;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🛡️</div>
+    <span class="nav-logo-text">TrustGuard</span>
+    <span class="nav-logo-beta">BETA</span>
+  </a>
+  <div class="nav-links">
+    <a href="app.html">Verify</a>
+    <a href="app.html#chatbot">Chatbot</a>
+    <a href="community.html" class="active">Community</a>
+    <a href="app.html#learn">Learn</a>
+  </div>
+  <div style="width:80px;"></div>
+</nav>
+
+<div class="marquee-bar">
+  <marquee scrollamount="4">
+    🚨 FAKE: "PM Modi announces ₹8500 for all families" &nbsp;&nbsp;|&nbsp;&nbsp;
+    ⚠️ FALSE: "5G towers spreading COVID-19" &nbsp;&nbsp;|&nbsp;&nbsp;
+    🔴 SCAM: "Free Jio recharge for 1 year — forward now" &nbsp;&nbsp;|&nbsp;&nbsp;
+    ⚠️ FAKE: "Aadhaar card cancelled if not updated in 24 hours" &nbsp;&nbsp;|&nbsp;&nbsp;
+    🚨 FALSE: "WhatsApp becoming paid next month" &nbsp;&nbsp;|&nbsp;&nbsp;
+    🔴 SCAM: "Win iPhone 15 — forward to 10 friends" &nbsp;&nbsp;|&nbsp;&nbsp;
+    ⚠️ FALSE: "Drinking hot water cures cancer" &nbsp;&nbsp;|&nbsp;&nbsp;
+    🚨 FAKE: "Government giving free laptop to all students" &nbsp;&nbsp;|&nbsp;&nbsp;
+  </marquee>
+</div>
+
+<div class="community-hero">
+  <h1>Community <span>Truth Channel</span></h1>
+  <p>Share your experiences with misinformation. Write blogs, warn others, and help India fight fake news together.</p>
+  <button class="write-btn" onclick="openWriteModal()">✍️ Write a Blog Post</button>
+</div>
+
+<div class="page-layout">
+  <div class="main-feed">
+    <div class="feed-header">
+      <h2>Latest Posts</h2>
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="filterPosts('all', this)">All</button>
+        <button class="filter-tab" onclick="filterPosts('scam', this)">Scams</button>
+        <button class="filter-tab" onclick="filterPosts('health', this)">Health</button>
+        <button class="filter-tab" onclick="filterPosts('political', this)">Political</button>
+        <button class="filter-tab" onclick="filterPosts('experience', this)">Experiences</button>
+      </div>
+    </div>
+    <div id="postsFeed"></div>
+  </div>
+
+  <div class="sidebar">
+    <div class="sidebar-card">
+      <h3>📈 Trending Topics</h3>
+      <div id="trendingList"></div>
+    </div>
+    <div class="sidebar-card">
+      <h3>📊 Community Stats</h3>
+      <div class="stat-row"><span class="stat-label">Total Posts</span><span class="stat-value" id="statPosts">0</span></div>
+      <div class="stat-row"><span class="stat-label">Active Members</span><span class="stat-value">1,247</span></div>
+      <div class="stat-row"><span class="stat-label">Scams Exposed</span><span class="stat-value">342</span></div>
+      <div class="stat-row"><span class="stat-label">Lives Protected</span><span class="stat-value">8,900+</span></div>
+    </div>
+    <div class="sidebar-card">
+      <h3>🏆 Top Contributors</h3>
+      <div id="contributorsList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Write Modal -->
+<div class="modal-overlay" id="writeModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>✍️ Write a Blog Post</h2>
+      <button class="modal-close" onclick="closeWriteModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Your Name</label>
+        <input class="form-input" id="postAuthor" placeholder="Enter your name..."/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Post Title</label>
+        <input class="form-input" id="postTitle" placeholder="e.g. How I almost fell for a PM Kisan scam..."/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <div class="category-select">
+          <button class="cat-option selected" onclick="selectCat(this,'scam')">🚨 Scam Alert</button>
+          <button class="cat-option" onclick="selectCat(this,'health')">🏥 Health Myth</button>
+          <button class="cat-option" onclick="selectCat(this,'political')">🏛️ Political</button>
+          <button class="cat-option" onclick="selectCat(this,'experience')">💬 My Experience</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Your Story</label>
+        <textarea class="form-input" id="postContent" placeholder="Share your experience or what you know about this misinformation..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tags (comma separated)</label>
+        <input class="form-input" id="postTags" placeholder="e.g. whatsapp, government scheme, scam"/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeWriteModal()">Cancel</button>
+      <button class="btn-publish" onclick="publishPost()">🚀 Publish Post</button>
+    </div>
+  </div>
+</div>
+
+<!-- Full Post Modal -->
+<div class="full-post-modal" id="fullPostModal">
+  <div class="full-post">
+    <div class="full-post-header" id="fullPostHeader"></div>
+    <div class="full-post-body" id="fullPostBody"></div>
+    <div class="comments-section">
+      <h3 style="font-size:14px;font-weight:700;margin-bottom:14px;">💬 Comments</h3>
+      <div id="commentsList"></div>
+      <div class="comment-input-row">
+        <input class="comment-input" id="commentInput" placeholder="Write a comment..."/>
+        <button class="comment-submit" onclick="submitComment()">Post</button>
+      </div>
+    </div>
+    <div style="padding:16px 28px;border-top:1px solid #eee;">
+      <button onclick="closeFullPost()" style="background:none;border:1px solid #ddd;padding:8px 18px;border-radius:8px;cursor:pointer;font-size:13px;font-family:'Sora',sans-serif;">← Back to Feed</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const AVATARS = ['#E63946','#2196F3','#4CAF50','#FF9800','#9C27B0','#00BCD4','#F44336','#3F51B5'];
+const AVATAR_INITIALS = (name) => name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+
+const SEED_POSTS = [
+  {
+    id:1, author:'Priya Sharma', city:'Mumbai', category:'scam',
+    title:'My mother almost sent ₹50,000 to a fake PM Kisan scheme',
+    content:`Last month, my mother received a WhatsApp message claiming the government was giving ₹8,500 to all families under PM Kisan Yojana. The message had an official-looking link and even a photo of PM Modi.\n\nShe was about to click the link and enter her Aadhaar number when I saw the message. I immediately checked PIB Fact Check — it was a complete scam. The link was a phishing website designed to steal Aadhaar and bank details.\n\nPlease warn your family members — the government NEVER announces schemes through WhatsApp forwards. Always check pib.gov.in before believing any government scheme message.`,
+    tags:['whatsapp','pm kisan','government scam','aadhaar'],
+    likes:234, comments:[], time:'2 hours ago', read:'4 min read'
+  },
+  {
+    id:2, author:'Rahul Verma', city:'Delhi', category:'health',
+    title:'The "hot water cures COVID" myth spread by my own relatives',
+    content:`During COVID, my relatives were convinced that drinking hot water with tulsi every hour would cure COVID-19. They even stopped taking their prescribed medications because someone in a WhatsApp group said "doctors are hiding this cure."\n\nThis is exactly how health misinformation kills people. My uncle delayed getting proper treatment for 4 days because of this myth. Thankfully he recovered, but it could have been much worse.\n\nI started using TruthGuard to fact-check every message before believing it. The AI analysis immediately flagged the hot water cure as misinformation with a credibility score of 4/100.`,
+    tags:['covid','health myth','hot water','WhatsApp forward'],
+    likes:189, comments:[], time:'5 hours ago', read:'3 min read'
+  },
+  {
+    id:3, author:'Ananya Singh', city:'Bangalore', category:'experience',
+    title:'How I exposed a fake job offer scam targeting college students',
+    content:`I received a message on WhatsApp offering a "work from home" job with ₹50,000 monthly salary. No experience needed, just pay ₹2,000 registration fee. Classic advance fee scam.\n\nWhat was scary was how professional it looked — they had a fake company website, fake employee testimonials, and even a fake HR contact number.\n\nI reported it to cybercrime.gov.in and also shared my analysis on this community. Within 24 hours, 3 other students from my college said they had received the same message. Together we reported it and the WhatsApp number was blocked.\n\nAlways remember: any job that asks for money upfront is a SCAM.`,
+    tags:['job scam','work from home','college students','cybercrime'],
+    likes:312, comments:[], time:'1 day ago', read:'5 min read'
+  },
+  {
+    id:4, author:'Mohammad Faiz', city:'Hyderabad', category:'political',
+    title:'Viral video claiming politician took bribe — it was edited',
+    content:`A video went viral in our area claiming a local politician was taking a bribe. The video had over 2 million views and people were sharing it furiously before elections.\n\nI used TruthGuard's video analysis and found the video had been heavily edited. The original video was from 2019 and showed a completely different context. The money exchange was actually a donation at a charity event.\n\nThis is how political misinformation works — take old footage, remove context, and release it before elections. Always verify videos before sharing, especially political ones near election time.`,
+    tags:['political','deep fake','election','viral video'],
+    likes:156, comments:[], time:'2 days ago', read:'4 min read'
+  }
+];
+
+let posts = [...SEED_POSTS];
+let currentCategory = 'all';
+let selectedCategory = 'scam';
+let currentPostId = null;
+
+function timeAgo(date) {
+  const diff = Date.now() - date;
+  const mins = Math.floor(diff/60000);
+  if(mins < 60) return `${mins}m ago`;
+  if(mins < 1440) return `${Math.floor(mins/60)}h ago`;
+  return `${Math.floor(mins/1440)}d ago`;
+}
+
+function getCatStyle(cat) {
+  const map = {scam:'cat-scam',health:'cat-health',political:'cat-political',experience:'cat-experience'};
+  return map[cat] || 'cat-scam';
+}
+
+function getCatLabel(cat) {
+  const map = {scam:'🚨 Scam Alert',health:'🏥 Health Myth',political:'🏛️ Political',experience:'💬 Experience'};
+  return map[cat] || cat;
+}
+
+function renderPosts() {
+  const feed = document.getElementById('postsFeed');
+  const filtered = currentCategory === 'all' ? posts : posts.filter(p => p.category === currentCategory);
+  document.getElementById('statPosts').textContent = posts.length;
+  feed.innerHTML = filtered.map(post => `
+    <div class="post-card" data-id="${post.id}">
+      <div class="post-header">
+        <div class="avatar" style="background:${AVATARS[post.id % AVATARS.length]};color:#fff;">${AVATAR_INITIALS(post.author)}</div>
+        <div class="post-meta">
+          <div class="post-author">${post.author} ${post.city ? `<span style="font-weight:400;color:#999;font-size:11px;">· ${post.city}</span>` : ''}</div>
+          <div class="post-time">${post.time} · ${post.read || '3 min read'}</div>
+        </div>
+        <span class="post-category ${getCatStyle(post.category)}">${getCatLabel(post.category)}</span>
+      </div>
+      <div class="post-title">${post.title}</div>
+      <div class="post-excerpt">${post.content.slice(0,180)}...</div>
+      <div class="post-tags">${(post.tags||[]).map(t=>`<span class="tag">#${t}</span>`).join('')}</div>
+      <div class="post-actions">
+        <button class="action-btn ${post.liked?'liked':''}" onclick="toggleLike(${post.id}, event)">
+          ${post.liked ? '❤️' : '🤍'} ${post.likes}
+        </button>
+        <button class="action-btn" onclick="openFullPost(${post.id})">
+          💬 ${post.comments.length} comments
+        </button>
+        <a class="read-more" onclick="openFullPost(${post.id})">Read more →</a>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderSidebar() {
+  const trending = [...posts].sort((a,b) => b.likes - a.likes).slice(0,4);
+  document.getElementById('trendingList').innerHTML = trending.map((p,i) => `
+    <div class="trending-item" onclick="openFullPost(${p.id})">
+      <div class="trending-num">${String(i+1).padStart(2,'0')}</div>
+      <div>
+        <div class="trending-title">${p.title}</div>
+        <div class="trending-views">❤️ ${p.likes} likes</div>
+      </div>
+    </div>
+  `).join('');
+
+  const contributors = {};
+  posts.forEach(p => { contributors[p.author] = (contributors[p.author]||0) + p.likes; });
+  const top = Object.entries(contributors).sort((a,b)=>b[1]-a[1]).slice(0,4);
+  document.getElementById('contributorsList').innerHTML = top.map(([name, likes], i) => `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+      <div class="avatar" style="background:${AVATARS[i]};color:#fff;width:32px;height:32px;font-size:12px;">${AVATAR_INITIALS(name)}</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:500;">${name}</div>
+        <div style="font-size:11px;color:#999;">❤️ ${likes} likes</div>
+      </div>
+      ${i===0?'<span style="font-size:16px;">🏆</span>':''}
+    </div>
+  `).join('');
+}
+
+function filterPosts(cat, btn) {
+  currentCategory = cat;
+  document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPosts();
+}
+
+function toggleLike(id, e) {
+  e.stopPropagation();
+  const post = posts.find(p => p.id === id);
+  if(post) { post.liked = !post.liked; post.likes += post.liked ? 1 : -1; }
+  renderPosts();
+  renderSidebar();
+}
+
+function openWriteModal() { document.getElementById('writeModal').classList.add('open'); }
+function closeWriteModal() { document.getElementById('writeModal').classList.remove('open'); }
+
+function selectCat(btn, cat) {
+  document.querySelectorAll('.cat-option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedCategory = cat;
+}
+
+function publishPost() {
+  const author = document.getElementById('postAuthor').value.trim();
+  const title = document.getElementById('postTitle').value.trim();
+  const content = document.getElementById('postContent').value.trim();
+  const tags = document.getElementById('postTags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  if(!author || !title || !content) { alert('Please fill in all fields!'); return; }
+  const newPost = {
+    id: Date.now(), author, category: selectedCategory,
+    title, content, tags, likes:0, comments:[], time:'Just now', read:'1 min read', liked:false
+  };
+  posts.unshift(newPost);
+  renderPosts(); renderSidebar();
+  closeWriteModal();
+  document.getElementById('postAuthor').value = '';
+  document.getElementById('postTitle').value = '';
+  document.getElementById('postContent').value = '';
+  document.getElementById('postTags').value = '';
+}
+
+function openFullPost(id) {
+  currentPostId = id;
+  const post = posts.find(p => p.id === id);
+  if(!post) return;
+  document.getElementById('fullPostHeader').innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <div class="avatar" style="background:${AVATARS[id % AVATARS.length]};color:#fff;">${AVATAR_INITIALS(post.author)}</div>
+      <div>
+        <div style="font-size:14px;font-weight:600;">${post.author}</div>
+        <div style="font-size:12px;color:#999;">${post.time} · ${post.read||'3 min read'}</div>
+      </div>
+      <span class="post-category ${getCatStyle(post.category)}" style="margin-left:auto;">${getCatLabel(post.category)}</span>
+    </div>
+    <h1 style="font-size:22px;font-weight:700;line-height:1.4;margin-bottom:12px;">${post.title}</h1>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;">${(post.tags||[]).map(t=>`<span class="tag">#${t}</span>`).join('')}</div>
+  `;
+  document.getElementById('fullPostBody').innerHTML = post.content.split('\n\n').map(p => p ? `<p>${p}</p>` : '').join('');
+  renderComments(post);
+  document.getElementById('fullPostModal').classList.add('open');
+  window.scrollTo(0,0);
+}
+
+function renderComments(post) {
+  document.getElementById('commentsList').innerHTML = (post.comments||[]).map(c => `
+    <div class="comment">
+      <div class="avatar" style="background:${AVATARS[Math.floor(Math.random()*AVATARS.length)]};color:#fff;width:32px;height:32px;font-size:12px;flex-shrink:0;">${AVATAR_INITIALS(c.author)}</div>
+      <div class="comment-content">
+        <div class="comment-author">${c.author}</div>
+        <div class="comment-text">${c.text}</div>
+      </div>
+    </div>
+  `).join('') || '<p style="font-size:13px;color:#999;margin-bottom:12px;">No comments yet. Be the first!</p>';
+}
+
+function submitComment() {
+  const input = document.getElementById('commentInput');
+  const text = input.value.trim();
+  if(!text) return;
+  const post = posts.find(p => p.id === currentPostId);
+  if(post) {
+    post.comments.push({ author: 'You', text });
+    renderComments(post);
+    renderPosts();
+  }
+  input.value = '';
+}
+
+function closeFullPost() { document.getElementById('fullPostModal').classList.remove('open'); }
+
+document.getElementById('writeModal').addEventListener('click', e => { if(e.target === document.getElementById('writeModal')) closeWriteModal(); });
+document.getElementById('fullPostModal').addEventListener('click', e => { if(e.target === document.getElementById('fullPostModal')) closeFullPost(); });
+
+renderPosts();
+renderSidebar();
+</script>
+</body>
+</html>
