@@ -560,6 +560,12 @@ textarea::placeholder { color: #BCC5D6; }
             <div class="input-sub">Paste text or upload a WhatsApp screenshot — Hindi & English supported</div>
           </div>
         </div>
+        <div style="margin-bottom:12px;">
+  <button id="voiceBtn" onclick="startVoice()" style="background:#E63946;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;">
+    🎤 Record Voice
+  </button>
+  <span id="voiceStatus" style="margin-left:10px;font-size:13px;color:#666;"></span>
+</div>
         <textarea id="inputText" placeholder="Paste any suspicious message, news article, or WhatsApp forward here...&#10;&#10;Example: 'सरकार दे रही है ₹5000 फ्री, अभी आवेदन करें'"></textarea>
         <div class="upload-zone" onclick="document.getElementById('imgInput').click()" id="uploadZone">
           <div class="upload-zone-icon">📷</div>
@@ -1095,6 +1101,24 @@ document.addEventListener('click', function(e) {
 
 // Track analyses count
 const origAnalyze = window.analyze;
+function startVoice() {
+  const btn = document.getElementById('voiceBtn');
+  const status = document.getElementById('voiceStatus');
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) { alert('Voice not supported in this browser. Use Chrome.'); return; }
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'hi-IN';
+  recognition.interimResults = false;
+  recognition.onstart = () => { btn.textContent = '⏹ Stop'; status.textContent = 'Listening...'; };
+  recognition.onresult = (e) => {
+    document.getElementById('inputText').value = e.results[0][0].transcript;
+    status.textContent = '✅ Got it! Click Analyze Now.';
+    btn.textContent = '🎤 Record Voice';
+  };
+  recognition.onerror = () => { status.textContent = '❌ Error. Try again.'; btn.textContent = '🎤 Record Voice'; };
+  recognition.onend = () => { btn.textContent = '🎤 Record Voice'; };
+  recognition.start();
+}
 </script>
 </body>
 </html>
