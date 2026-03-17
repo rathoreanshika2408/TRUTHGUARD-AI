@@ -610,7 +610,15 @@ textarea::placeholder { color: #BCC5D6; }
           </span>
         </div>
       </div>
- 
+ <div style="margin-bottom:12px;">
+  <input type="file" id="videoInput" accept="video/*" style="display:none" onchange="handleVideo(event)"/>
+  <button onclick="document.getElementById('videoInput').click()"
+    style="width:100%;background:#f5f5f5;border:1px solid #ddd;padding:10px;border-radius:8px;cursor:pointer;font-size:13px;">
+    🎥 Upload Video
+  </button>
+  <div id="videoStatus" style="font-size:13px;color:#666;margin-top:6px;"></div>
+  <video id="videoPlayer" controls style="display:none;width:100%;border-radius:8px;margin-top:8px;max-height:200px;"></video>
+</div>
       <!-- Result -->
       <div id="resultSection" class="hidden">
         <div class="card">
@@ -1204,6 +1212,41 @@ function capturePhoto() {
   document.getElementById('captureBtn').style.display = 'none';
   document.getElementById('dropZone').style.display = 'block';
   canvas.toBlob(blob => processImage(new File([blob], 'photo.jpg', { type: 'image/jpeg' })));
+}
+function handleVideo(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const status = document.getElementById('videoStatus');
+  const player = document.getElementById('videoPlayer');
+  status.textContent = '🎥 Video loaded. Extracting audio...';
+  player.src = URL.createObjectURL(file);
+  player.style.display = 'block';
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    status.textContent = '❌ Speech recognition not supported. Try Chrome.';
+    return;
+  }
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'hi-IN';
+  recognition.continuous = true;
+  recognition.interimResults = false;
+  let transcript = '';
+  recognition.onresult = (e) => {
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      transcript += e.results[i][0].transcript + ' ';
+    }
+    document.getElementById('inputText').value = transcript;
+    status.textContent = '✅ Audio extracted! Click Analyze Now.';
+  };
+  recognition.onerror = () => {
+    status.textContent = '❌ Could not extract audio. Try playing the video and using voice record instead.';
+  };
+  player.onplay = () => recognition.start();
+  player.onpause = () => recognition.stop();
+  player.onended = () => {
+    recognition.stop();
+    status.textContent = '✅ Done! Click Analyze Now.';
+  };
 }
 </script>
 </body>
