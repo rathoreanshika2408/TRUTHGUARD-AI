@@ -604,7 +604,16 @@ textarea::placeholder { color: #BCC5D6; }
  
 </div><!-- end main -->
  
+
+async function wakeUpBackend() {
+  try {
+    const res = await fetch(API + '/trends', { method: 'GET' });
+    console.log('Backend awake!');
+  } catch(e) {}
+}
+wakeUpBackend();   
 <script>
+  
 const API = "https://trustguard-backend-4n2p.onrender.com";
 let chatHistory = [];
  
