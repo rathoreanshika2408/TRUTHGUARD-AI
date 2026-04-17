@@ -265,31 +265,41 @@ def verify_url():
     result["domain"]            = domain
     return jsonify(result)
 
-from youtube_transcript_api import YouTubeTranscriptApi
+import yt_dlp
+import tempfile
 
 @app.route('/analyze-youtube', methods=['POST'])
 def analyze_youtube():
     data = request.get_json()
-    url  = data.get('url', '').strip()
+    url = data.get('url', '').strip()
     if not url:
         return jsonify({'error': 'No URL provided'}), 400
 
-    import re
-    match = re.search(r'(?:v=|youtu\.be/)([a-zA-Z0-9_-]{11})', url)
-    if not match:
-        return jsonify({'error': 'Could not extract video ID'}), 400
-
-    video_id = match.group(1)
-
     try:
-        # ✅ New API for youtube-transcript-api v1.x
-        ytt_api = YouTubeTranscriptApi()
-        fetched = ytt_api.fetch(video_id)
-        transcript = ' '.join([t.text for t in fetched])
+        with tempfile.TemporaryDirectory() as tmpdir:
+            audio_path = os.path.join(tmpdir, "audio.mp3")
 
-        if not transcript.strip():
-            return jsonify({'error': 'Transcript is empty'}), 400
+            ydl_opts = {
+                'format': 'worstaudio/worst',
+                'outtmpl': audio_path,
+                'postprocessors': [{'key': 'FFmpegExtractAudio', 'preferredcodec': 'mp3'}],
+                'quiet': True,
+                'max_filesize': 10 * 1024 * 1024,  # 10MB max
+            }
 
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([url])
+
+            # Use Groq's Whisper API — fast, no local model
+            with open(audio_path, 'rb') as f:
+                transcription = groq_client.audio.transcriptions.create(
+                    model="whisper-large-v3-turbo",
+                    file=f,
+                    response_format="text"
+                )
+            transcript = transcription.strip()
+
+        # Analyze with AI
         ai_response = groq_client.chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=[
@@ -309,10 +319,7 @@ def analyze_youtube():
         return jsonify(parsed)
 
     except Exception as e:
-        err = str(e)
-        if "No transcripts" in err or "disabled" in err or "available" in err:
-            return jsonify({'error': 'This video has no captions available. Try a video with auto-generated subtitles.'}), 400
-        return jsonify({'error': f'Transcript fetch failed: {err}'}), 500
+        return jsonify({'error': str(e)}), 500
 
 @app.route("/send-whatsapp", methods=["POST"])
 def send_whatsapp():
