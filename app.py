@@ -265,9 +265,7 @@ def verify_url():
     result["domain"]            = domain
     return jsonify(result)
 
-
 from youtube_transcript_api import YouTubeTranscriptApi
-import re
 
 @app.route('/analyze-youtube', methods=['POST'])
 def analyze_youtube():
@@ -276,30 +274,22 @@ def analyze_youtube():
     if not url:
         return jsonify({'error': 'No URL provided'}), 400
 
-    # Extract video ID from URL
+    import re
     match = re.search(r'(?:v=|youtu\.be/)([a-zA-Z0-9_-]{11})', url)
     if not match:
-        return jsonify({'error': 'Could not extract video ID from URL'}), 400
+        return jsonify({'error': 'Could not extract video ID'}), 400
 
     video_id = match.group(1)
 
     try:
-        # Fetch transcript — tries English first, then Hindi, then any available
-        try:
-            transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=['en'])
-        except:
-            try:
-                transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=['hi'])
-            except:
-                transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
-
-        # Join all transcript pieces into full text
-        transcript = ' '.join([t['text'] for t in transcript_list])
+        # ✅ New API for youtube-transcript-api v1.x
+        ytt_api = YouTubeTranscriptApi()
+        fetched = ytt_api.fetch(video_id)
+        transcript = ' '.join([t.text for t in fetched])
 
         if not transcript.strip():
-            return jsonify({'error': 'Transcript is empty for this video'}), 400
+            return jsonify({'error': 'Transcript is empty'}), 400
 
-        # Analyze with AI
         ai_response = groq_client.chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=[
@@ -320,9 +310,9 @@ def analyze_youtube():
 
     except Exception as e:
         err = str(e)
-        if "No transcripts" in err or "disabled" in err:
-            return jsonify({'error': 'This video has no captions/subtitles available. Try a video with auto-generated captions.'}), 400
-        return jsonify({'error': f'Could not fetch transcript: {err}'}), 500
+        if "No transcripts" in err or "disabled" in err or "available" in err:
+            return jsonify({'error': 'This video has no captions available. Try a video with auto-generated subtitles.'}), 400
+        return jsonify({'error': f'Transcript fetch failed: {err}'}), 500
 
 @app.route("/send-whatsapp", methods=["POST"])
 def send_whatsapp():
