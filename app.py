@@ -265,8 +265,7 @@ def verify_url():
     result["domain"]            = domain
     return jsonify(result)
 
-import yt_dlp
-import tempfile
+import requests as http_requests
 
 @app.route('/analyze-youtube', methods=['POST'])
 def analyze_youtube():
@@ -275,36 +274,56 @@ def analyze_youtube():
     if not url:
         return jsonify({'error': 'No URL provided'}), 400
 
+    # Extract video ID
+    import re
+    match = re.search(r'(?:v=|youtu\.be/)([a-zA-Z0-9_-]{11})', url)
+    if not match:
+        return jsonify({'error': 'Invalid YouTube URL'}), 400
+    video_id = match.group(1)
+
+    api_key = os.getenv('YOUTUBE_API_KEY')
+
+    # Fetch video details from YouTube Data API
     try:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            audio_path = os.path.join(tmpdir, "audio.mp3")
+        yt_resp = http_requests.get(
+            'https://www.googleapis.com/youtube/v3/videos',
+            params={
+                'id': video_id,
+                'key': api_key,
+                'part': 'snippet,statistics'
+            },
+            timeout=5
+        )
+        yt_data = yt_resp.json()
 
-            ydl_opts = {
-                'format': 'worstaudio/worst',
-                'outtmpl': audio_path,
-                'postprocessors': [{'key': 'FFmpegExtractAudio', 'preferredcodec': 'mp3'}],
-                'quiet': True,
-                'max_filesize': 10 * 1024 * 1024,  # 10MB max
-            }
+        if not yt_data.get('items'):
+            return jsonify({'error': 'Video not found'}), 404
 
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                ydl.download([url])
+        video = yt_data['items'][0]
+        snippet = video['snippet']
+        stats = video.get('statistics', {})
 
-            # Use Groq's Whisper API — fast, no local model
-            with open(audio_path, 'rb') as f:
-                transcription = groq_client.audio.transcriptions.create(
-                    model="whisper-large-v3-turbo",
-                    file=f,
-                    response_format="text"
-                )
-            transcript = transcription.strip()
+        title = snippet.get('title', '')
+        description = snippet.get('description', '')[:1000]
+        channel = snippet.get('channelTitle', '')
+        tags = ', '.join(snippet.get('tags', [])[:10])
+        views = stats.get('viewCount', 'N/A')
+        likes = stats.get('likeCount', 'N/A')
 
-        # Analyze with AI
+        content_for_ai = f"""
+YouTube Video Analysis Request:
+Title: {title}
+Channel: {channel}
+Views: {views} | Likes: {likes}
+Tags: {tags}
+Description: {description}
+"""
+
         ai_response = groq_client.chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": f"Analyze this YouTube video transcript for misinformation. Reply with JSON only:\n\n{transcript[:3000]}"}
+                {"role": "user", "content": f"Analyze this YouTube video for misinformation based on its metadata. Reply with JSON only:\n\n{content_for_ai}"}
             ],
             temperature=0.2,
             max_tokens=500,
@@ -315,7 +334,9 @@ def analyze_youtube():
             if raw.startswith("json"):
                 raw = raw[4:]
         parsed = json.loads(raw.strip())
-        parsed["transcript_preview"] = transcript[:400]
+        parsed["video_title"] = title
+        parsed["channel"] = channel
+        parsed["views"] = views
         return jsonify(parsed)
 
     except Exception as e:
