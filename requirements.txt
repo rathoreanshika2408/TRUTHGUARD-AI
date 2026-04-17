@@ -40,5 +40,4 @@ urllib3==2.6.3
 Werkzeug==3.1.6
 yarl==1.23.0
 requests
-openai-whisper
-yt-dlp
+youtube-transcript-api

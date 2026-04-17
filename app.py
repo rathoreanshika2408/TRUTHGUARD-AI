@@ -266,28 +266,40 @@ def verify_url():
     return jsonify(result)
 
 
+from youtube_transcript_api import YouTubeTranscriptApi
+import re
+
 @app.route('/analyze-youtube', methods=['POST'])
 def analyze_youtube():
     data = request.get_json()
     url  = data.get('url', '').strip()
-    if not url or ('youtube.com' not in url and 'youtu.be' not in url):
-        return jsonify({'error': 'Invalid YouTube URL'}), 400
+    if not url:
+        return jsonify({'error': 'No URL provided'}), 400
+
+    # Extract video ID from URL
+    match = re.search(r'(?:v=|youtu\.be/)([a-zA-Z0-9_-]{11})', url)
+    if not match:
+        return jsonify({'error': 'Could not extract video ID from URL'}), 400
+
+    video_id = match.group(1)
 
     try:
-        import whisper
-        with tempfile.TemporaryDirectory() as tmpdir:
-            audio_path = os.path.join(tmpdir, "audio.mp3")
-            subprocess.run(
-                ["yt-dlp", "-x", "--audio-format", "mp3", "-o", audio_path, url],
-                check=True, timeout=60
-            )
-            model      = whisper.load_model("tiny")
-            result     = model.transcribe(audio_path)
-            transcript = result["text"].strip()
+        # Fetch transcript — tries English first, then Hindi, then any available
+        try:
+            transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=['en'])
+        except:
+            try:
+                transcript_list = YouTubeTranscriptApi.get_transcript(video_id, languages=['hi'])
+            except:
+                transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
 
-        if not transcript:
-            return jsonify({'error': 'Could not transcribe video'}), 400
+        # Join all transcript pieces into full text
+        transcript = ' '.join([t['text'] for t in transcript_list])
 
+        if not transcript.strip():
+            return jsonify({'error': 'Transcript is empty for this video'}), 400
+
+        # Analyze with AI
         ai_response = groq_client.chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=[
@@ -303,14 +315,14 @@ def analyze_youtube():
             if raw.startswith("json"):
                 raw = raw[4:]
         parsed = json.loads(raw.strip())
-        parsed["transcript_preview"] = transcript[:500]
+        parsed["transcript_preview"] = transcript[:400]
         return jsonify(parsed)
 
-    except subprocess.TimeoutExpired:
-        return jsonify({'error': 'Video download timed out'}), 500
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
+        err = str(e)
+        if "No transcripts" in err or "disabled" in err:
+            return jsonify({'error': 'This video has no captions/subtitles available. Try a video with auto-generated captions.'}), 400
+        return jsonify({'error': f'Could not fetch transcript: {err}'}), 500
 
 @app.route("/send-whatsapp", methods=["POST"])
 def send_whatsapp():
