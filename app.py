@@ -22,7 +22,9 @@ def handle_preflight():
         response.headers.add('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
         return response
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-twilio_client = Client(os.getenv("TWILIO_ACCOUNT_SID"), os.getenv("TWILIO_AUTH_TOKEN"))
+twilio_sid = os.getenv("TWILIO_ACCOUNT_SID")
+twilio_token = os.getenv("TWILIO_AUTH_TOKEN")
+twilio_client = Client(twilio_sid, twilio_token) if twilio_sid and twilio_token else None
 
 if platform.system() == "Windows":
     pytesseract.pytesseract.tesseract_cmd = os.getenv("TESSERACT_PATH")
