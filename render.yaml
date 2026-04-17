@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: truthguard-ai
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    plan: free
+    nativePackages:
+      - tesseract-ocr
+      - tesseract-ocr-hin
