@@ -6,190 +6,257 @@
 <title>TruthGuard AI</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
-/* ── CSS VARIABLES (only variables inside :root) ── */
 :root {
-  --white: #ffffff; --bg: #F2F4F8; --surface: #ffffff; --border: #E4E8F0;
-  --text: #0D1117; --muted: #6B7A99; --red: #E63946; --red-light: #FFF0F1;
-  --red-mid: #FFD6D8; --amber: #FF9F1C; --amber-light: #FFF7ED; --green: #2EC4B6;
-  --green-light: #EDFAF9; --blue: #3B82F6; --blue-light: #EFF6FF; --purple: #8B5CF6;
-  --purple-light: #F5F3FF; --shadow-sm: 0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
-  --shadow: 0 4px 16px rgba(0,0,0,0.08); --radius: 20px; --radius-sm: 12px;
+  --white: #ffffff;
+  --bg: #F2F4F8;
+  --surface: #ffffff;
+  --border: #E4E8F0;
+  --text: #0D1117;
+  --muted: #6B7A99;
+  --red: #E63946;
+  --red-light: #FFF0F1;
+  --red-mid: #FFD6D8;
+  --amber: #FF9F1C;
+  --amber-light: #FFF7ED;
+  --green: #2EC4B6;
+  --green-light: #EDFAF9;
+  --blue: #3B82F6;
+  --blue-light: #EFF6FF;
+  --purple: #8B5CF6;
+  --purple-light: #F5F3FF;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 4px 16px rgba(0,0,0,0.08);
+  --radius: 20px;
+  --radius-sm: 12px;
 }
-
-/* ── RESET ── */
-* { margin:0; padding:0; box-sizing:border-box; }
-body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; }
-h1,h2,h3,h4 { font-family:'Sora',sans-serif; }
-::-webkit-scrollbar { width:4px; }
-::-webkit-scrollbar-track { background:transparent; }
-::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
-
-/* ── NAV ── */
-nav { background:var(--white); border-bottom:1px solid var(--border); padding:0 2rem; display:flex; align-items:center; justify-content:space-between; height:68px; position:sticky; top:0; z-index:200; box-shadow:var(--shadow-sm); }
-.nav-brand { display:flex; align-items:center; gap:12px; }
-.nav-logo { width:40px; height:40px; background:linear-gradient(135deg,var(--red) 0%,#C1121F 100%); border-radius:12px; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(230,57,70,0.35); }
-.nav-logo svg { width:22px; height:22px; fill:white; }
-.nav-name { font-family:'Sora',sans-serif; font-size:1.1rem; font-weight:800; color:var(--text); letter-spacing:-0.5px; }
-.nav-name span { color:var(--red); }
-.nav-pill { background:var(--red-light); color:var(--red); font-size:9px; font-weight:700; padding:3px 8px; border-radius:20px; letter-spacing:1px; border:1px solid var(--red-mid); margin-left:4px; }
-.nav-tabs { display:flex; gap:4px; }
-.tab-btn { background:none; border:none; color:var(--muted); padding:8px 18px; border-radius:10px; cursor:pointer; font-size:.88rem; font-weight:500; transition:all .2s; font-family:'DM Sans',sans-serif; }
-.tab-btn.active { background:var(--red-light); color:var(--red); font-weight:600; }
-.tab-btn:hover:not(.active) { background:var(--bg); color:var(--text); }
-
-/* ── TICKER ── */
-.ticker { background:var(--text); padding:9px 2rem; display:flex; align-items:center; gap:24px; font-size:11px; color:#9CA3AF; overflow:hidden; }
-.ticker-live { display:flex; align-items:center; gap:6px; }
-.ticker-dot { width:6px; height:6px; background:var(--red); border-radius:50%; animation:blink 1.5s infinite; flex-shrink:0; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+h1,h2,h3,h4 { font-family: 'Sora', sans-serif; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+ 
+/* NAV */
+nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 68px;
+  position: sticky; top: 0; z-index: 200;
+  box-shadow: var(--shadow-sm);
+}
+.nav-brand { display: flex; align-items: center; gap: 12px; }
+.nav-logo {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, var(--red) 0%, #C1121F 100%);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px rgba(230,57,70,0.35);
+}
+.nav-logo svg { width: 22px; height: 22px; fill: white; }
+.nav-name { font-family: 'Sora', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
+.nav-name span { color: var(--red); }
+.nav-pill { background: var(--red-light); color: var(--red); font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 20px; letter-spacing: 1px; border: 1px solid var(--red-mid); margin-left: 4px; }
+.nav-tabs { display: flex; gap: 4px; }
+.tab-btn {
+  background: none; border: none; color: var(--muted);
+  padding: 8px 18px; border-radius: 10px;
+  cursor: pointer; font-size: .88rem; font-weight: 500;
+  transition: all .2s; font-family: 'DM Sans', sans-serif;
+}
+.tab-btn.active { background: var(--red-light); color: var(--red); font-weight: 600; }
+.tab-btn:hover:not(.active) { background: var(--bg); color: var(--text); }
+ 
+/* TICKER */
+.ticker {
+  background: var(--text);
+  padding: 9px 2rem;
+  display: flex; align-items: center; gap: 24px;
+  font-size: 11px; color: #9CA3AF; overflow: hidden;
+}
+.ticker-live { display: flex; align-items: center; gap: 6px; }
+.ticker-dot { width: 6px; height: 6px; background: var(--red); border-radius: 50%; animation: blink 1.5s infinite; flex-shrink: 0; }
 @keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(0.8)} }
-.ticker-text { color:#E5E7EB; font-weight:500; font-size:11px; }
-.ticker-text strong { color:#FF9F1C; font-weight:700; }
-.ticker-sep { color:#374151; font-size:14px; }
-.marquee-bar { background:#1a1a1a; color:#fff; padding:8px 0; font-size:12px; overflow:hidden; white-space:nowrap; }
-
-/* ── STATS ── */
-.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; max-width:860px; margin:16px auto; padding:0 16px; }
+.ticker-text { color: #E5E7EB; font-weight: 500; font-size: 11px; }
+.ticker-text strong { color: #FF9F1C; font-weight: 700; }
+.ticker-sep { color: #374151; font-size: 14px; }
+ 
+/* MARQUEE */
+.marquee-bar { background: #1a1a1a; color: #fff; padding: 8px 0; font-size: 12px; overflow: hidden; white-space: nowrap; }
+ 
+/* STATS */
+.stats-grid {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 12px;
+  max-width: 860px; margin: 16px auto; padding: 0 16px;
+}
 .stat-box { background:#fff; border:1px solid #eee; border-radius:12px; padding:16px; text-align:center; }
 .stat-box-num { font-size:22px; font-weight:700; color:var(--red); font-family:'Sora',sans-serif; }
 .stat-box-label { font-size:11px; color:#666; margin-top:4px; }
-
-/* ── HERO ── */
-.hero { background:var(--white); padding:2.5rem 2rem 1rem; text-align:center; border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
-.hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% -20%,rgba(230,57,70,0.06) 0%,transparent 70%); }
-.hero-badge { display:inline-flex; align-items:center; gap:8px; background:var(--red-light); color:var(--red); font-size:.78rem; font-weight:700; padding:6px 16px; border-radius:20px; border:1px solid var(--red-mid); margin-bottom:1.2rem; letter-spacing:.5px; }
-.hero h1 { font-size:2.4rem; font-weight:800; color:var(--text); letter-spacing:-1.5px; line-height:1.1; margin-bottom:.8rem; }
-.hero h1 span { color:var(--red); }
-.hero p { color:var(--muted); font-size:1rem; max-width:520px; margin:0 auto 1.5rem; line-height:1.7; }
-
-/* ── LAYOUT ── */
-.main { max-width:1120px; margin:0 auto; padding:2rem 1.5rem; }
-.layout { display:grid; grid-template-columns:1fr 300px; gap:1.5rem; align-items:start; }
-.page { display:none; }
-.page.active { display:block; }
-
-/* ── CARD ── */
-.card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius); padding:1.5rem; margin-bottom:1.2rem; box-shadow:var(--shadow-sm); transition:box-shadow .2s; }
-.card:hover { box-shadow:var(--shadow); }
-.card-tag { font-size:.68rem; font-weight:700; letter-spacing:1.5px; color:var(--red); text-transform:uppercase; margin-bottom:.6rem; display:flex; align-items:center; gap:6px; }
+ 
+/* HERO */
+.hero {
+  background: var(--white);
+  padding: 2.5rem 2rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% -20%, rgba(230,57,70,0.06) 0%, transparent 70%);
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--red-light); color: var(--red);
+  font-size: .78rem; font-weight: 700; padding: 6px 16px;
+  border-radius: 20px; border: 1px solid var(--red-mid);
+  margin-bottom: 1.2rem; letter-spacing: .5px;
+}
+.hero h1 { font-size: 2.4rem; font-weight: 800; color: var(--text); letter-spacing: -1.5px; line-height: 1.1; margin-bottom: .8rem; }
+.hero h1 span { color: var(--red); }
+.hero p { color: var(--muted); font-size: 1rem; max-width: 520px; margin: 0 auto 1.5rem; line-height: 1.7; }
+ 
+/* MAIN */
+.main { max-width: 1120px; margin: 0 auto; padding: 2rem 1.5rem; }
+.layout { display: grid; grid-template-columns: 1fr 300px; gap: 1.5rem; align-items: start; }
+.page { display: none; }
+.page.active { display: block; }
+ 
+/* CARDS */
+.card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.2rem; box-shadow: var(--shadow-sm); transition: box-shadow .2s; }
+.card:hover { box-shadow: var(--shadow); }
+.card-tag { font-size: .68rem; font-weight: 700; letter-spacing: 1.5px; color: var(--red); text-transform: uppercase; margin-bottom: .6rem; display: flex; align-items: center; gap: 6px; }
 .card-tag::before { content:''; display:inline-block; width:3px; height:12px; background:var(--red); border-radius:2px; }
-
-/* ── INPUTS ── */
-.input-top { display:flex; align-items:flex-start; gap:14px; margin-bottom:1.2rem; }
-.input-icon-wrap { width:48px; height:48px; flex-shrink:0; background:var(--red-light); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:22px; }
-.input-heading { font-family:'Sora',sans-serif; font-size:1.15rem; font-weight:700; color:var(--text); margin-bottom:3px; }
-.input-sub { font-size:.82rem; color:var(--muted); }
-textarea { width:100%; background:var(--bg); border:1.5px solid var(--border); border-radius:var(--radius-sm); color:var(--text); padding:1rem 1.1rem; font-size:.92rem; resize:vertical; min-height:110px; font-family:'DM Sans',sans-serif; transition:all .2s; line-height:1.6; margin-bottom:1rem; }
-textarea:focus { outline:none; border-color:var(--red); background:var(--white); box-shadow:0 0 0 3px rgba(230,57,70,0.08); }
-textarea::placeholder { color:#BCC5D6; }
-
-/* ── UPLOAD ── */
-.upload-zone { border:2px dashed var(--border); border-radius:var(--radius-sm); padding:1.2rem; text-align:center; cursor:pointer; transition:all .25s; background:var(--bg); margin:.8rem 0; display:flex; flex-direction:column; align-items:center; gap:6px; }
-.upload-zone:hover { border-color:var(--red); background:var(--red-light); }
-.upload-zone-icon { font-size:28px; }
-.upload-zone-text { font-size:.85rem; font-weight:600; color:var(--muted); }
-.upload-zone-sub { font-size:.74rem; color:#BCC5D6; }
-
-/* ── BUTTONS ── */
-.btn-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:1rem; }
-.btn-primary { background:var(--red); color:white; border:none; padding:11px 26px; border-radius:12px; font-size:.9rem; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 14px rgba(230,57,70,0.3); transition:all .2s; }
-.btn-primary:hover { background:#C1121F; transform:translateY(-1px); }
-.btn-primary:disabled { background:var(--border); color:var(--muted); cursor:not-allowed; transform:none; box-shadow:none; }
-.btn-secondary { background:var(--bg); color:var(--muted); border:1.5px solid var(--border); padding:11px 20px; border-radius:12px; font-size:.88rem; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; }
-.btn-secondary:hover { background:var(--border); color:var(--text); }
-.media-row { display:flex; gap:8px; margin-bottom:1rem; flex-wrap:wrap; }
-.media-btn { flex:1; min-width:120px; background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:10px; font-size:.82rem; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; display:flex; align-items:center; justify-content:center; gap:6px; }
-.media-btn:hover { border-color:var(--red); background:var(--red-light); color:var(--red); }
-.media-btn.recording { background:var(--red); color:white; border-color:var(--red); }
-
-/* ── RESULT ── */
-.result-top { display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; }
-.score-circle { width:90px; height:90px; border-radius:50%; border:6px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0; transition:all .5s; }
-.score-num { font-family:'Sora',sans-serif; font-size:1.8rem; font-weight:800; line-height:1; }
-.score-sub { font-size:.58rem; color:var(--muted); font-weight:500; margin-top:2px; }
-.verdict-chip { display:inline-flex; align-items:center; gap:7px; padding:7px 16px; border-radius:20px; font-weight:700; font-size:.78rem; letter-spacing:.5px; border:1.5px solid; font-family:'Sora',sans-serif; }
-.verdict-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
-.tags { display:flex; flex-wrap:wrap; gap:7px; margin-top:.6rem; }
-.tag { padding:5px 13px; border-radius:20px; font-size:.74rem; font-weight:600; border:1.5px solid; display:inline-flex; align-items:center; gap:5px; }
-.tag-red { background:var(--red-light); color:#C1121F; border-color:var(--red-mid); }
-.tag-amber { background:var(--amber-light); color:#B45309; border-color:#FDE68A; }
-.tag-green { background:var(--green-light); color:#0D8A82; border-color:#A7F3D0; }
-.flag-item { display:flex; align-items:flex-start; gap:10px; background:#FFFBF0; border:1.5px solid #FDE68A; border-radius:12px; padding:11px 14px; margin-bottom:8px; }
-.flag-emoji { font-size:14px; flex-shrink:0; margin-top:1px; }
-.flag-text { font-size:.83rem; color:#92400E; line-height:1.5; }
-.explain-box { background:#F8FAFF; border:1.5px solid #E0E7FF; border-radius:var(--radius-sm); padding:1rem 1.1rem; margin-bottom:.8rem; }
-.explain-text { font-size:.88rem; color:#374151; line-height:1.75; }
-.hindi-box { background:#FFFBF5; border:1.5px solid #FDE68A; border-radius:var(--radius-sm); padding:1rem 1.1rem; display:flex; gap:10px; align-items:flex-start; }
-.hindi-text { font-size:.85rem; color:#92400E; line-height:1.7; }
-.action-box { background:var(--text); border-radius:var(--radius-sm); padding:1rem 1.2rem; display:flex; align-items:center; gap:12px; margin-bottom:1rem; }
-.action-text { font-size:.88rem; color:#E5E7EB; line-height:1.6; font-weight:500; }
-.source-link { display:inline-flex; align-items:center; gap:6px; background:var(--green-light); color:#0D8A82; border:1.5px solid #A7F3D0; padding:6px 14px; border-radius:10px; font-size:.8rem; font-weight:600; margin:4px; text-decoration:none; transition:all .2s; }
-.source-link:hover { background:#D1FAF7; }
-
-/* ── SIDEBAR ── */
-.stat-row { margin-bottom:12px; }
-.stat-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
-.stat-name { font-size:.8rem; font-weight:500; color:var(--text); }
-.stat-change { font-size:.74rem; font-weight:700; }
-.stat-bar-bg { background:var(--bg); border-radius:6px; height:7px; overflow:hidden; }
-.stat-bar { height:7px; border-radius:6px; }
-.kw-pill { display:inline-block; background:var(--bg); color:var(--muted); border:1px solid var(--border); padding:4px 11px; border-radius:20px; font-size:.74rem; margin:3px; font-weight:500; }
-.source-row { display:flex; align-items:center; gap:12px; padding:11px 0; border-bottom:1px solid var(--border); }
-.source-row:last-child { border-bottom:none; padding-bottom:0; }
-.source-avatar { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; font-family:'Sora',sans-serif; }
-.source-name { font-size:.85rem; font-weight:600; color:var(--text); }
-.source-desc { font-size:.74rem; color:var(--muted); margin-top:1px; }
-.source-official { font-size:.65rem; font-weight:700; color:var(--green); background:var(--green-light); padding:2px 7px; border-radius:10px; margin-left:6px; }
-
-/* ── FEATURES ── */
-.feature-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:1.2rem; }
-.feature-item { background:var(--bg); border-radius:var(--radius-sm); padding:14px 10px; text-align:center; border:1.5px solid var(--border); transition:all .2s; }
-.feature-item:hover { border-color:var(--red); background:var(--red-light); }
-.feature-icon { font-size:22px; margin-bottom:6px; }
-.feature-label { font-size:.72rem; font-weight:600; color:var(--muted); line-height:1.3; }
-
-/* ── CHAT ── */
-.chat-box { height:360px; overflow-y:auto; background:var(--bg); border:1.5px solid var(--border); border-radius:var(--radius-sm); padding:1rem; margin-bottom:1rem; display:flex; flex-direction:column; gap:.75rem; }
-.msg { max-width:80%; padding:.75rem 1rem; border-radius:16px; font-size:.88rem; line-height:1.6; }
-.msg.user { background:var(--red); color:white; align-self:flex-end; border-bottom-right-radius:4px; }
-.msg.bot { background:white; color:var(--text); align-self:flex-start; border-bottom-left-radius:4px; border:1.5px solid var(--border); }
-.chat-row { display:flex; gap:8px; }
-.chat-row input { flex:1; background:white; border:1.5px solid var(--border); border-radius:12px; color:var(--text); padding:10px 14px; font-size:.9rem; font-family:'DM Sans',sans-serif; transition:all .2s; }
-.chat-row input:focus { outline:none; border-color:var(--red); }
-.suggest-btn { width:100%; background:var(--bg); border:1.5px solid var(--border); border-radius:10px; color:var(--text); padding:10px 14px; margin-bottom:7px; cursor:pointer; text-align:left; font-size:.82rem; font-weight:500; font-family:'DM Sans',sans-serif; transition:all .2s; display:flex; align-items:center; gap:8px; }
-.suggest-btn:hover { border-color:var(--red); background:var(--red-light); color:var(--red); }
-
-/* ── LEARN ── */
-.learn-card { background:white; border:1.5px solid var(--border); border-radius:var(--radius); padding:1.4rem; margin-bottom:1rem; overflow:hidden; position:relative; box-shadow:var(--shadow-sm); }
-.learn-stripe { position:absolute; left:0; top:0; bottom:0; width:5px; }
-.learn-num { font-size:.68rem; font-weight:700; letter-spacing:1.5px; color:var(--muted); margin-bottom:.4rem; text-transform:uppercase; }
-.learn-title { font-family:'Sora',sans-serif; font-size:1rem; font-weight:700; color:var(--text); margin-bottom:.7rem; }
-.learn-body { font-size:.85rem; color:var(--muted); line-height:1.75; }
-.quiz-opt { width:100%; background:var(--bg); border:1.5px solid var(--border); border-radius:12px; color:var(--text); padding:11px 14px; margin-bottom:.6rem; cursor:pointer; text-align:left; font-size:.85rem; font-weight:500; transition:all .2s; font-family:'DM Sans',sans-serif; }
-.quiz-opt:hover:not(:disabled) { border-color:var(--red); background:var(--red-light); color:var(--red); }
-.quiz-opt.correct { border-color:var(--green); background:var(--green-light); color:#0D8A82; }
-.quiz-opt.wrong { border-color:var(--red); background:var(--red-light); color:var(--red); }
-.quiz-opt:disabled { cursor:not-allowed; opacity:.7; }
-.rule-item { display:flex; gap:12px; align-items:flex-start; margin-bottom:12px; }
-.rule-num { width:26px; height:26px; border-radius:8px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:.78rem; font-weight:700; font-family:'Sora',sans-serif; }
-.rule-text { font-size:.83rem; color:var(--muted); line-height:1.6; }
-.rule-text strong { color:var(--text); }
-
-/* ── MISC ── */
-.spinner { display:inline-block; width:16px; height:16px; border:2px solid var(--red-mid); border-top-color:var(--red); border-radius:50%; animation:spin .7s linear infinite; vertical-align:middle; }
-@keyframes spin { to { transform:rotate(360deg); } }
-.hidden { display:none !important; }
-.profile-wrap { position:relative; display:inline-block; }
-
-/* ── IMAGE PREVIEW ── */
-.img-preview-wrap { position:relative; display:inline-block; margin-bottom:.8rem; width:100%; }
-.img-remove-btn { position:absolute; top:6px; right:6px; width:26px; height:26px; background:rgba(0,0,0,0.65); color:white; border:none; border-radius:50%; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:10; transition:background .2s; }
-.img-remove-btn:hover { background:var(--red); }
-
-/* ── URL BADGES ── */
-.url-badge { display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:8px; font-size:.78rem; font-weight:700; margin:3px; }
-.url-badge.trusted { background:#EDFAF9; color:#0D8A82; border:1px solid #A7F3D0; }
-.url-badge.warning { background:#FFF7ED; color:#B45309; border:1px solid #FDE68A; }
-.url-badge.danger  { background:#FFF0F1; color:#C1121F; border:1px solid #FFD6D8; }
+ 
+/* INPUT */
+.input-top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 1.2rem; }
+.input-icon-wrap { width: 48px; height: 48px; flex-shrink: 0; background: var(--red-light); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.input-heading { font-family: 'Sora', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.input-sub { font-size: .82rem; color: var(--muted); }
+textarea { width: 100%; background: var(--bg); border: 1.5px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 1rem 1.1rem; font-size: .92rem; resize: vertical; min-height: 110px; font-family: 'DM Sans', sans-serif; transition: all .2s; line-height: 1.6; margin-bottom: 1rem; }
+textarea:focus { outline: none; border-color: var(--red); background: var(--white); box-shadow: 0 0 0 3px rgba(230,57,70,0.08); }
+textarea::placeholder { color: #BCC5D6; }
+ 
+/* UPLOAD */
+.upload-zone { border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 1.2rem; text-align: center; cursor: pointer; transition: all .25s; background: var(--bg); margin: .8rem 0; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.upload-zone:hover { border-color: var(--red); background: var(--red-light); }
+.upload-zone-icon { font-size: 28px; }
+.upload-zone-text { font-size: .85rem; font-weight: 600; color: var(--muted); }
+.upload-zone-sub { font-size: .74rem; color: #BCC5D6; }
+ 
+/* BUTTONS */
+.btn-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 1rem; }
+.btn-primary { background: var(--red); color: white; border: none; padding: 11px 26px; border-radius: 12px; font-size: .9rem; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(230,57,70,0.3); transition: all .2s; }
+.btn-primary:hover { background: #C1121F; transform: translateY(-1px); }
+.btn-primary:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-secondary { background: var(--bg); color: var(--muted); border: 1.5px solid var(--border); padding: 11px 20px; border-radius: 12px; font-size: .88rem; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .2s; }
+.btn-secondary:hover { background: var(--border); color: var(--text); }
+ 
+/* VOICE & MEDIA BUTTONS */
+.media-row { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+.media-btn { flex: 1; min-width: 120px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 10px; font-size: .82rem; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.media-btn:hover { border-color: var(--red); background: var(--red-light); color: var(--red); }
+.media-btn.recording { background: var(--red); color: white; border-color: var(--red); }
+ 
+/* RESULT */
+.result-top { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+.score-circle { width: 90px; height: 90px; border-radius: 50%; border: 6px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; transition: all .5s; }
+.score-num { font-family: 'Sora', sans-serif; font-size: 1.8rem; font-weight: 800; line-height: 1; }
+.score-sub { font-size: .58rem; color: var(--muted); font-weight: 500; margin-top: 2px; }
+.verdict-chip { display: inline-flex; align-items: center; gap: 7px; padding: 7px 16px; border-radius: 20px; font-weight: 700; font-size: .78rem; letter-spacing: .5px; border: 1.5px solid; font-family: 'Sora', sans-serif; }
+.verdict-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+ 
+/* TAGS */
+.tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: .6rem; }
+.tag { padding: 5px 13px; border-radius: 20px; font-size: .74rem; font-weight: 600; border: 1.5px solid; display: inline-flex; align-items: center; gap: 5px; }
+.tag-red { background: var(--red-light); color: #C1121F; border-color: var(--red-mid); }
+.tag-amber { background: var(--amber-light); color: #B45309; border-color: #FDE68A; }
+.tag-green { background: var(--green-light); color: #0D8A82; border-color: #A7F3D0; }
+ 
+/* FLAGS */
+.flag-item { display: flex; align-items: flex-start; gap: 10px; background: #FFFBF0; border: 1.5px solid #FDE68A; border-radius: 12px; padding: 11px 14px; margin-bottom: 8px; }
+.flag-emoji { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.flag-text { font-size: .83rem; color: #92400E; line-height: 1.5; }
+ 
+/* EXPLAIN */
+.explain-box { background: #F8FAFF; border: 1.5px solid #E0E7FF; border-radius: var(--radius-sm); padding: 1rem 1.1rem; margin-bottom: .8rem; }
+.explain-text { font-size: .88rem; color: #374151; line-height: 1.75; }
+.hindi-box { background: #FFFBF5; border: 1.5px solid #FDE68A; border-radius: var(--radius-sm); padding: 1rem 1.1rem; display: flex; gap: 10px; align-items: flex-start; }
+.hindi-text { font-size: .85rem; color: #92400E; line-height: 1.7; }
+ 
+/* ACTION */
+.action-box { background: var(--text); border-radius: var(--radius-sm); padding: 1rem 1.2rem; display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+.action-text { font-size: .88rem; color: #E5E7EB; line-height: 1.6; font-weight: 500; }
+ 
+/* SOURCE */
+.source-link { display: inline-flex; align-items: center; gap: 6px; background: var(--green-light); color: #0D8A82; border: 1.5px solid #A7F3D0; padding: 6px 14px; border-radius: 10px; font-size: .8rem; font-weight: 600; margin: 4px; text-decoration: none; transition: all .2s; }
+.source-link:hover { background: #D1FAF7; }
+ 
+/* SIDEBAR */
+.stat-row { margin-bottom: 12px; }
+.stat-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.stat-name { font-size: .8rem; font-weight: 500; color: var(--text); }
+.stat-change { font-size: .74rem; font-weight: 700; }
+.stat-bar-bg { background: var(--bg); border-radius: 6px; height: 7px; overflow: hidden; }
+.stat-bar { height: 7px; border-radius: 6px; }
+.kw-pill { display: inline-block; background: var(--bg); color: var(--muted); border: 1px solid var(--border); padding: 4px 11px; border-radius: 20px; font-size: .74rem; margin: 3px; font-weight: 500; }
+.source-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--border); }
+.source-row:last-child { border-bottom: none; padding-bottom: 0; }
+.source-avatar { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; font-family: 'Sora', sans-serif; }
+.source-name { font-size: .85rem; font-weight: 600; color: var(--text); }
+.source-desc { font-size: .74rem; color: var(--muted); margin-top: 1px; }
+.source-official { font-size: .65rem; font-weight: 700; color: var(--green); background: var(--green-light); padding: 2px 7px; border-radius: 10px; margin-left: 6px; }
+ 
+/* FEATURE GRID */
+.feature-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.2rem; }
+.feature-item { background: var(--bg); border-radius: var(--radius-sm); padding: 14px 10px; text-align: center; border: 1.5px solid var(--border); transition: all .2s; }
+.feature-item:hover { border-color: var(--red); background: var(--red-light); }
+.feature-icon { font-size: 22px; margin-bottom: 6px; }
+.feature-label { font-size: .72rem; font-weight: 600; color: var(--muted); line-height: 1.3; }
+ 
+/* CHAT */
+.chat-box { height: 360px; overflow-y: auto; background: var(--bg); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1rem; display: flex; flex-direction: column; gap: .75rem; }
+.msg { max-width: 80%; padding: .75rem 1rem; border-radius: 16px; font-size: .88rem; line-height: 1.6; }
+.msg.user { background: var(--red); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+.msg.bot { background: white; color: var(--text); align-self: flex-start; border-bottom-left-radius: 4px; border: 1.5px solid var(--border); }
+.chat-row { display: flex; gap: 8px; }
+.chat-row input { flex: 1; background: white; border: 1.5px solid var(--border); border-radius: 12px; color: var(--text); padding: 10px 14px; font-size: .9rem; font-family: 'DM Sans', sans-serif; transition: all .2s; }
+.chat-row input:focus { outline: none; border-color: var(--red); }
+.suggest-btn { width: 100%; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); padding: 10px 14px; margin-bottom: 7px; cursor: pointer; text-align: left; font-size: .82rem; font-weight: 500; font-family: 'DM Sans', sans-serif; transition: all .2s; display: flex; align-items: center; gap: 8px; }
+.suggest-btn:hover { border-color: var(--red); background: var(--red-light); color: var(--red); }
+ 
+/* LEARN */
+.learn-card { background: white; border: 1.5px solid var(--border); border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1rem; overflow: hidden; position: relative; box-shadow: var(--shadow-sm); }
+.learn-stripe { position: absolute; left: 0; top: 0; bottom: 0; width: 5px; }
+.learn-num { font-size: .68rem; font-weight: 700; letter-spacing: 1.5px; color: var(--muted); margin-bottom: .4rem; text-transform: uppercase; }
+.learn-title { font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: .7rem; }
+.learn-body { font-size: .85rem; color: var(--muted); line-height: 1.75; }
+.quiz-opt { width: 100%; background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px; color: var(--text); padding: 11px 14px; margin-bottom: .6rem; cursor: pointer; text-align: left; font-size: .85rem; font-weight: 500; transition: all .2s; font-family: 'DM Sans', sans-serif; }
+.quiz-opt:hover:not(:disabled) { border-color: var(--red); background: var(--red-light); color: var(--red); }
+.quiz-opt.correct { border-color: var(--green); background: var(--green-light); color: #0D8A82; }
+.quiz-opt.wrong { border-color: var(--red); background: var(--red-light); color: var(--red); }
+.quiz-opt:disabled { cursor: not-allowed; opacity: .7; }
+.rule-item { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+.rule-num { width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: .78rem; font-weight: 700; font-family: 'Sora', sans-serif; }
+.rule-text { font-size: .83rem; color: var(--muted); line-height: 1.6; }
+.rule-text strong { color: var(--text); }
+ 
+/* MISC */
+.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--red-mid); border-top-color: var(--red); border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.hidden { display: none !important; }
+ 
+/* PROFILE */
+.profile-wrap { position: relative; display: inline-block; }
+ 
+@media (max-width: 768px) {
+  .layout { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 1.7rem; }
+  .tab-btn { padding: 7px 10px; font-size: .8rem; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); }
+}
 
 /* ── COMMUNITY ── */
 .community-container { max-width:900px; margin:0 auto; padding:20px; }
@@ -200,17 +267,16 @@ textarea::placeholder { color:#BCC5D6; }
 .pill.active { background:#E63946; color:white; border-color:#E63946; }
 .trending-section { margin-bottom:30px; }
 .trending-section h3 { font-size:18px; font-weight:700; margin-bottom:16px; }
-.trending-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:14px; }
-.trend-card { background:white; border-radius:12px; padding:16px; box-shadow:0 2px 8px rgba(0,0,0,0.08); cursor:pointer; border-left:4px solid; transition:transform 0.2s, box-shadow 0.2s; }
+.trending-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; }
+.trend-card { background:white; border-radius:12px; padding:16px; box-shadow:0 2px 8px rgba(0,0,0,0.08); cursor:pointer; border-left:4px solid; transition:transform 0.2s,box-shadow 0.2s; }
 .trend-card:hover { transform:translateY(-3px); box-shadow:0 6px 20px rgba(0,0,0,0.12); }
 .trend-keyword { font-weight:700; font-size:15px; margin-bottom:6px; }
 .trend-meta { font-size:12px; color:#888; display:flex; justify-content:space-between; }
 .trend-change { font-weight:600; color:#E63946; }
 .trend-category { background:#f0f0f0; padding:2px 8px; border-radius:10px; font-size:11px; }
-.blog-results-section { margin-top:30px; }
 .blog-results-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
 .blog-results-header h3 { font-size:18px; font-weight:700; }
-.blog-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px; }
+.blog-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
 .blog-card { background:white; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:transform 0.2s; text-decoration:none; color:inherit; display:block; }
 .blog-card:hover { transform:translateY(-3px); }
 .blog-card img { width:100%; height:160px; object-fit:cover; background:#f0f0f0; }
@@ -220,16 +286,10 @@ textarea::placeholder { color:#BCC5D6; }
 .blog-card p { font-size:12px; color:#666; line-height:1.5; }
 .loading-pulse { color:#888; font-size:14px; padding:20px; text-align:center; }
 
-@media (max-width:768px) {
-  .layout { grid-template-columns:1fr; }
-  .hero h1 { font-size:1.7rem; }
-  .tab-btn { padding:7px 10px; font-size:.8rem; }
-  .stats-grid { grid-template-columns:repeat(2,1fr); }
-}
 </style>
 </head>
 <body>
-
+ 
 <!-- NAV -->
 <nav>
   <div class="nav-brand">
@@ -239,12 +299,14 @@ textarea::placeholder { color:#BCC5D6; }
     <div class="nav-name">Trust<span>Guard</span></div>
     <span class="nav-pill">BETA</span>
   </div>
+ 
   <div class="nav-tabs">
     <button class="tab-btn active" onclick="showTab('check',this)">Verify</button>
     <button class="tab-btn" onclick="showTab('chat',this)">Chatbot</button>
-    <button class="tab-btn" onclick="showTab('community',this); loadCommunityTrends()">Community</button>
+    <button class="tab-btn" onclick="showTab('community',this);loadCommunityTrends()">Community</button>
     <button class="tab-btn" onclick="showTab('learn',this)">Learn</button>
   </div>
+ 
   <div class="profile-wrap">
     <div id="profileBtn" onclick="toggleProfile()" style="width:36px;height:36px;background:#FFF0F0;border:2px solid #FFCDD2;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;">👤</div>
     <div id="profileDropdown" style="display:none;position:absolute;right:0;top:48px;background:#fff;border:1px solid #E8ECF4;border-radius:16px;padding:1.5rem;width:280px;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,.1)">
@@ -284,10 +346,13 @@ textarea::placeholder { color:#BCC5D6; }
     </div>
   </div>
 </nav>
-
+ 
 <!-- TICKER -->
 <div class="ticker">
-  <div class="ticker-live"><div class="ticker-dot"></div><span class="ticker-text">LIVE</span></div>
+  <div class="ticker-live">
+    <div class="ticker-dot"></div>
+    <span class="ticker-text">LIVE</span>
+  </div>
   <span class="ticker-text"><strong>14,823</strong> messages analyzed today</span>
   <span class="ticker-sep">·</span>
   <span class="ticker-text">Top threat: <strong>Govt scheme scams +41%</strong></span>
@@ -296,7 +361,7 @@ textarea::placeholder { color:#BCC5D6; }
   <span class="ticker-sep">·</span>
   <span class="ticker-text">Powered by <strong>Llama 3.1 AI</strong></span>
 </div>
-
+ 
 <!-- MARQUEE -->
 <div class="marquee-bar">
   <marquee scrollamount="5">
@@ -306,451 +371,411 @@ textarea::placeholder { color:#BCC5D6; }
     ⚠️ FAKE: "Aadhaar card cancelled if not updated in 24 hours" — Govt scheme scam &nbsp;&nbsp;|&nbsp;&nbsp;
     🚨 FALSE: "WhatsApp becoming paid next month" — Viral rumour &nbsp;&nbsp;|&nbsp;&nbsp;
     🔴 SCAM: "Win iPhone 15 — forward to 10 friends" — Chain message &nbsp;&nbsp;|&nbsp;&nbsp;
+    ⚠️ FALSE: "Drinking hot water cures cancer" — Health misinformation &nbsp;&nbsp;|&nbsp;&nbsp;
+    🚨 FAKE: "Government giving free laptop to all students" — Scheme scam &nbsp;&nbsp;|&nbsp;&nbsp;
   </marquee>
 </div>
-
+ 
 <!-- HERO -->
 <div class="hero">
   <div class="hero-badge"><span>🇮🇳</span> India's AI Misinformation Shield</div>
   <h1>Don't share. <span>Verify first.</span></h1>
   <p>AI-powered fact-checking for WhatsApp forwards, fake news & government scheme scams — in Hindi and English.</p>
 </div>
-
+ 
 <!-- STATS -->
 <div class="stats-grid">
-  <div class="stat-box"><div class="stat-box-num">500M+</div><div class="stat-box-label">WhatsApp users in India</div></div>
-  <div class="stat-box"><div class="stat-box-num">64%</div><div class="stat-box-label">Indians encountered fake news</div></div>
-  <div class="stat-box"><div class="stat-box-num">56</div><div class="stat-box-label">Deaths from WA misinformation</div></div>
-  <div class="stat-box"><div class="stat-box-num">&lt;3s</div><div class="stat-box-label">AI analysis time</div></div>
+  <div class="stat-box">
+    <div class="stat-box-num">500M+</div>
+    <div class="stat-box-label">WhatsApp users in India</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-box-num">64%</div>
+    <div class="stat-box-label">Indians encountered fake news</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-box-num">56</div>
+    <div class="stat-box-label">Deaths from WA misinformation</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-box-num">&lt;3s</div>
+    <div class="stat-box-label">AI analysis time</div>
+  </div>
 </div>
-
+ 
 <!-- MAIN -->
 <div class="main">
-
-  <!-- ══ VERIFY TAB ══ -->
-  <div id="tab-check" class="page active">
-    <div class="layout">
-      <div>
-        <div class="feature-grid">
-          <div class="feature-item"><div class="feature-icon">🔍</div><div class="feature-label">Text Analysis</div></div>
-          <div class="feature-item"><div class="feature-icon">📷</div><div class="feature-label">Screenshot OCR</div></div>
-          <div class="feature-item"><div class="feature-icon">🇮🇳</div><div class="feature-label">Hindi Support</div></div>
-          <div class="feature-item"><div class="feature-icon">🎯</div><div class="feature-label">Credibility Score</div></div>
-          <div class="feature-item"><div class="feature-icon">🚨</div><div class="feature-label">Scam Detection</div></div>
-          <div class="feature-item"><div class="feature-icon">💡</div><div class="feature-label">AI Explanation</div></div>
+ 
+<!-- VERIFY TAB -->
+<div id="tab-check" class="page active">
+  <div class="layout">
+    <div>
+      <div class="feature-grid">
+        <div class="feature-item"><div class="feature-icon">🔍</div><div class="feature-label">Text Analysis</div></div>
+        <div class="feature-item"><div class="feature-icon">📷</div><div class="feature-label">Screenshot OCR</div></div>
+        <div class="feature-item"><div class="feature-icon">🇮🇳</div><div class="feature-label">Hindi Support</div></div>
+        <div class="feature-item"><div class="feature-icon">🎯</div><div class="feature-label">Credibility Score</div></div>
+        <div class="feature-item"><div class="feature-icon">🚨</div><div class="feature-label">Scam Detection</div></div>
+        <div class="feature-item"><div class="feature-icon">💡</div><div class="feature-label">AI Explanation</div></div>
+      </div>
+ 
+      <div class="card">
+        <div class="input-top">
+          <div class="input-icon-wrap">🔍</div>
+          <div>
+            <div class="input-heading">Verify a message or forward</div>
+            <div class="input-sub">Paste text or upload a WhatsApp screenshot — Hindi & English supported</div>
+          </div>
         </div>
-
+ 
+        <!-- MEDIA BUTTONS -->
+        <div class="media-row">
+          <button class="media-btn" id="voiceBtn" onclick="startVoice()">🎤 Record Voice</button>
+          <button class="media-btn" onclick="document.getElementById('fileInput').click()">🖼️ Upload Image</button>
+          <button class="media-btn" onclick="openCamera()">📸 Take Photo</button>
+          <button class="media-btn" onclick="document.getElementById('videoInput').click()">🎥 Upload Video</button>
+        </div>
+        <div id="voiceStatus" style="font-size:13px;color:var(--muted);margin-bottom:.5rem;"></div>
+ 
+        <!-- TEXT INPUT -->
+        <textarea id="inputText" placeholder="Paste any suspicious message, news article, or WhatsApp forward here...&#10;&#10;Example: 'सरकार दे रही है ₹5000 फ्री, अभी आवेदन करें'"></textarea>
+ 
+        <!-- IMAGE UPLOAD -->
+        <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFileSelect(event)"/>
+        <input type="file" id="imgInput" accept="image/*" style="display:none" onchange="handleImage(this)"/>
+        <input type="file" id="videoInput" accept="video/*" style="display:none" onchange="handleVideo(event)"/>
+ 
+        <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+          <div class="upload-zone-icon">📷</div>
+          <div class="upload-zone-text">Drop a WhatsApp screenshot here or click to upload</div>
+          <div class="upload-zone-sub">PNG, JPG supported · Text extracted automatically via OCR</div>
+        </div>
+ 
+        <div id="imagePreview" style="display:none;margin-bottom:.8rem;">
+          <img id="previewImg" style="max-width:100%;border-radius:8px;max-height:180px;object-fit:cover;"/>
+          <div id="ocrStatus" style="font-size:13px;color:var(--muted);margin-top:6px;"></div>
+        </div>
+ 
+        <video id="cameraVideo" style="display:none;width:100%;border-radius:8px;" autoplay></video>
+        <canvas id="cameraCanvas" style="display:none;"></canvas>
+        <button id="captureBtn" onclick="capturePhoto()" style="display:none;width:100%;margin-bottom:.8rem;background:var(--red);color:white;border:none;padding:10px;border-radius:8px;cursor:pointer;font-size:14px;font-family:'DM Sans',sans-serif;">📸 Capture Photo</button>
+ 
+        <div id="videoStatus" style="font-size:13px;color:var(--muted);margin-bottom:.5rem;"></div>
+        <video id="videoPlayer" controls style="display:none;width:100%;border-radius:8px;margin-bottom:.8rem;max-height:200px;"></video>
+ 
+        <!-- URL INPUT -->
+        <div style="display:flex;gap:8px;margin-bottom:1rem;">
+          <input id="urlInput" type="url" placeholder="Or paste a suspicious URL here..." style="flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);outline:none;"/>
+          <button onclick="verifyURL()" style="background:var(--red);color:white;border:none;padding:10px 18px;border-radius:10px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">🔗 Verify URL</button>
+        </div>
+ 
+        <div class="btn-row">
+          <button class="btn-primary" id="analyzeBtn" onclick="analyze()"><span>🔍</span> Analyze Now</button>
+          <button class="btn-secondary" onclick="loadSample()">Try a sample</button>
+          <span id="loadingSpinner" class="hidden" style="font-size:.85rem;color:var(--muted)"><span class="spinner"></span> Analyzing...</span>
+        </div>
+      </div>
+ 
+      <!-- RESULT -->
+      <div id="resultSection" class="hidden">
         <div class="card">
-          <div class="input-top">
-            <div class="input-icon-wrap">🔍</div>
-            <div>
-              <div class="input-heading">Verify a message or forward</div>
-              <div class="input-sub">Paste text, upload a screenshot, or drop a YouTube link — Hindi & English supported</div>
+          <div class="card-tag">Analysis result</div>
+          <div class="result-top">
+            <div class="score-circle" id="scoreRing">
+              <span class="score-num" id="scoreNum">--</span>
+              <span class="score-sub">/ 100</span>
             </div>
-          </div>
-
-          <div class="media-row">
-            <button class="media-btn" id="voiceBtn" onclick="startVoice()">🎤 Record Voice</button>
-            <button class="media-btn" onclick="document.getElementById('fileInput').click()">🖼️ Upload Image</button>
-            <button class="media-btn" onclick="openCamera()">📸 Take Photo</button>
-            <button class="media-btn" onclick="document.getElementById('videoInput').click()">🎥 Upload Video</button>
-          </div>
-
-          <div id="voiceStatus" style="font-size:13px;color:var(--muted);margin-bottom:.5rem;"></div>
-
-          <textarea id="inputText" placeholder="Paste any suspicious message, news article, or WhatsApp forward here...&#10;&#10;Example: 'सरकार दे रही है ₹5000 फ्री, अभी आवेदन करें'"></textarea>
-
-          <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFileSelect(event)"/>
-          <input type="file" id="videoInput" accept="video/*" style="display:none" onchange="handleVideo(event)"/>
-
-          <div class="upload-zone" id="uploadZone"
-               onclick="document.getElementById('fileInput').click()"
-               ondragover="event.preventDefault()"
-               ondrop="handleDrop(event)">
-            <div class="upload-zone-icon">📷</div>
-            <div class="upload-zone-text">Drop a WhatsApp screenshot here or click to upload</div>
-            <div class="upload-zone-sub">PNG, JPG supported · Text extracted automatically via OCR</div>
-          </div>
-
-          <div id="imagePreview" style="display:none; margin-bottom:.8rem;">
-            <div class="img-preview-wrap">
-              <img id="previewImg" style="max-width:100%;border-radius:8px;max-height:200px;object-fit:cover;display:block;"/>
-              <button class="img-remove-btn" onclick="removeImage()" title="Remove image">✕</button>
-            </div>
-            <div id="ocrStatus" style="font-size:13px;color:var(--muted);margin-top:6px;"></div>
-          </div>
-
-          <video id="cameraVideo" style="display:none;width:100%;border-radius:8px;" autoplay></video>
-          <canvas id="cameraCanvas" style="display:none;"></canvas>
-          <button id="captureBtn" onclick="capturePhoto()" style="display:none;width:100%;margin-bottom:.8rem;background:var(--red);color:white;border:none;padding:10px;border-radius:8px;cursor:pointer;font-size:14px;font-family:'DM Sans',sans-serif;">📸 Capture Photo</button>
-
-          <div id="videoStatus" style="font-size:13px;color:var(--muted);margin-bottom:.5rem;"></div>
-          <video id="videoPlayer" controls style="display:none;width:100%;border-radius:8px;margin-bottom:.8rem;max-height:200px;"></video>
-
-          <div style="display:flex;gap:8px;margin-bottom:1rem;">
-            <input id="urlInput" type="url" placeholder="Or paste a suspicious URL here..."
-              style="flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);outline:none;transition:border-color .2s;"
-              onfocus="this.style.borderColor='var(--red)'" onblur="this.style.borderColor='var(--border)'"/>
-            <button onclick="verifyURL()" style="background:var(--red);color:white;border:none;padding:10px 18px;border-radius:10px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;">🔗 Verify URL</button>
-          </div>
-
-          <div style="display:flex;gap:8px;margin-bottom:1rem;">
-            <input id="ytInput" type="url" placeholder="Or paste a YouTube video URL to fact-check..."
-              style="flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);outline:none;transition:border-color .2s;"
-              onfocus="this.style.borderColor='var(--red)'" onblur="this.style.borderColor='var(--border)'"/>
-            <button onclick="analyzeYouTube()" style="background:#FF0000;color:white;border:none;padding:10px 18px;border-radius:10px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;">▶ Analyze Video</button>
-          </div>
-
-          <div class="btn-row">
-            <button class="btn-primary" id="analyzeBtn" onclick="analyze()"><span>🔍</span> Analyze Now</button>
-            <button class="btn-secondary" onclick="loadSample()">Try a sample</button>
-            <span id="loadingSpinner" class="hidden" style="font-size:.85rem;color:var(--muted)"><span class="spinner"></span> Analyzing...</span>
-          </div>
-        </div>
-
-        <!-- RESULT -->
-        <div id="resultSection" class="hidden">
-          <div class="card">
-            <div class="card-tag">Analysis result</div>
-            <div class="result-top">
-              <div class="score-circle" id="scoreRing">
-                <span class="score-num" id="scoreNum">--</span>
-                <span class="score-sub">/ 100</span>
+            <div style="flex:1">
+              <div style="margin-bottom:.8rem">
+                <span class="verdict-chip" id="verdictBadge">
+                  <span class="verdict-dot" id="verdictDot"></span>
+                  <span id="verdictText">--</span>
+                </span>
               </div>
-              <div style="flex:1">
-                <div style="margin-bottom:.8rem">
-                  <span class="verdict-chip" id="verdictBadge">
-                    <span class="verdict-dot" id="verdictDot"></span>
-                    <span id="verdictText">--</span>
-                  </span>
-                </div>
-                <div style="font-size:.72rem;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:.4rem">Manipulation Techniques</div>
-                <div id="techTags" class="tags"></div>
-              </div>
+              <div style="font-size:.72rem;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:.4rem">Manipulation Techniques</div>
+              <div id="techTags" class="tags"></div>
             </div>
-          </div>
-          <div class="card">
-            <div class="card-tag">Red flags detected</div>
-            <div id="redFlags"></div>
-          </div>
-          <div class="card">
-            <div class="card-tag">Why is this suspicious?</div>
-            <div class="explain-box"><p class="explain-text" id="explanation"></p></div>
-            <div class="hindi-box">
-              <span style="font-size:1.2rem;flex-shrink:0">🇮🇳</span>
-              <span class="hindi-text" id="explanationHindi"></span>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-tag">What should you do?</div>
-            <div class="action-box">
-              <span style="font-size:20px">💡</span>
-              <span class="action-text" id="recommendedAction"></span>
-            </div>
-            <div style="font-size:.72rem;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:.6rem">Verify with trusted sources</div>
-            <div id="factSources"></div>
-          </div>
-          <div id="urlResultCard" class="card hidden">
-            <div class="card-tag">URL safety check</div>
-            <div id="urlBadges" style="margin-bottom:.8rem;"></div>
-            <div style="font-size:.82rem;color:var(--muted);" id="urlMeta"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SIDEBAR -->
-      <div>
-        <div class="card">
-          <div class="card-tag">India threat radar</div>
-          <div class="stat-row"><div class="stat-head"><span class="stat-name">Health misinformation</span><span class="stat-change" style="color:var(--red)">+12%</span></div><div class="stat-bar-bg"><div class="stat-bar" style="background:var(--red);width:85%"></div></div></div>
-          <div class="stat-row"><div class="stat-head"><span class="stat-name">Financial scams</span><span class="stat-change" style="color:var(--amber)">+28%</span></div><div class="stat-bar-bg"><div class="stat-bar" style="background:var(--amber);width:65%"></div></div></div>
-          <div class="stat-row"><div class="stat-head"><span class="stat-name">Govt scheme scams</span><span class="stat-change" style="color:var(--amber)">+41%</span></div><div class="stat-bar-bg"><div class="stat-bar" style="background:var(--amber);width:50%"></div></div></div>
-          <div class="stat-row"><div class="stat-head"><span class="stat-name">Political propaganda</span><span class="stat-change" style="color:var(--muted)">+5%</span></div><div class="stat-bar-bg"><div class="stat-bar" style="background:#CBD5E1;width:35%"></div></div></div>
-          <div class="stat-row"><div class="stat-head"><span class="stat-name">Communal messages</span><span class="stat-change" style="color:var(--muted)">+8%</span></div><div class="stat-bar-bg"><div class="stat-bar" style="background:#CBD5E1;width:25%"></div></div></div>
-          <div style="margin-top:1.2rem">
-            <div style="font-size:.68rem;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:.6rem">Trending keywords</div>
-            <span class="kw-pill">free recharge</span><span class="kw-pill">PM Yojana</span><span class="kw-pill">cancer cure</span><span class="kw-pill">OTP scam</span><span class="kw-pill">आयुष्मान</span><span class="kw-pill">free laptop</span>
           </div>
         </div>
         <div class="card">
-          <div class="card-tag">Trusted fact-checkers</div>
-          <div class="source-row"><div class="source-avatar" style="background:#FFF0F1;color:var(--red)">PIB</div><div><div class="source-name">pib.gov.in/factcheck <span class="source-official">OFFICIAL</span></div><div class="source-desc">Government of India</div></div></div>
-          <div class="source-row"><div class="source-avatar" style="background:var(--amber-light);color:#B45309">BL</div><div><div class="source-name">boomlive.in</div><div class="source-desc">India's #1 fact-checker</div></div></div>
-          <div class="source-row"><div class="source-avatar" style="background:var(--green-light);color:#0D8A82">AN</div><div><div class="source-name">altnews.in</div><div class="source-desc">Independent fact-checking</div></div></div>
-          <div class="source-row"><div class="source-avatar" style="background:var(--blue-light);color:var(--blue)">VN</div><div><div class="source-name">vishvasnews.com</div><div class="source-desc">Hindi fact-checking</div></div></div>
+          <div class="card-tag">Red flags detected</div>
+          <div id="redFlags"></div>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ CHATBOT TAB ══ -->
-  <div id="tab-chat" class="page">
-    <div class="layout">
-      <div>
         <div class="card">
-          <div class="input-top" style="margin-bottom:1rem">
-            <div class="input-icon-wrap">💬</div>
-            <div>
-              <div class="input-heading">AI Fact-Check Assistant</div>
-              <div class="input-sub">Ask about any claim, forward, or news story in Hindi or English</div>
-            </div>
-          </div>
-          <div class="chat-box" id="chatBox">
-            <div class="msg bot">👋 Hi! I'm TruthGuard AI. Paste any suspicious message or ask me to fact-check a claim — in Hindi or English.</div>
-          </div>
-          <div class="chat-row">
-            <input type="text" id="chatInput" placeholder="Ask me to fact-check something..." onkeydown="if(event.key==='Enter')sendChat()"/>
-            <button class="btn-primary" onclick="sendChat()">Send</button>
+          <div class="card-tag">Why is this suspicious?</div>
+          <div class="explain-box"><p class="explain-text" id="explanation"></p></div>
+          <div class="hindi-box">
+            <span style="font-size:1.2rem;flex-shrink:0">🇮🇳</span>
+            <span class="hindi-text" id="explanationHindi"></span>
           </div>
         </div>
-      </div>
-      <div>
         <div class="card">
-          <div class="card-tag">Suggested questions</div>
-          <button class="suggest-btn" onclick="askSuggested('Is the PM Kisan ₹8000 bonus scheme real?')"><span>🏛️</span> Is the PM Kisan ₹8000 bonus real?</button>
-          <button class="suggest-btn" onclick="askSuggested('How do I identify a WhatsApp scam message?')"><span>📱</span> How to identify a WhatsApp scam?</button>
-          <button class="suggest-btn" onclick="askSuggested('What is boomlive.in and how do I use it?')"><span>🔎</span> What is boomlive.in?</button>
-          <button class="suggest-btn" onclick="askSuggested('How can I verify a government scheme in India?')"><span>✅</span> How to verify a govt scheme?</button>
-          <button class="suggest-btn" onclick="askSuggested('क्या यह सच है कि सरकार फ्री मोबाइल दे रही है?')"><span>🇮🇳</span> क्या सरकार फ्री मोबाइल दे रही है?</button>
+          <div class="card-tag">What should you do?</div>
+          <div class="action-box">
+            <span style="font-size:20px">💡</span>
+            <span class="action-text" id="recommendedAction"></span>
+          </div>
+          <div style="font-size:.72rem;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:.6rem">Verify with trusted sources</div>
+          <div id="factSources"></div>
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- ══ COMMUNITY TAB ══ -->
-<div id="tab-community" class="page">
-  <div class="community-container">
-
-    <div class="community-header">
-      <h2>🔥 Community Scam Radar</h2>
-      <p id="trend-month" style="color:#888;font-size:13px;">Loading trends...</p>
-    </div>
-
-    <div id="category-filter" class="category-pills">
-      <button class="pill active" onclick="filterCategory('All')">All</button>
-    </div>
-
-    <div class="trending-section">
-      <h3>📈 Trending Right Now</h3>
-      <div id="trending-grid" class="trending-grid">
-        <div class="loading-pulse">Loading real-time trends...</div>
-      </div>
-    </div>
-
-    <div id="blog-results-section" style="display:none; margin-top:30px;">
-      <div class="blog-results-header">
-        <h3>📰 Articles about: <span id="current-keyword" style="color:#E63946;"></span></h3>
-        <button onclick="closeBlogResults()" style="background:none;border:1px solid #ccc;padding:6px 14px;border-radius:20px;cursor:pointer;">✕ Close</button>
-      </div>
-      <p style="font-size:12px;color:#888;margin-bottom:12px;">⚠️ These are search links — click to find real articles on each platform.</p>
-      <div id="blog-grid" class="blog-grid"></div>
-    </div>
-
-    <!-- ══ USER BLOG SECTION ══ -->
-    <div style="margin-top:40px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-        <h3>📝 Community Reports</h3>
-        <button onclick="toggleBlogForm()" id="writeBlogBtn"
-          style="background:#E63946;color:white;border:none;padding:10px 20px;border-radius:10px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:6px;">
-          ✏️ Write a Report
-        </button>
-      </div>
-
-      <!-- Write Blog Form -->
-      <div id="blogForm" style="display:none;background:white;border-radius:16px;padding:24px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,0.08);border:1.5px solid #E4E8F0;">
-        <h4 style="margin-bottom:16px;font-family:'Sora',sans-serif;">Share a Scam Report or Warning</h4>
-        <input id="blogAuthor" type="text" placeholder="Your name (optional)"
-          style="width:100%;padding:10px 14px;border:1.5px solid #E4E8F0;border-radius:10px;margin-bottom:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;">
-        <input id="blogTitle" type="text" placeholder="Title — e.g. 'Warning: Fake PM Kisan SMS going around'"
-          style="width:100%;padding:10px 14px;border:1.5px solid #E4E8F0;border-radius:10px;margin-bottom:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;">
-        <select id="blogCategory"
-          style="width:100%;padding:10px 14px;border:1.5px solid #E4E8F0;border-radius:10px;margin-bottom:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;background:white;">
-          <option>Financial</option>
-          <option>Cyber</option>
-          <option>Government</option>
-          <option>Employment</option>
-          <option>Health</option>
-          <option>AI Scam</option>
-          <option>Other</option>
-        </select>
-        <textarea id="blogContent" placeholder="Describe the scam — what did it look like? How did you identify it? How can others avoid it? (min 50 characters)"
-          style="width:100%;padding:10px 14px;border:1.5px solid #E4E8F0;border-radius:10px;margin-bottom:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;min-height:120px;resize:vertical;outline:none;"></textarea>
-        <div style="display:flex;gap:10px;">
-          <button onclick="submitBlog()"
-            style="background:#E63946;color:white;border:none;padding:10px 24px;border-radius:10px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">
-            🚀 Publish Report
-          </button>
-          <button onclick="toggleBlogForm()"
-            style="background:#f0f0f0;color:#666;border:none;padding:10px 20px;border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;">
-            Cancel
-          </button>
+ 
+    <!-- SIDEBAR -->
+    <div>
+      <div class="card">
+        <div class="card-tag">India threat radar</div>
+        <div class="stat-row"><div class="stat-head"><span class="stat-name">Health misinformation</span><span class="stat-change" style="color:var(--red)">+12%</span></div><div class="stat-bar-bg"><div class="stat-bar" style="background:var(--red);width:85%"></div></div></div>
+        <div class="stat-row"><div class="stat-head"><span class="stat-name">Financial scams</span><span class="stat-change" style="color:var(--amber)">+28%</span></div><div class="stat-bar-bg"><div class="stat-bar" style="background:var(--amber);width:65%"></div></div></div>
+        <div class="stat-row"><div class="stat-head"><span class="stat-name">Govt scheme scams</span><span class="stat-change" style="color:var(--amber)">+41%</span></div><div class="stat-bar-bg"><div class="stat-bar" style="background:var(--amber);width:50%"></div></div></div>
+        <div class="stat-row"><div class="stat-head"><span class="stat-name">Political propaganda</span><span class="stat-change" style="color:var(--muted)">+5%</span></div><div class="stat-bar-bg"><div class="stat-bar" style="background:#CBD5E1;width:35%"></div></div></div>
+        <div class="stat-row"><div class="stat-head"><span class="stat-name">Communal messages</span><span class="stat-change" style="color:var(--muted)">+8%</span></div><div class="stat-bar-bg"><div class="stat-bar" style="background:#CBD5E1;width:25%"></div></div></div>
+        <div style="margin-top:1.2rem">
+          <div style="font-size:.68rem;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:.6rem">Trending keywords</div>
+          <span class="kw-pill">free recharge</span><span class="kw-pill">PM Yojana</span><span class="kw-pill">cancer cure</span><span class="kw-pill">OTP scam</span><span class="kw-pill">आयुष्मान</span><span class="kw-pill">free laptop</span>
         </div>
-        <div id="blogSubmitStatus" style="margin-top:10px;font-size:13px;"></div>
       </div>
-
-      <!-- Blog Posts Feed -->
-      <div id="communityPostsFeed">
-        <div class="loading-pulse">Loading community reports...</div>
+      <div class="card">
+        <div class="card-tag">Trusted fact-checkers</div>
+        <div class="source-row"><div class="source-avatar" style="background:#FFF0F1;color:var(--red)">PIB</div><div><div class="source-name">pib.gov.in/factcheck <span class="source-official">OFFICIAL</span></div><div class="source-desc">Government of India</div></div></div>
+        <div class="source-row"><div class="source-avatar" style="background:var(--amber-light);color:#B45309">BL</div><div><div class="source-name">boomlive.in</div><div class="source-desc">India's #1 fact-checker</div></div></div>
+        <div class="source-row"><div class="source-avatar" style="background:var(--green-light);color:#0D8A82">AN</div><div><div class="source-name">altnews.in</div><div class="source-desc">Independent fact-checking</div></div></div>
+        <div class="source-row"><div class="source-avatar" style="background:var(--blue-light);color:var(--blue)">VN</div><div><div class="source-name">vishvasnews.com</div><div class="source-desc">Hindi fact-checking</div></div></div>
       </div>
-      
-      // ── BLOG POSTING ──
-function toggleBlogForm() {
-  const form = document.getElementById('blogForm');
-  form.style.display = form.style.display === 'none' ? 'block' : 'none';
-}
-
-async function submitBlog() {
-  const title = document.getElementById('blogTitle').value.trim();
-  const content = document.getElementById('blogContent').value.trim();
-  const author = document.getElementById('blogAuthor').value.trim() || 'Anonymous';
-  const category = document.getElementById('blogCategory').value;
-  const status = document.getElementById('blogSubmitStatus');
-
-  if (!title) { status.innerHTML = '<span style="color:red">⚠️ Please add a title.</span>'; return; }
-  if (content.length < 50) { status.innerHTML = '<span style="color:red">⚠️ Content too short (min 50 characters).</span>'; return; }
-
-  status.innerHTML = '<span style="color:#888">⏳ Publishing...</span>';
-
-  try {
-    const res = await fetch(API + '/community-posts', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({title, content, author, category})
-    });
-    const data = await res.json();
-    if (data.error) { status.innerHTML = `<span style="color:red">❌ ${data.error}</span>`; return; }
-
-    status.innerHTML = '<span style="color:green">✅ Published! Thank you for helping the community.</span>';
-    document.getElementById('blogTitle').value = '';
-    document.getElementById('blogContent').value = '';
-    document.getElementById('blogAuthor').value = '';
-    setTimeout(() => {
-      document.getElementById('blogForm').style.display = 'none';
-      loadCommunityPosts();
-    }, 1500);
-  } catch(e) {
-    status.innerHTML = '<span style="color:red">❌ Failed to publish. Try again.</span>';
-  }
-}
-
-async function loadCommunityPosts() {
-  const feed = document.getElementById('communityPostsFeed');
-  if (!feed) return;
-  try {
-    const res = await fetch(API + '/community-posts');
-    const data = await res.json();
-    const posts = data.posts || [];
-    if (!posts.length) {
-      feed.innerHTML = '<div style="text-align:center;padding:40px;color:#888;"><div style="font-size:40px;margin-bottom:12px;">📭</div><p>No community reports yet. Be the first to share a scam warning!</p></div>';
-      return;
-    }
-    feed.innerHTML = posts.map(p => `
-      <div style="background:white;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border:1.5px solid #E4E8F0;">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
-          <span style="background:#FFF0F1;color:#E63946;border:1px solid #FFD6D8;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700;">${p.category}</span>
-          <span style="font-size:11px;color:#9CA3AF;">${p.timestamp}</span>
-        </div>
-        <h4 style="font-size:16px;font-weight:700;margin-bottom:8px;font-family:'Sora',sans-serif;">${p.title}</h4>
-        <p style="font-size:13px;color:#555;line-height:1.7;margin-bottom:12px;">${p.content}</p>
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <span style="font-size:12px;color:#9CA3AF;">By <strong>${p.author}</strong></span>
-          <button onclick="likePost('${p.id}', this)"
-          style="background:#FFF0F1;color:#E63946;border:1px solid #FFD6D8;padding:5px 14px;border-radius:20px;cursor:pointer;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;">
-            ❤️ <span id="likes-${p.id}">${p.likes}</span>
-          </button>
-        </div>
-      </div> 
-      `).join('');
-    } catch(e) {
-      feed.innerHTML = '<p style="color:#888;padding:20px;">Could not load posts.</p>';
-    }
-  }
-  async function likePost(id, btn) {
-  btn.disabled = true;
-  try {
-    const res = await fetch(API + `/community-posts/${id}/like`, {method:'POST'});
-    const data = await res.json();
-    document.getElementById(`likes-${id}`).textContent = data.likes;
-  } catch(e) {}
-}
-
     </div>
-
   </div>
 </div>
+ 
+<!-- CHATBOT TAB -->
+<div id="tab-chat" class="page">
+  <div class="layout">
+    <div>
+      <div class="card">
+        <div class="input-top" style="margin-bottom:1rem">
+          <div class="input-icon-wrap">💬</div>
+          <div>
+            <div class="input-heading">AI Fact-Check Assistant</div>
+            <div class="input-sub">Ask about any claim, forward, or news story in Hindi or English</div>
+          </div>
+        </div>
+        <div class="chat-box" id="chatBox">
+          <div class="msg bot">👋 Hi! I'm TruthGuard AI. Paste any suspicious message or ask me to fact-check a claim — in Hindi or English.</div>
+        </div>
+        <div class="chat-row">
+          <input type="text" id="chatInput" placeholder="Ask me to fact-check something..." onkeydown="if(event.key==='Enter')sendChat()"/>
+          <button class="btn-primary" onclick="sendChat()">Send</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-tag">Suggested questions</div>
+        <button class="suggest-btn" onclick="askSuggested('Is the PM Kisan ₹8000 bonus scheme real?')"><span>🏛️</span> Is the PM Kisan ₹8000 bonus real?</button>
+        <button class="suggest-btn" onclick="askSuggested('How do I identify a WhatsApp scam message?')"><span>📱</span> How to identify a WhatsApp scam?</button>
+        <button class="suggest-btn" onclick="askSuggested('What is boomlive.in and how do I use it?')"><span>🔎</span> What is boomlive.in?</button>
+        <button class="suggest-btn" onclick="askSuggested('How can I verify a government scheme in India?')"><span>✅</span> How to verify a govt scheme?</button>
+        <button class="suggest-btn" onclick="askSuggested('क्या यह सच है कि सरकार फ्री मोबाइल दे रही है?')"><span>🇮🇳</span> क्या सरकार फ्री मोबाइल दे रही है?</button>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- LEARN TAB -->
+<div id="tab-learn" class="page">
+  <div class="layout">
+    <div>
+      <div class="learn-card">
+        <div class="learn-stripe" style="background:var(--red)"></div>
+        <div style="padding-left:16px">
+          <div class="learn-num">Tactic 01</div>
+          <div class="learn-title">🚨 Urgency triggers</div>
+          <div class="learn-body">Fake messages create artificial time pressure to stop you from thinking critically. Phrases like <em>"Share in 2 hours"</em>, <em>"अभी करें वरना मौका जाएगा"</em>, or <em>"BREAKING — expires tonight"</em> are classic red flags. Real important news doesn't disappear in 2 hours. If a message pressures you to act immediately — pause and verify first.</div>
+        </div>
+      </div>
+      <div class="learn-card">
+        <div class="learn-stripe" style="background:var(--amber)"></div>
+        <div style="padding-left:16px">
+          <div class="learn-num" style="color:var(--amber)">Tactic 02</div>
+          <div class="learn-title">😱 Fear-based messaging</div>
+          <div class="learn-body">Content designed to scare you overrides rational thinking. Fake health cures, disease outbreak hoaxes, crime exaggeration, and religious threat messages all weaponize fear. The formula: create panic → bypass critical thinking → get shares. Always ask: does a verified news source confirm this?</div>
+        </div>
+      </div>
+      <div class="learn-card">
+        <div class="learn-stripe" style="background:var(--green)"></div>
+        <div style="padding-left:16px">
+          <div class="learn-num" style="color:var(--green)">Tactic 03</div>
+          <div class="learn-title">🏛️ Fake government schemes</div>
+          <div class="learn-body">India's most dangerous scam category. Messages claim the government is giving free money, phones, gas cylinders, or laptops. Real government schemes are announced only on <strong>pib.gov.in</strong> — never through WhatsApp forwards. Never click unofficial links or share your Aadhaar, OTP, or bank details.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:1.2rem">
+        <div class="card-tag">Quick quiz</div>
+        <div style="font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:1rem;line-height:1.6;font-family:'Sora',sans-serif">You receive: "PM Modi announces ₹8000 for all families — share this link in 1 hour to apply." What do you do?</div>
+        <button class="quiz-opt" onclick="quizAnswer(this,false)">Share immediately — sounds official</button>
+        <button class="quiz-opt" onclick="quizAnswer(this,false)">Click the link to verify</button>
+        <button class="quiz-opt" onclick="quizAnswer(this,true)">Check pib.gov.in — do not share or click</button>
+        <button class="quiz-opt" onclick="quizAnswer(this,false)">Forward only to family, not publicly</button>
+        <div id="quizFeedback" class="hidden" style="margin-top:1rem;padding:.9rem 1rem;border-radius:12px;font-size:.85rem;font-weight:500;line-height:1.6"></div>
+      </div>
+      <div class="card">
+        <div class="card-tag">5 golden rules</div>
+        <div class="rule-item"><div class="rule-num" style="background:var(--red-light);color:var(--red)">1</div><div class="rule-text">Always check <strong>pib.gov.in</strong> for government scheme claims</div></div>
+        <div class="rule-item"><div class="rule-num" style="background:var(--amber-light);color:var(--amber)">2</div><div class="rule-text">Never share your <strong>Aadhaar, OTP, or bank details</strong> from a forward</div></div>
+        <div class="rule-item"><div class="rule-num" style="background:var(--green-light);color:var(--green)">3</div><div class="rule-text">If it says <strong>"forward to 10 people"</strong> — it's almost certainly fake</div></div>
+        <div class="rule-item"><div class="rule-num" style="background:var(--blue-light);color:var(--blue)">4</div><div class="rule-text">Check <strong>boomlive.in</strong> or <strong>altnews.in</strong> before believing viral claims</div></div>
+        <div class="rule-item" style="margin-bottom:0"><div class="rule-num" style="background:var(--purple-light);color:var(--purple)">5</div><div class="rule-text">When in doubt — <strong style="color:var(--red)">don't share</strong>. Sharing fake news makes you part of the problem</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+  <!-- ══ COMMUNITY TAB ══ -->
+  <div id="tab-community" class="page">
+    <div class="community-container">
 
+      <div class="community-header">
+        <h2>🔥 Community Scam Radar</h2>
+        <p id="trend-month" style="color:#888;font-size:13px;">Loading trends...</p>
+      </div>
+
+      <div id="category-filter" class="category-pills">
+        <button class="pill active" onclick="filterCategory('All')">All</button>
+      </div>
+
+      <div class="trending-section">
+        <h3>📈 Trending Right Now</h3>
+        <div id="trending-grid" class="trending-grid">
+          <div class="loading-pulse">Loading real-time trends...</div>
+        </div>
+      </div>
+
+      <div id="blog-results-section" style="display:none; margin-top:30px;">
+        <div class="blog-results-header">
+          <h3>📰 Articles about: <span id="current-keyword" style="color:#E63946;"></span></h3>
+          <button onclick="closeBlogResults()" style="background:none;border:1px solid #ccc;padding:6px 14px;border-radius:20px;cursor:pointer;">✕ Close</button>
+        </div>
+        <p style="font-size:12px;color:#888;margin-bottom:12px;">⚠️ These are search links — click to find real articles on each platform.</p>
+        <div id="blog-grid" class="blog-grid"></div>
+      </div>
+
+      <!-- ══ USER BLOG SECTION ══ -->
+      <div style="margin-top:40px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <h3>📝 Community Reports</h3>
+          <button onclick="toggleBlogForm()" id="writeBlogBtn"
+            style="background:#E63946;color:white;border:none;padding:10px 20px;border-radius:10px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:6px;">
+            ✏️ Write a Report
+          </button>
+        </div>
+
+        <!-- Write Blog Form -->
+        <div id="blogForm" style="display:none;background:white;border-radius:16px;padding:24px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,0.08);border:1.5px solid #E4E8F0;">
+          <h4 style="margin-bottom:16px;font-family:'Sora',sans-serif;">Share a Scam Report or Warning</h4>
+          <input id="blogAuthor" type="text" placeholder="Your name (optional)"
+            style="width:100%;padding:10px 14px;border:1.5px solid #E4E8F0;border-radius:10px;margin-bottom:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;">
+          <input id="blogTitle" type="text" placeholder="Title — e.g. 'Warning: Fake PM Kisan SMS going around'"
+            style="width:100%;padding:10px 14px;border:1.5px solid #E4E8F0;border-radius:10px;margin-bottom:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;">
+          <select id="blogCategory"
+            style="width:100%;padding:10px 14px;border:1.5px solid #E4E8F0;border-radius:10px;margin-bottom:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;background:white;">
+            <option>Financial</option><option>Cyber</option><option>Government</option>
+            <option>Employment</option><option>Health</option><option>AI Scam</option><option>Other</option>
+          </select>
+          <textarea id="blogContent" placeholder="Describe the scam — what did it look like? How did you identify it? How can others avoid it? (min 50 characters)"
+            style="width:100%;padding:10px 14px;border:1.5px solid #E4E8F0;border-radius:10px;margin-bottom:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;min-height:120px;resize:vertical;outline:none;"></textarea>
+          <div style="display:flex;gap:10px;">
+            <button onclick="submitBlog()"
+              style="background:#E63946;color:white;border:none;padding:10px 24px;border-radius:10px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">
+              🚀 Publish Report
+            </button>
+            <button onclick="toggleBlogForm()"
+              style="background:#f0f0f0;color:#666;border:none;padding:10px 20px;border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;">
+              Cancel
+            </button>
+          </div>
+          <div id="blogSubmitStatus" style="margin-top:10px;font-size:13px;"></div>
+        </div>
+
+        <!-- Blog Posts Feed -->
+        <div id="communityPostsFeed">
+          <div class="loading-pulse">Loading community reports...</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
 
 </div><!-- end main -->
-
+ 
 <script>
+// @ts-nocheck
+/* eslint-disable */
 const API = "https://trustguard-backend-4n2p.onrender.com";
 let chatHistory = [];
-let currentImageFile = null;
-
-// ── Wake up backend on load ──
-async function wakeUpBackend() {
-  try { await fetch(API + '/trends', { method: 'GET' }); } catch(e) {}
-}
-wakeUpBackend();
-
-// ── TAB SWITCHING ──
+ 
 function showTab(name, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + name).classList.add('active');
   btn.classList.add('active');
 }
-
+ 
 function loadSample() {
-  document.getElementById('inputText').value = "🚨 URGENT: सरकार दे रही है सभी परिवारों को ₹8500! PM Kisan Yojana के तहत आज रात 12 बजे से पहले इस लिंक पर क्लिक करें। यह ऑफर सिर्फ 2 घंटे के लिए है। 10 लोगों को forward करें। http://pmkisan-apply.xyz/free-money";
+  document.getElementById('inputText').value = "🚨 URGENT: सरकार दे रही है सभी परिवारों को ₹8500! PM Kisan Yojana के तहत आज रात 12 बजे से पहले इस लिंक पर क्लिक करें और अपना Aadhaar नंबर दर्ज करें। यह ऑफर सिर्फ 2 घंटे के लिए है। 10 लोगों को forward करें वरना पैसे नहीं मिलेंगे। http://pmkisan-apply.xyz/free-money";
 }
-
-// ── IMAGE HANDLING ──
-function handleFileSelect(e) { const f = e.target.files[0]; if (f) processImage(f); }
-function handleDrop(e) { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) processImage(f); }
-
+ 
+function verifyURL() {
+  const url = document.getElementById('urlInput').value.trim();
+  if (!url) { alert('Please paste a URL first'); return; }
+  document.getElementById('inputText').value = url;
+  analyze();
+}
+ 
+async function handleImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  processImage(file);
+}
+ 
+function handleFileSelect(e) {
+  const file = e.target.files[0];
+  if (file) processImage(file);
+}
+ 
+function handleDrop(e) {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file) processImage(file);
+}
+ 
 function processImage(file) {
-  currentImageFile = file;
   const reader = new FileReader();
   reader.onload = (e) => {
     document.getElementById('previewImg').src = e.target.result;
     document.getElementById('imagePreview').style.display = 'block';
-    document.getElementById('uploadZone').style.display = 'none';
-    document.getElementById('ocrStatus').innerHTML = '🔍 Extracting text...';
+    document.getElementById('ocrStatus').textContent = '🔍 Extracting text...';
   };
   reader.readAsDataURL(file);
-
   const form = new FormData();
   form.append('image', file);
   fetch(API + '/ocr', { method: 'POST', body: form })
     .then(r => r.json())
     .then(data => {
-      // FIX: backend returns 'text', not 'extracted_text'
-      const text = data.text || data.extracted_text || '';
+      const text = data.extracted_text || data.text || '';
       if (text) {
         document.getElementById('inputText').value = text;
-        document.getElementById('ocrStatus').innerHTML = '✅ Text extracted! Click <strong>Analyze Now</strong>.';
+        document.getElementById('ocrStatus').textContent = '✅ Text extracted! Click Analyze Now.';
       } else {
-        document.getElementById('ocrStatus').innerHTML = '⚠️ No text found. Click <strong>Analyze Now</strong> to analyze the image directly.';
+        document.getElementById('ocrStatus').textContent = '❌ Could not extract text. Try a clearer image.';
       }
     })
     .catch(() => {
-      document.getElementById('ocrStatus').innerHTML = '❌ OCR failed. Try <strong>Analyze Now</strong> anyway.';
+      document.getElementById('ocrStatus').textContent = '❌ OCR failed. Try again.';
     });
 }
-
-function removeImage() {
-  currentImageFile = null;
-  document.getElementById('imagePreview').style.display = 'none';
-  document.getElementById('uploadZone').style.display = 'flex';
-  document.getElementById('previewImg').src = '';
-  document.getElementById('ocrStatus').textContent = '';
-  document.getElementById('fileInput').value = '';
-  document.getElementById('inputText').value = '';
-}
-
-// ── CAMERA ──
+ 
 async function openCamera() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
@@ -758,72 +783,74 @@ async function openCamera() {
     video.srcObject = stream;
     video.style.display = 'block';
     document.getElementById('captureBtn').style.display = 'block';
-  } catch(e) { alert('Camera access denied.'); }
+  } catch(e) {
+    alert('Camera access denied. Please allow camera permission.');
+  }
 }
-
+ 
 function capturePhoto() {
   const video = document.getElementById('cameraVideo');
   const canvas = document.getElementById('cameraCanvas');
-  canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
   canvas.getContext('2d').drawImage(video, 0, 0);
   video.srcObject.getTracks().forEach(t => t.stop());
   video.style.display = 'none';
   document.getElementById('captureBtn').style.display = 'none';
   canvas.toBlob(blob => processImage(new File([blob], 'photo.jpg', { type: 'image/jpeg' })));
 }
-
-// ── VIDEO ──
+ 
 function handleVideo(e) {
   const file = e.target.files[0];
   if (!file) return;
   const status = document.getElementById('videoStatus');
   const player = document.getElementById('videoPlayer');
-  status.textContent = '🎥 Video loaded.';
+  status.textContent = '🎥 Video loaded. Play it to extract audio...';
   player.src = URL.createObjectURL(file);
   player.style.display = 'block';
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) { status.textContent = '❌ Speech recognition not supported. Use Chrome.'; return; }
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'hi-IN';
+  recognition.continuous = true;
+  recognition.interimResults = false;
+  let transcript = '';
+  recognition.onresult = (e) => {
+    for (let i = e.resultIndex; i < e.results.length; i++) transcript += e.results[i][0].transcript + ' ';
+    document.getElementById('inputText').value = transcript;
+    status.textContent = '✅ Audio extracted! Click Analyze Now.';
+  };
+  recognition.onerror = () => { status.textContent = '❌ Could not extract audio.'; };
+  player.onplay = () => recognition.start();
+  player.onpause = () => recognition.stop();
+  player.onended = () => { recognition.stop(); status.textContent = '✅ Done! Click Analyze Now.'; };
 }
-
-// ── VOICE ──
+ 
 function startVoice() {
   const btn = document.getElementById('voiceBtn');
   const status = document.getElementById('voiceStatus');
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { alert('Voice not supported. Use Chrome.'); return; }
-  const recognition = new SR();
-  recognition.lang = 'hi-IN'; recognition.interimResults = false;
-  recognition.onstart = () => { btn.textContent = '⏹ Stop'; btn.classList.add('recording'); status.textContent = '🎤 Listening...'; };
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) { alert('Voice not supported. Use Chrome.'); return; }
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'hi-IN';
+  recognition.interimResults = false;
+  recognition.onstart = () => { btn.textContent = '⏹ Stop Recording'; btn.classList.add('recording'); status.textContent = '🎤 Listening...'; };
   recognition.onresult = (e) => { document.getElementById('inputText').value = e.results[0][0].transcript; status.textContent = '✅ Got it! Click Analyze Now.'; btn.textContent = '🎤 Record Voice'; btn.classList.remove('recording'); };
-  recognition.onerror = () => { status.textContent = '❌ Error.'; btn.textContent = '🎤 Record Voice'; btn.classList.remove('recording'); };
+  recognition.onerror = () => { status.textContent = '❌ Error. Try again.'; btn.textContent = '🎤 Record Voice'; btn.classList.remove('recording'); };
   recognition.onend = () => { btn.textContent = '🎤 Record Voice'; btn.classList.remove('recording'); };
   recognition.start();
 }
-
-// ── ANALYZE ──
+ 
 async function analyze() {
   const text = document.getElementById('inputText').value.trim();
-  if (!text && !currentImageFile) {
-    alert('Please paste some text or upload an image first.');
-    return;
-  }
+  if (!text) { alert('Please paste some text first.'); return; }
   document.getElementById('analyzeBtn').disabled = true;
   document.getElementById('loadingSpinner').classList.remove('hidden');
   document.getElementById('resultSection').classList.add('hidden');
-  document.getElementById('urlResultCard').classList.add('hidden');
-
   try {
-    let analyzeText = text;
-    if (!analyzeText && currentImageFile) {
-      const form = new FormData();
-      form.append('image', currentImageFile);
-      const ocrRes = await fetch(API + '/ocr', { method: 'POST', body: form });
-      const ocrData = await ocrRes.json();
-      analyzeText = ocrData.text || ocrData.extracted_text || 'Image uploaded — no text extracted.';
-      document.getElementById('inputText').value = analyzeText;
-    }
     const res = await fetch(API + '/analyze', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: analyzeText })
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ text })
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
@@ -837,68 +864,7 @@ async function analyze() {
     document.getElementById('loadingSpinner').classList.add('hidden');
   }
 }
-
-// ── URL VERIFY ──
-async function verifyURL() {
-  const url = document.getElementById('urlInput').value.trim();
-  if (!url) { alert('Please paste a URL first'); return; }
-  document.getElementById('analyzeBtn').disabled = true;
-  document.getElementById('loadingSpinner').classList.remove('hidden');
-  document.getElementById('resultSection').classList.add('hidden');
-  try {
-    const res = await fetch(API + '/verify-url', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url })
-    });
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-    renderResult(data);
-    const badges = document.getElementById('urlBadges');
-    const meta = document.getElementById('urlMeta');
-    badges.innerHTML = '';
-    if (data.is_trusted_domain) badges.innerHTML += '<span class="url-badge trusted">✅ Trusted Domain</span>';
-    else badges.innerHTML += '<span class="url-badge warning">⚠️ Unknown Domain</span>';
-    if (data.scam_url_pattern) badges.innerHTML += '<span class="url-badge danger">🚨 Scam URL Pattern</span>';
-    if (!data.is_reachable) badges.innerHTML += '<span class="url-badge danger">❌ Not Reachable</span>';
-    if (data.redirected) badges.innerHTML += `<span class="url-badge warning">↪️ Redirects to: ${data.final_url}</span>`;
-    meta.textContent = `Domain: ${data.domain || '—'}`;
-    document.getElementById('urlResultCard').classList.remove('hidden');
-  } catch(e) {
-    alert('URL check failed: ' + e.message);
-  } finally {
-    document.getElementById('analyzeBtn').disabled = false;
-    document.getElementById('loadingSpinner').classList.add('hidden');
-  }
-}
-
-// ── YOUTUBE ──
-async function analyzeYouTube() {
-  const url = document.getElementById('ytInput').value.trim();
-  if (!url) { alert('Please paste a YouTube URL first'); return; }
-  if (!url.includes('youtube.com') && !url.includes('youtu.be')) { alert('Please enter a valid YouTube URL'); return; }
-  document.getElementById('analyzeBtn').disabled = true;
-  document.getElementById('loadingSpinner').classList.remove('hidden');
-  document.getElementById('resultSection').classList.add('hidden');
-  try {
-    const res = await fetch(API + '/analyze-youtube', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url })
-    });
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-    if (data.transcript_preview) document.getElementById('inputText').value = data.transcript_preview + '...';
-    renderResult(data);
-  } catch(e) {
-    alert('YouTube analysis failed: ' + e.message);
-  } finally {
-    document.getElementById('analyzeBtn').disabled = false;
-    document.getElementById('loadingSpinner').classList.add('hidden');
-  }
-}
-
-// ── RENDER RESULT ──
+ 
 function renderResult(d) {
   const score = Number(d.credibility_score) || 0;
   const palettes = {
@@ -912,26 +878,19 @@ function renderResult(d) {
   ring.style.borderColor = c.border; ring.style.color = c.text;
   document.getElementById('scoreNum').textContent = score;
   const badge = document.getElementById('verdictBadge');
-  badge.style.cssText = `background:${c.bg};color:${c.text};border-color:${c.chipBorder};display:inline-flex;align-items:center;gap:7px;padding:7px 16px;border-radius:20px;font-weight:700;font-size:.78rem;letter-spacing:.5px;border:1.5px solid;font-family:'Sora',sans-serif`;
-  document.getElementById('verdictDot').style.cssText = `width:7px;height:7px;border-radius:50%;background:${c.dot};flex-shrink:0`;
+  badge.style.cssText = 'background:' + c.bg + ';color:' + c.text + ';border-color:' + c.chipBorder + ';display:inline-flex;align-items:center;gap:7px;padding:7px 16px;border-radius:20px;font-weight:700;font-size:.78rem;letter-spacing:.5px;border:1.5px solid;font-family:\'Sora\',sans-serif';
+  document.getElementById('verdictDot').style.cssText = 'width:7px;height:7px;border-radius:50%;background:' + c.dot + ';flex-shrink:0';
   document.getElementById('verdictText').textContent = d.verdict || 'UNKNOWN';
-  document.getElementById('techTags').innerHTML = (d.manipulation_techniques && d.manipulation_techniques.length)
-    ? d.manipulation_techniques.map(t => `<span class="tag tag-red">⚠️ ${t}</span>`).join('')
-    : '<span style="font-size:.82rem;color:var(--muted)">None detected</span>';
-  document.getElementById('redFlags').innerHTML = (d.red_flags && d.red_flags.length)
-    ? d.red_flags.map(f => `<div class="flag-item"><span class="flag-emoji">⚠️</span><span class="flag-text">"${f}"</span></div>`).join('')
-    : '<div style="font-size:.85rem;color:var(--muted);padding:.5rem 0">No specific red flags found</div>';
+  document.getElementById('techTags').innerHTML = (d.manipulation_techniques && d.manipulation_techniques.length) ? d.manipulation_techniques.map(function(t) { return '<span class="tag tag-red">\u26A0\uFE0F ' + t + '</span>'; }).join('') : '<span style="font-size:.82rem;color:var(--muted)">None detected</span>';
+  document.getElementById('redFlags').innerHTML = (d.red_flags && d.red_flags.length) ? d.red_flags.map(function(f) { return '<div class="flag-item"><span class="flag-emoji">\u26A0\uFE0F</span><span class="flag-text">"' + f + '"</span></div>'; }).join('') : '<div style="font-size:.85rem;color:var(--muted);padding:.5rem 0">No specific red flags found</div>';
   document.getElementById('explanation').textContent = d.explanation || '';
   document.getElementById('explanationHindi').textContent = d.explanation_hindi || '';
   document.getElementById('recommendedAction').textContent = d.recommended_action || '';
-  document.getElementById('factSources').innerHTML = (d.fact_check_sources && d.fact_check_sources.length)
-    ? d.fact_check_sources.map(s => { const url = s.startsWith('http') ? s : 'https://' + s; const label = s.replace(/https?:\/\//,'').split('/')[0]; return `<a href="${url}" target="_blank" class="source-link">✅ ${label}</a>`; }).join('')
-    : '';
+  document.getElementById('factSources').innerHTML = (d.fact_check_sources && d.fact_check_sources.length) ? d.fact_check_sources.map(function(s) { var url = s.startsWith('http') ? s : 'https://' + s; var label = s.replace(/https?:\/\//,'').split('/')[0]; return '<a href="' + url + '" target="_blank" class="source-link">\u2705 ' + label + '</a>'; }).join('') : '';
   document.getElementById('resultSection').classList.remove('hidden');
   document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
 }
-
-// ── CHAT ──
+ 
 async function sendChat() {
   const input = document.getElementById('chatInput');
   const msg = input.value.trim();
@@ -940,47 +899,49 @@ async function sendChat() {
   appendChat(msg, 'user');
   const typingId = 'typing_' + Date.now();
   const box = document.getElementById('chatBox');
-  box.innerHTML += `<div class="msg bot" id="${typingId}"><span class="spinner"></span> Thinking...</div>`;
+  box.innerHTML += '<div class="msg bot" id="' + typingId + '"><span class="spinner"></span> Thinking...</div>';
   box.scrollTop = box.scrollHeight;
   chatHistory.push({ role: 'user', content: msg });
   try {
     const res = await fetch(API + '/chat', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ message: msg, history: chatHistory }) });
     const data = await res.json();
-    const reply = data.reply || 'Sorry, no response.';
+    const reply = data.reply || 'Sorry, no response. Try again.';
     document.getElementById(typingId)?.remove();
     chatHistory.push({ role: 'assistant', content: reply });
     appendChat(reply, 'bot');
   } catch {
     document.getElementById(typingId)?.remove();
-    appendChat('⚠️ Could not connect. Backend may be waking up — try again in 30 seconds.', 'bot');
+    appendChat('⚠️ Could not connect to backend.', 'bot');
   }
 }
-
+ 
 function appendChat(msg, type) {
   const box = document.getElementById('chatBox');
-  box.innerHTML += `<div class="msg ${type}">${msg}</div>`;
+  box.innerHTML += '<div class="msg ' + type + '">' + msg + '</div>';
   box.scrollTop = box.scrollHeight;
 }
-
-function askSuggested(q) { document.getElementById('chatInput').value = q; sendChat(); }
-
-// ── QUIZ ──
+ 
+function askSuggested(q) {
+  document.getElementById('chatInput').value = q;
+  sendChat();
+}
+ 
 function quizAnswer(btn, correct) {
   document.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
   btn.classList.add(correct ? 'correct' : 'wrong');
   if (!correct) document.querySelectorAll('.quiz-opt')[2].classList.add('correct');
   const fb = document.getElementById('quizFeedback');
   fb.classList.remove('hidden');
-  fb.style.cssText = `background:${correct?'#EDFAF9':'#FFF0F1'};border:1.5px solid ${correct?'#A7F3D0':'#FFD6D8'};color:${correct?'#0D8A82':'#C1121F'};margin-top:1rem;padding:.9rem 1rem;border-radius:12px;font-size:.85rem;font-weight:500;line-height:1.6`;
-  fb.textContent = correct ? '✅ Correct! Always verify on pib.gov.in.' : '❌ This is a scam pattern. Real govt schemes never use WhatsApp forwards.';
+  fb.style.cssText = 'background:' + (correct ? '#EDFAF9' : '#FFF0F1') + ';border:1.5px solid ' + (correct ? '#A7F3D0' : '#FFD6D8') + ';color:' + (correct ? '#0D8A82' : '#C1121F') + ';margin-top:1rem;padding:.9rem 1rem;border-radius:12px;font-size:.85rem;font-weight:500;line-height:1.6';
+  fb.textContent = correct ? '✅ Correct! Always verify on pib.gov.in. Never share unverified forwards.' : '❌ This is a scam pattern. Real government schemes never ask you to share WhatsApp messages.';
 }
-
-// ── PROFILE ──
+ 
 function toggleProfile() {
   const dd = document.getElementById('profileDropdown');
   dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
   loadProfile();
 }
+ 
 function loadProfile() {
   const user = JSON.parse(localStorage.getItem('tg_user') || '{}');
   const analyses = parseInt(localStorage.getItem('tg_analyses') || '0');
@@ -994,7 +955,12 @@ function loadProfile() {
   }
   document.getElementById('profileAnalyses').textContent = analyses + ' messages verified';
 }
-function logout() { localStorage.removeItem('tg_user'); window.location.href = 'login.html'; }
+ 
+function logout() {
+  localStorage.removeItem('tg_user');
+  window.location.href = 'login.html';
+}
+ 
 document.addEventListener('click', function(e) {
   const btn = document.getElementById('profileBtn');
   const dd = document.getElementById('profileDropdown');
@@ -1013,7 +979,7 @@ async function loadCommunityTrends() {
     const res = await fetch(API + '/community-trends');
     const data = await res.json();
     allTrends = data.trending || [];
-    document.getElementById('trend-month').textContent = `🗓️ Trends for ${data.month} — updates daily`;
+    document.getElementById('trend-month').textContent = '🗓️ Trends for ' + data.month + ' — updates daily';
     const pillsContainer = document.getElementById('category-filter');
     pillsContainer.innerHTML = '';
     (data.categories || ['All']).forEach(cat => {
@@ -1040,24 +1006,25 @@ function filterCategory(cat) {
 }
 
 function renderTrends(trends) {
-  const grid = document.getElementById('trending-grid');
+  var grid = document.getElementById('trending-grid');
   if (!trends.length) { grid.innerHTML = '<p style="color:#888;padding:20px;">No trends in this category.</p>'; return; }
-  grid.innerHTML = trends.map(t => `
-    <div class="trend-card" style="border-color:${t.color}" onclick="searchBlogs('${t.keyword.replace(/'/g,"\\'")}')">
-      <div class="trend-keyword">${t.keyword}</div>
-      <div class="trend-meta">
-        <span class="trend-category">${t.category}</span>
-        <span class="trend-change">${t.change}</span>
-      </div>
-      <div style="margin-top:8px;font-size:12px;color:#888">${t.count.toLocaleString()} reports</div>
-    </div>
-  `).join('');
+  grid.innerHTML = trends.map(function(t) {
+    var safeKw = t.keyword.replace(/'/g, "\\'");
+    return '<div class="trend-card" style="border-color:' + t.color + '" onclick="searchBlogs(\'' + safeKw + '\')">'
+      + '<div class="trend-keyword">' + t.keyword + '</div>'
+      + '<div class="trend-meta">'
+      + '<span class="trend-category">' + t.category + '</span>'
+      + '<span class="trend-change">' + t.change + '</span>'
+      + '</div>'
+      + '<div style="margin-top:8px;font-size:12px;color:#888">' + t.count.toLocaleString() + ' reports</div>'
+      + '</div>';
+  }).join('');
 }
 
 async function searchBlogs(keyword) {
   document.getElementById('current-keyword').textContent = keyword;
   document.getElementById('blog-results-section').style.display = 'block';
-  document.getElementById('blog-grid').innerHTML = `<div class="loading-pulse">🔍 Fetching articles about "${keyword}"...</div>`;
+  document.getElementById('blog-grid').innerHTML = '<div class="loading-pulse">🔍 Fetching articles about "' + keyword + '"...</div>';
   document.getElementById('blog-results-section').scrollIntoView({behavior:'smooth'});
   try {
     const res = await fetch(API + '/search-blogs', {
@@ -1071,16 +1038,17 @@ async function searchBlogs(keyword) {
       document.getElementById('blog-grid').innerHTML = '<p style="color:#888;padding:20px;">No articles found. Try another keyword.</p>';
       return;
     }
-    document.getElementById('blog-grid').innerHTML = articles.map(a => `
-      <a href="${a.url}" target="_blank" class="blog-card">
-        ${a.image ? `<img src="${a.image}" onerror="this.style.display='none'" alt="">` : ''}
-        <div class="blog-card-body">
-          <span class="blog-source-badge" style="background:${a.source_color || '#E63946'}">${a.source}</span>
-          <h4>${a.title}</h4>
-          <p>${a.description}</p>
-        </div>
-      </a>
-    `).join('');
+    document.getElementById('blog-grid').innerHTML = articles.map(function(a) {
+      var imgHtml = a.image ? '<img src="' + a.image + '" onerror="this.style.display=\'none\'" alt="">' : '';
+      var bgColor = a.source_color || '#E63946';
+      return '<a href="' + a.url + '" target="_blank" class="blog-card">'
+        + imgHtml
+        + '<div class="blog-card-body">'
+        + '<span class="blog-source-badge" style="background:' + bgColor + '">' + a.source + '</span>'
+        + '<h4>' + a.title + '</h4>'
+        + '<p>' + a.description + '</p>'
+        + '</div></a>';
+    }).join('');
   } catch(e) {
     document.getElementById('blog-grid').innerHTML = '<p style="color:red;padding:20px;">Failed to fetch articles.</p>';
   }
@@ -1089,6 +1057,83 @@ async function searchBlogs(keyword) {
 function closeBlogResults() {
   document.getElementById('blog-results-section').style.display = 'none';
 }
+
+function toggleBlogForm() {
+  const form = document.getElementById('blogForm');
+  form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
+
+async function submitBlog() {
+  const title = document.getElementById('blogTitle').value.trim();
+  const content = document.getElementById('blogContent').value.trim();
+  const author = document.getElementById('blogAuthor').value.trim() || 'Anonymous';
+  const category = document.getElementById('blogCategory').value;
+  const status = document.getElementById('blogSubmitStatus');
+  if (!title) { status.innerHTML = '<span style="color:red">⚠️ Please add a title.</span>'; return; }
+  if (content.length < 50) { status.innerHTML = '<span style="color:red">⚠️ Content too short (min 50 characters).</span>'; return; }
+  status.innerHTML = '<span style="color:#888">⏳ Publishing...</span>';
+  try {
+    const res = await fetch(API + '/community-posts', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({title, content, author, category})
+    });
+    const data = await res.json();
+    if (data.error) { status.innerHTML = '<span style="color:red">❌ ' + data.error + '</span>'; return; }
+    status.innerHTML = '<span style="color:green">✅ Published! Thank you for helping the community.</span>';
+    document.getElementById('blogTitle').value = '';
+    document.getElementById('blogContent').value = '';
+    document.getElementById('blogAuthor').value = '';
+    setTimeout(() => {
+      document.getElementById('blogForm').style.display = 'none';
+      loadCommunityPosts();
+    }, 1500);
+  } catch(e) {
+    status.innerHTML = '<span style="color:red">❌ Failed to publish. Try again.</span>';
+  }
+}
+
+async function loadCommunityPosts() {
+  const feed = document.getElementById('communityPostsFeed');
+  if (!feed) return;
+  try {
+    const res = await fetch(API + '/community-posts');
+    const data = await res.json();
+    const posts = data.posts || [];
+    if (!posts.length) {
+      feed.innerHTML = '<div style="text-align:center;padding:40px;color:#888;"><div style="font-size:40px;margin-bottom:12px;">📭</div><p>No community reports yet. Be the first to share a scam warning!</p></div>';
+      return;
+    }
+    feed.innerHTML = posts.map(function(p) {
+      return '<div style="background:white;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border:1.5px solid #E4E8F0;">'
+        + '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">'
+        + '<span style="background:#FFF0F1;color:#E63946;border:1px solid #FFD6D8;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700;">' + p.category + '</span>'
+        + '<span style="font-size:11px;color:#9CA3AF;">' + p.timestamp + '</span>'
+        + '</div>'
+        + '<h4 style="font-size:16px;font-weight:700;margin-bottom:8px;font-family:\'Sora\',sans-serif;">' + p.title + '</h4>'
+        + '<p style="font-size:13px;color:#555;line-height:1.7;margin-bottom:12px;">' + p.content + '</p>'
+        + '<div style="display:flex;justify-content:space-between;align-items:center;">'
+        + '<span style="font-size:12px;color:#9CA3AF;">By <strong>' + p.author + '</strong></span>'
+        + '<button onclick="likePost(\'' + p.id + '\', this)" style="background:#FFF0F1;color:#E63946;border:1px solid #FFD6D8;padding:5px 14px;border-radius:20px;cursor:pointer;font-size:12px;font-weight:600;font-family:\'DM Sans\',sans-serif;">'
+        + '\u2764\uFE0F <span id="likes-' + p.id + '">' + p.likes + '</span>'
+        + '</button>'
+        + '</div>'
+        + '</div>';
+    }).join('');
+  } catch(e) {
+    feed.innerHTML = '<p style="color:#888;padding:20px;">Could not load posts.</p>';
+  }
+}
+
+async function likePost(id, btn) {
+  btn.disabled = true;
+  try {
+    const res = await fetch(API + '/community-posts/' + id + '/like', {method:'POST'});
+    const data = await res.json();
+    document.getElementById('likes-' + id).textContent = data.likes;
+  } catch(e) { btn.disabled = false; }
+}
+
 </script>
 </body>
 </html>
