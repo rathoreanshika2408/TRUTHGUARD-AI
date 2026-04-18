@@ -282,94 +282,120 @@ def search_blogs():
     if not keyword:
         return jsonify({'error': 'No keyword'}), 400
 
-    import requests as http_requests
-
-    sources = [
-        f"https://boomlive.in/search?q={keyword.replace(' ', '+')}",
-        f"https://www.altnews.in/?s={keyword.replace(' ', '+')}"
-    ]
-
     articles = []
 
-    # Fetch BoomLive results
+    # Use AI to generate realistic article suggestions with real search URLs
     try:
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-        r = http_requests.get(sources[0], headers=headers, timeout=8)
-        from bs4 import BeautifulSoup
-        soup = BeautifulSoup(r.text, 'html.parser')
+        ai_resp = groq_client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[
+                {"role": "system", "content": "Reply ONLY with valid JSON, no markdown, no extra text."},
+                {"role": "user", "content": f"""Generate 6 realistic fact-check articles about "{keyword}" in India.
+Use ONLY these sources: BoomLive, AltNews, VisvasNews, PIB.
+For URLs, use real search URLs like:
+- BoomLive: https://boomlive.in/search?q={keyword.replace(' ', '+')}
+- AltNews: https://www.altnews.in/?s={keyword.replace(' ', '+')}
+- VisvasNews: https://www.vishvasnews.com/?s={keyword.replace(' ', '+')}
+- PIB: https://pib.gov.in/search.aspx?reg=3&lang=1&qval={keyword.replace(' ', '+')}
 
-        # BoomLive article cards
-        for card in soup.select('div.story-card, article, div.card')[:6]:
-            title_el = card.select_one('h2, h3, .title, a')
-            link_el = card.select_one('a[href]')
-            img_el = card.select_one('img')
-            desc_el = card.select_one('p, .description, .excerpt')
-
-            if title_el and link_el:
-                href = link_el.get('href', '')
-                if href and not href.startswith('http'):
-                    href = 'https://boomlive.in' + href
-                articles.append({
-                    'title': title_el.get_text(strip=True),
-                    'url': href,
-                    'source': 'BoomLive',
-                    'source_color': '#E63946',
-                    'image': img_el.get('src', '') if img_el else '',
-                    'description': desc_el.get_text(strip=True)[:120] + '...' if desc_el else 'Click to read full fact-check article.'
-                })
-    except:
-        pass
-
-    # Fetch AltNews results
-    try:
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        r = http_requests.get(sources[1], headers=headers, timeout=8)
-        from bs4 import BeautifulSoup
-        soup = BeautifulSoup(r.text, 'html.parser')
-
-        for card in soup.select('article, div.post')[:4]:
-            title_el = card.select_one('h2, h3, .entry-title')
-            link_el = card.select_one('a[href]')
-            img_el = card.select_one('img')
-            desc_el = card.select_one('p, .excerpt')
-
-            if title_el and link_el:
-                href = link_el.get('href', '')
-                articles.append({
-                    'title': title_el.get_text(strip=True),
-                    'url': href,
-                    'source': 'AltNews',
-                    'source_color': '#2563EB',
-                    'image': img_el.get('src', '') if img_el else '',
-                    'description': desc_el.get_text(strip=True)[:120] + '...' if desc_el else 'Click to read full fact-check article.'
-                })
-    except:
-        pass
-
-    # If scraping fails, use AI to generate article suggestions
-    if not articles:
-        try:
-            ai_resp = groq_client.chat.completions.create(
-                model="llama-3.1-8b-instant",
-                messages=[
-                    {"role": "system", "content": "Reply ONLY with valid JSON, no markdown."},
-                    {"role": "user", "content": f"""Generate 4 realistic fact-check article suggestions about "{keyword}" in India.
-Return JSON: {{"articles": [{{"title": "...", "url": "https://boomlive.in", "source": "BoomLive", "source_color": "#E63946", "description": "..."}}]}}"""}
-                ],
-                temperature=0.7,
-                max_tokens=400,
-            )
-            raw = ai_resp.choices[0].message.content.strip()
-            if "```" in raw:
-                raw = raw.split("```")[1]
-                if raw.startswith("json"):
-                    raw = raw[4:]
-            result = json.loads(raw.strip())
-            articles = result.get('articles', [])
-        except:
-            pass
+Return JSON:
+{{
+  "articles": [
+    {{
+      "title": "Realistic fact-check article title about {keyword}",
+      "url": "real search URL from above",
+      "source": "BoomLive",
+      "source_color": "#E63946",
+      "description": "2 sentence description of what this fact-check found about {keyword} in India."
+    }}
+  ]
+}}
+Mix sources. Make titles realistic and specific to India context. 2 from BoomLive, 2 from AltNews, 1 VisvasNews, 1 PIB."""}
+            ],
+            temperature=0.7,
+            max_tokens=800,
+        )
+        raw = ai_resp.choices[0].message.content.strip()
+        if "```" in raw:
+            raw = raw.split("```")[1]
+            if raw.startswith("json"):
+                raw = raw[4:]
+        result = json.loads(raw.strip())
+        articles = result.get('articles', [])
+    except Exception as e:
+        # Hardcoded fallback
+        encoded = keyword.replace(' ', '+')
+        articles = [
+            {"title": f"Fact Check: {keyword} — What's true?", "url": f"https://boomlive.in/search?q={encoded}", "source": "BoomLive", "source_color": "#E63946", "description": f"BoomLive investigates the viral claim about {keyword} circulating on WhatsApp and social media in India."},
+            {"title": f"Alt News investigates: {keyword}", "url": f"https://www.altnews.in/?s={encoded}", "source": "AltNews", "source_color": "#2563EB", "description": f"AltNews fact-checkers dig into the truth behind {keyword} spreading across Indian social media platforms."},
+            {"title": f"Vishvas News: {keyword} — Fact or Fiction?", "url": f"https://www.vishvasnews.com/?s={encoded}", "source": "VisvasNews", "source_color": "#7C3AED", "description": f"Vishvas News examines claims related to {keyword} that have been widely shared in Hindi-speaking communities."},
+            {"title": f"PIB Fact Check on {keyword}", "url": f"https://pib.gov.in/search.aspx?reg=3&lang=1&qval={encoded}", "source": "PIB Fact Check", "source_color": "#059669", "description": f"Government of India's Press Information Bureau addresses misinformation related to {keyword}."},
+        ]
 
     return jsonify({'articles': articles, 'keyword': keyword, 'total': len(articles)})
+
+
+    # In-memory blog store (resets on server restart — upgrade to DB for persistence)
+community_posts = []
+
+@app.route('/community-posts', methods=['GET'])
+def get_community_posts():
+    return jsonify({'posts': list(reversed(community_posts[-20:]))})  # Latest 20
+
+@app.route('/community-posts', methods=['POST'])
+def create_community_post():
+    data = request.get_json()
+    title = data.get('title', '').strip()
+    content = data.get('content', '').strip()
+    author = data.get('author', 'Anonymous').strip()
+    category = data.get('category', 'General').strip()
+
+    if not title or not content:
+        return jsonify({'error': 'Title and content required'}), 400
+    if len(content) < 50:
+        return jsonify({'error': 'Content too short (min 50 characters)'}), 400
+
+    # AI moderation — check if post is relevant to scams/misinformation
+    try:
+        mod = groq_client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[
+                {"role": "system", "content": "Reply ONLY with JSON: {\"approved\": true/false, \"reason\": \"one sentence\"}"},
+                {"role": "user", "content": f"Is this post relevant to scams, misinformation, or fact-checking in India? Title: {title}. Content: {content[:300]}"}
+            ],
+            temperature=0.1, max_tokens=100
+        )
+        raw = mod.choices[0].message.content.strip()
+        if "```" in raw:
+            raw = raw.split("```")[1]
+            if raw.startswith("json"): raw = raw[4:]
+        mod_result = json.loads(raw.strip())
+    except:
+        mod_result = {"approved": True}
+
+    if not mod_result.get('approved', True):
+        return jsonify({'error': f'Post rejected: {mod_result.get("reason", "Not relevant to scams/misinformation")}'}), 400
+
+    post = {
+        'id': len(community_posts) + 1,
+        'title': title,
+        'content': content,
+        'author': author,
+        'category': category,
+        'timestamp': datetime.now().strftime('%B %d, %Y at %I:%M %p'),
+        'likes': 0
+    }
+    community_posts.append(post)
+    return jsonify({'success': True, 'post': post})
+
+
+@app.route('/community-posts/<int:post_id>/like', methods=['POST'])
+def like_post(post_id):
+    for post in community_posts:
+        if post['id'] == post_id:
+            post['likes'] += 1
+            return jsonify({'likes': post['likes']})
+    return jsonify({'error': 'Post not found'}), 404
 
 @app.route('/verify-url', methods=['POST'])
 def verify_url():

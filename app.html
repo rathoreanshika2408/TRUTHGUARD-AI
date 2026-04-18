@@ -518,81 +518,168 @@ textarea::placeholder { color:#BCC5D6; }
   </div>
 
   <!-- ══ COMMUNITY TAB ══ -->
-  <div id="tab-community" class="page">
-    <div class="community-container">
-      <div class="community-header">
-        <h2>🔥 Community Scam Radar</h2>
-        <p id="trend-month" style="color:#888;font-size:13px;">Loading trends...</p>
-      </div>
-      <div id="category-filter" class="category-pills">
-        <button class="pill active" onclick="filterCategory('All')">All</button>
-      </div>
-      <div class="trending-section">
-        <h3>📈 Trending Right Now</h3>
-        <div id="trending-grid" class="trending-grid">
-          <div class="loading-pulse">Loading real-time trends...</div>
-        </div>
-      </div>
-      <div id="blog-results-section" class="blog-results-section" style="display:none;">
-        <div class="blog-results-header">
-          <h3>📰 Articles about: <span id="current-keyword" style="color:#E63946;"></span></h3>
-          <button onclick="closeBlogResults()" style="background:none;border:1px solid #ccc;padding:6px 14px;border-radius:20px;cursor:pointer;">✕ Close</button>
-        </div>
-        <div id="blog-grid" class="blog-grid"></div>
-      </div>
-    </div>
-  </div>
+<div id="tab-community" class="page">
+  <div class="community-container">
 
-  <!-- ══ LEARN TAB ══ -->
-  <div id="tab-learn" class="page">
-    <div class="layout">
-      <div>
-        <div class="learn-card">
-          <div class="learn-stripe" style="background:var(--red)"></div>
-          <div style="padding-left:16px">
-            <div class="learn-num">Tactic 01</div>
-            <div class="learn-title">🚨 Urgency triggers</div>
-            <div class="learn-body">Fake messages create artificial time pressure. Phrases like <em>"Share in 2 hours"</em> or <em>"अभी करें"</em> are classic red flags. Real news doesn't expire in 2 hours — pause and verify first.</div>
-          </div>
-        </div>
-        <div class="learn-card">
-          <div class="learn-stripe" style="background:var(--amber)"></div>
-          <div style="padding-left:16px">
-            <div class="learn-num" style="color:var(--amber)">Tactic 02</div>
-            <div class="learn-title">😱 Fear-based messaging</div>
-            <div class="learn-body">Content designed to scare you bypasses rational thinking. Fake health cures, disease hoaxes, and religious threat messages all weaponize fear to get shares. Always ask: does a verified news source confirm this?</div>
-          </div>
-        </div>
-        <div class="learn-card">
-          <div class="learn-stripe" style="background:var(--green)"></div>
-          <div style="padding-left:16px">
-            <div class="learn-num" style="color:var(--green)">Tactic 03</div>
-            <div class="learn-title">🏛️ Fake government schemes</div>
-            <div class="learn-body">India's most dangerous scam category. Real schemes are only announced on <strong>pib.gov.in</strong> — never through WhatsApp forwards. Never share your Aadhaar, OTP, or bank details from a forward.</div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="card" style="margin-bottom:1.2rem">
-          <div class="card-tag">Quick quiz</div>
-          <div style="font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:1rem;line-height:1.6;font-family:'Sora',sans-serif">You receive: "PM Modi announces ₹8000 for all families — share this link in 1 hour." What do you do?</div>
-          <button class="quiz-opt" onclick="quizAnswer(this,false)">Share immediately — sounds official</button>
-          <button class="quiz-opt" onclick="quizAnswer(this,false)">Click the link to verify</button>
-          <button class="quiz-opt" onclick="quizAnswer(this,true)">Check pib.gov.in — do not share or click</button>
-          <button class="quiz-opt" onclick="quizAnswer(this,false)">Forward only to family, not publicly</button>
-          <div id="quizFeedback" class="hidden" style="margin-top:1rem;padding:.9rem 1rem;border-radius:12px;font-size:.85rem;font-weight:500;line-height:1.6"></div>
-        </div>
-        <div class="card">
-          <div class="card-tag">5 golden rules</div>
-          <div class="rule-item"><div class="rule-num" style="background:var(--red-light);color:var(--red)">1</div><div class="rule-text">Always check <strong>pib.gov.in</strong> for government scheme claims</div></div>
-          <div class="rule-item"><div class="rule-num" style="background:var(--amber-light);color:var(--amber)">2</div><div class="rule-text">Never share your <strong>Aadhaar, OTP, or bank details</strong> from a forward</div></div>
-          <div class="rule-item"><div class="rule-num" style="background:var(--green-light);color:var(--green)">3</div><div class="rule-text">If it says <strong>"forward to 10 people"</strong> — it's almost certainly fake</div></div>
-          <div class="rule-item"><div class="rule-num" style="background:var(--blue-light);color:var(--blue)">4</div><div class="rule-text">Check <strong>boomlive.in</strong> or <strong>altnews.in</strong> before believing viral claims</div></div>
-          <div class="rule-item" style="margin-bottom:0"><div class="rule-num" style="background:var(--purple-light);color:var(--purple)">5</div><div class="rule-text">When in doubt — <strong style="color:var(--red)">don't share</strong>.</div></div>
-        </div>
+    <div class="community-header">
+      <h2>🔥 Community Scam Radar</h2>
+      <p id="trend-month" style="color:#888;font-size:13px;">Loading trends...</p>
+    </div>
+
+    <div id="category-filter" class="category-pills">
+      <button class="pill active" onclick="filterCategory('All')">All</button>
+    </div>
+
+    <div class="trending-section">
+      <h3>📈 Trending Right Now</h3>
+      <div id="trending-grid" class="trending-grid">
+        <div class="loading-pulse">Loading real-time trends...</div>
       </div>
     </div>
+
+    <div id="blog-results-section" style="display:none; margin-top:30px;">
+      <div class="blog-results-header">
+        <h3>📰 Articles about: <span id="current-keyword" style="color:#E63946;"></span></h3>
+        <button onclick="closeBlogResults()" style="background:none;border:1px solid #ccc;padding:6px 14px;border-radius:20px;cursor:pointer;">✕ Close</button>
+      </div>
+      <p style="font-size:12px;color:#888;margin-bottom:12px;">⚠️ These are search links — click to find real articles on each platform.</p>
+      <div id="blog-grid" class="blog-grid"></div>
+    </div>
+
+    <!-- ══ USER BLOG SECTION ══ -->
+    <div style="margin-top:40px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <h3>📝 Community Reports</h3>
+        <button onclick="toggleBlogForm()" id="writeBlogBtn"
+          style="background:#E63946;color:white;border:none;padding:10px 20px;border-radius:10px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:6px;">
+          ✏️ Write a Report
+        </button>
+      </div>
+
+      <!-- Write Blog Form -->
+      <div id="blogForm" style="display:none;background:white;border-radius:16px;padding:24px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,0.08);border:1.5px solid #E4E8F0;">
+        <h4 style="margin-bottom:16px;font-family:'Sora',sans-serif;">Share a Scam Report or Warning</h4>
+        <input id="blogAuthor" type="text" placeholder="Your name (optional)"
+          style="width:100%;padding:10px 14px;border:1.5px solid #E4E8F0;border-radius:10px;margin-bottom:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;">
+        <input id="blogTitle" type="text" placeholder="Title — e.g. 'Warning: Fake PM Kisan SMS going around'"
+          style="width:100%;padding:10px 14px;border:1.5px solid #E4E8F0;border-radius:10px;margin-bottom:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;">
+        <select id="blogCategory"
+          style="width:100%;padding:10px 14px;border:1.5px solid #E4E8F0;border-radius:10px;margin-bottom:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;background:white;">
+          <option>Financial</option>
+          <option>Cyber</option>
+          <option>Government</option>
+          <option>Employment</option>
+          <option>Health</option>
+          <option>AI Scam</option>
+          <option>Other</option>
+        </select>
+        <textarea id="blogContent" placeholder="Describe the scam — what did it look like? How did you identify it? How can others avoid it? (min 50 characters)"
+          style="width:100%;padding:10px 14px;border:1.5px solid #E4E8F0;border-radius:10px;margin-bottom:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;min-height:120px;resize:vertical;outline:none;"></textarea>
+        <div style="display:flex;gap:10px;">
+          <button onclick="submitBlog()"
+            style="background:#E63946;color:white;border:none;padding:10px 24px;border-radius:10px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">
+            🚀 Publish Report
+          </button>
+          <button onclick="toggleBlogForm()"
+            style="background:#f0f0f0;color:#666;border:none;padding:10px 20px;border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;">
+            Cancel
+          </button>
+        </div>
+        <div id="blogSubmitStatus" style="margin-top:10px;font-size:13px;"></div>
+      </div>
+
+      <!-- Blog Posts Feed -->
+      <div id="communityPostsFeed">
+        <div class="loading-pulse">Loading community reports...</div>
+      </div>
+      
+      // ── BLOG POSTING ──
+function toggleBlogForm() {
+  const form = document.getElementById('blogForm');
+  form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
+
+async function submitBlog() {
+  const title = document.getElementById('blogTitle').value.trim();
+  const content = document.getElementById('blogContent').value.trim();
+  const author = document.getElementById('blogAuthor').value.trim() || 'Anonymous';
+  const category = document.getElementById('blogCategory').value;
+  const status = document.getElementById('blogSubmitStatus');
+
+  if (!title) { status.innerHTML = '<span style="color:red">⚠️ Please add a title.</span>'; return; }
+  if (content.length < 50) { status.innerHTML = '<span style="color:red">⚠️ Content too short (min 50 characters).</span>'; return; }
+
+  status.innerHTML = '<span style="color:#888">⏳ Publishing...</span>';
+
+  try {
+    const res = await fetch(API + '/community-posts', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({title, content, author, category})
+    });
+    const data = await res.json();
+    if (data.error) { status.innerHTML = `<span style="color:red">❌ ${data.error}</span>`; return; }
+
+    status.innerHTML = '<span style="color:green">✅ Published! Thank you for helping the community.</span>';
+    document.getElementById('blogTitle').value = '';
+    document.getElementById('blogContent').value = '';
+    document.getElementById('blogAuthor').value = '';
+    setTimeout(() => {
+      document.getElementById('blogForm').style.display = 'none';
+      loadCommunityPosts();
+    }, 1500);
+  } catch(e) {
+    status.innerHTML = '<span style="color:red">❌ Failed to publish. Try again.</span>';
+  }
+}
+
+async function loadCommunityPosts() {
+  const feed = document.getElementById('communityPostsFeed');
+  if (!feed) return;
+  try {
+    const res = await fetch(API + '/community-posts');
+    const data = await res.json();
+    const posts = data.posts || [];
+    if (!posts.length) {
+      feed.innerHTML = '<div style="text-align:center;padding:40px;color:#888;"><div style="font-size:40px;margin-bottom:12px;">📭</div><p>No community reports yet. Be the first to share a scam warning!</p></div>';
+      return;
+    }
+    feed.innerHTML = posts.map(p => `
+      <div style="background:white;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border:1.5px solid #E4E8F0;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <span style="background:#FFF0F1;color:#E63946;border:1px solid #FFD6D8;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700;">${p.category}</span>
+          <span style="font-size:11px;color:#9CA3AF;">${p.timestamp}</span>
+        </div>
+        <h4 style="font-size:16px;font-weight:700;margin-bottom:8px;font-family:'Sora',sans-serif;">${p.title}</h4>
+        <p style="font-size:13px;color:#555;line-height:1.7;margin-bottom:12px;">${p.content}</p>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:12px;color:#9CA3AF;">By <strong>${p.author}</strong></span>
+          <button onclick="likePost('${p.id}', this)"
+          style="background:#FFF0F1;color:#E63946;border:1px solid #FFD6D8;padding:5px 14px;border-radius:20px;cursor:pointer;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;">
+            ❤️ <span id="likes-${p.id}">${p.likes}</span>
+          </button>
+        </div>
+      </div> 
+      `).join('');
+    } catch(e) {
+      feed.innerHTML = '<p style="color:#888;padding:20px;">Could not load posts.</p>';
+    }
+  }
+  async function likePost(id, btn) {
+  btn.disabled = true;
+  try {
+    const res = await fetch(API + `/community-posts/${id}/like`, {method:'POST'});
+    const data = await res.json();
+    document.getElementById(`likes-${id}`).textContent = data.likes;
+  } catch(e) {}
+}
+
+    </div>
+
   </div>
+</div>
+
+
 
 </div><!-- end main -->
 
@@ -940,6 +1027,7 @@ async function loadCommunityTrends() {
   } catch(e) {
     if (grid) grid.innerHTML = '<p style="color:#888;padding:20px;">Could not load trends. Try again later.</p>';
   }
+  loadCommunityPosts();
 }
 
 function filterCategory(cat) {
