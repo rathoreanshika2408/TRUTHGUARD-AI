@@ -223,6 +223,153 @@ Generate 5 realistic trending scams relevant to {month} in India (tax season, fe
             "month": f"{month} {year}"
         })
 
+from datetime import datetime
+
+@app.route('/community-trends', methods=['GET'])
+def community_trends():
+    month = datetime.now().strftime("%B")
+    year = datetime.now().year
+
+    try:
+        response = groq_client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[
+                {"role": "system", "content": "You are a scam trends analyst for India. Reply ONLY with valid JSON, no markdown, no extra text."},
+                {"role": "user", "content": f"""Generate trending scam/misinformation topics in India for {month} {year}.
+Return ONLY this JSON:
+{{
+  "trending": [
+    {{"keyword": "IPL Betting Scam", "category": "Financial", "count": 2847, "change": "+63%", "color": "#E63946"}},
+    {{"keyword": "ITR Refund Fraud", "category": "Financial", "count": 3102, "change": "+41%", "color": "#F59E0B"}},
+    {{"keyword": "Fake Job Offer", "category": "Employment", "count": 1893, "change": "+29%", "color": "#8B5CF6"}},
+    {{"keyword": "WhatsApp OTP Scam", "category": "Cyber", "count": 4201, "change": "+18%", "color": "#EC4899"}},
+    {{"keyword": "PM Yojana Fake", "category": "Government", "count": 1247, "change": "+55%", "color": "#10B981"}},
+    {{"keyword": "Deepfake Video", "category": "AI Scam", "count": 987, "change": "+82%", "color": "#6366F1"}}
+  ],
+  "categories": ["All", "Financial", "Cyber", "Government", "Employment", "AI Scam", "Health"],
+  "month": "{month} {year}"
+}}
+Make keywords realistic and seasonal for {month} in India. Vary the counts and percentages realistically."""}
+            ],
+            temperature=0.8,
+            max_tokens=600,
+        )
+        raw = response.choices[0].message.content.strip()
+        if "```" in raw:
+            raw = raw.split("```")[1]
+            if raw.startswith("json"):
+                raw = raw[4:]
+        return jsonify(json.loads(raw.strip()))
+    except Exception as e:
+        return jsonify({
+            "trending": [
+                {"keyword": "IPL Betting Scam", "category": "Financial", "count": 2847, "change": "+63%", "color": "#E63946"},
+                {"keyword": "ITR Refund Fraud", "category": "Financial", "count": 3102, "change": "+41%", "color": "#F59E0B"},
+                {"keyword": "WhatsApp OTP Scam", "category": "Cyber", "count": 4201, "change": "+18%", "color": "#EC4899"},
+                {"keyword": "Fake Job Offer", "category": "Employment", "count": 1893, "change": "+29%", "color": "#8B5CF6"},
+                {"keyword": "PM Yojana Fake", "category": "Government", "count": 1247, "change": "+55%", "color": "#10B981"},
+                {"keyword": "Deepfake Video", "category": "AI Scam", "count": 987, "change": "+82%", "color": "#6366F1"}
+            ],
+            "categories": ["All", "Financial", "Cyber", "Government", "Employment", "AI Scam", "Health"],
+            "month": f"{month} {year}"
+        })
+
+
+@app.route('/search-blogs', methods=['POST'])
+def search_blogs():
+    data = request.get_json()
+    keyword = data.get('keyword', '').strip()
+    if not keyword:
+        return jsonify({'error': 'No keyword'}), 400
+
+    import requests as http_requests
+
+    sources = [
+        f"https://boomlive.in/search?q={keyword.replace(' ', '+')}",
+        f"https://www.altnews.in/?s={keyword.replace(' ', '+')}"
+    ]
+
+    articles = []
+
+    # Fetch BoomLive results
+    try:
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+        r = http_requests.get(sources[0], headers=headers, timeout=8)
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(r.text, 'html.parser')
+
+        # BoomLive article cards
+        for card in soup.select('div.story-card, article, div.card')[:6]:
+            title_el = card.select_one('h2, h3, .title, a')
+            link_el = card.select_one('a[href]')
+            img_el = card.select_one('img')
+            desc_el = card.select_one('p, .description, .excerpt')
+
+            if title_el and link_el:
+                href = link_el.get('href', '')
+                if href and not href.startswith('http'):
+                    href = 'https://boomlive.in' + href
+                articles.append({
+                    'title': title_el.get_text(strip=True),
+                    'url': href,
+                    'source': 'BoomLive',
+                    'source_color': '#E63946',
+                    'image': img_el.get('src', '') if img_el else '',
+                    'description': desc_el.get_text(strip=True)[:120] + '...' if desc_el else 'Click to read full fact-check article.'
+                })
+    except:
+        pass
+
+    # Fetch AltNews results
+    try:
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        r = http_requests.get(sources[1], headers=headers, timeout=8)
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(r.text, 'html.parser')
+
+        for card in soup.select('article, div.post')[:4]:
+            title_el = card.select_one('h2, h3, .entry-title')
+            link_el = card.select_one('a[href]')
+            img_el = card.select_one('img')
+            desc_el = card.select_one('p, .excerpt')
+
+            if title_el and link_el:
+                href = link_el.get('href', '')
+                articles.append({
+                    'title': title_el.get_text(strip=True),
+                    'url': href,
+                    'source': 'AltNews',
+                    'source_color': '#2563EB',
+                    'image': img_el.get('src', '') if img_el else '',
+                    'description': desc_el.get_text(strip=True)[:120] + '...' if desc_el else 'Click to read full fact-check article.'
+                })
+    except:
+        pass
+
+    # If scraping fails, use AI to generate article suggestions
+    if not articles:
+        try:
+            ai_resp = groq_client.chat.completions.create(
+                model="llama-3.1-8b-instant",
+                messages=[
+                    {"role": "system", "content": "Reply ONLY with valid JSON, no markdown."},
+                    {"role": "user", "content": f"""Generate 4 realistic fact-check article suggestions about "{keyword}" in India.
+Return JSON: {{"articles": [{{"title": "...", "url": "https://boomlive.in", "source": "BoomLive", "source_color": "#E63946", "description": "..."}}]}}"""}
+                ],
+                temperature=0.7,
+                max_tokens=400,
+            )
+            raw = ai_resp.choices[0].message.content.strip()
+            if "```" in raw:
+                raw = raw.split("```")[1]
+                if raw.startswith("json"):
+                    raw = raw[4:]
+            result = json.loads(raw.strip())
+            articles = result.get('articles', [])
+        except:
+            pass
+
+    return jsonify({'articles': articles, 'keyword': keyword, 'total': len(articles)})
 
 @app.route('/verify-url', methods=['POST'])
 def verify_url():

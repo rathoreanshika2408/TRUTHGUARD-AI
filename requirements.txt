@@ -43,3 +43,4 @@ requests
 yt-dlp
 anthropic
 google-generativeai
+beautifulsoup4

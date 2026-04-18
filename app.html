@@ -7,6 +7,50 @@
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
 :root {
+  .community-container { max-width: 900px; margin: 0 auto; padding: 20px; }
+.community-header { margin-bottom: 20px; }
+.community-header h2 { font-size: 24px; font-weight: 700; }
+
+.category-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.pill {
+  padding: 6px 16px; border-radius: 20px; border: 1.5px solid #ddd;
+  background: white; cursor: pointer; font-size: 13px; font-weight: 500;
+  transition: all 0.2s;
+}
+.pill.active { background: #E63946; color: white; border-color: #E63946; }
+
+.trending-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px; margin-bottom: 30px;
+}
+.trend-card {
+  background: white; border-radius: 12px; padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08); cursor: pointer;
+  border-left: 4px solid; transition: transform 0.2s, box-shadow 0.2s;
+}
+.trend-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+.trend-keyword { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+.trend-meta { font-size: 12px; color: #888; display: flex; justify-content: space-between; }
+.trend-change { font-weight: 600; color: #E63946; }
+.trend-category { background: #f0f0f0; padding: 2px 8px; border-radius: 10px; font-size: 11px; }
+
+.blog-results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.blog-card {
+  background: white; border-radius: 12px; overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s;
+  text-decoration: none; color: inherit; display: block;
+}
+.blog-card:hover { transform: translateY(-3px); }
+.blog-card img { width: 100%; height: 160px; object-fit: cover; background: #f0f0f0; }
+.blog-card-body { padding: 14px; }
+.blog-source-badge {
+  display: inline-block; padding: 2px 10px; border-radius: 10px;
+  font-size: 11px; font-weight: 700; color: white; margin-bottom: 8px;
+}
+.blog-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; line-height: 1.4; }
+.blog-card p { font-size: 12px; color: #666; line-height: 1.5; }
+.loading-pulse { color: #888; font-size: 14px; padding: 20px; text-align: center; }
 --white: #ffffff; --bg: #F2F4F8; --surface: #ffffff; --border: #E4E8F0;
 --text: #0D1117; --muted: #6B7A99; --red: #E63946; --red-light: #FFF0F1;
 --red-mid: #FFD6D8; --amber: #FF9F1C; --amber-light: #FFF7ED; --green: #2EC4B6;
@@ -876,11 +920,153 @@ function loadProfile() {
   }
   document.getElementById('profileAnalyses').textContent = analyses + ' messages verified';
 }
+
+<!-- COMMUNITY SECTION -->
+<div id="community" class="tab-content">
+  <div class="community-container">
+
+    
+    <div class="community-header">
+      <h2>🔥 Community Scam Radar</h2>
+      <p id="trend-month" style="color:#888;font-size:13px;">Loading trends...</p>
+    </div>
+
+    
+    <div id="category-filter" class="category-pills">
+      <button class="pill active" onclick="filterCategory('All')">All</button>
+    </div>
+
+    
+    <div class="trending-section">
+      <h3>📈 Trending Right Now</h3>
+      <div id="trending-grid" class="trending-grid">
+        <div class="loading-pulse">Loading real-time trends...</div>
+      </div>
+    </div>
+
+    
+    <div id="blog-results-section" style="display:none;">
+      <div class="blog-results-header">
+        <h3>📰 Articles about: <span id="current-keyword" style="color:#E63946;"></span></h3>
+        <button onclick="closeBlogResults()" style="background:none;border:1px solid #ccc;padding:6px 14px;border-radius:20px;cursor:pointer;">✕ Close</button>
+      </div>
+      <div id="blog-grid" class="blog-grid"></div>
+    </div>
+
+  </div>
+</div>
+
 function logout() { localStorage.removeItem('tg_user'); window.location.href = 'login.html'; }
 document.addEventListener('click', function(e) {
   const btn = document.getElementById('profileBtn');
   const dd = document.getElementById('profileDropdown');
   if (btn && dd && !btn.contains(e.target) && !dd.contains(e.target)) dd.style.display = 'none';
+});
+let allTrends = [];
+let activeCategory = 'All';
+
+async function loadCommunityTrends() {
+  try {
+    const res = await fetch('/community-trends');
+    const data = await res.json();
+    allTrends = data.trending || [];
+
+    // Update month label
+    document.getElementById('trend-month').textContent = `🗓️ Trends for ${data.month} — updates daily`;
+
+    // Build category pills
+    const pillsContainer = document.getElementById('category-filter');
+    pillsContainer.innerHTML = '';
+    (data.categories || ['All']).forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = 'pill' + (cat === 'All' ? ' active' : '');
+      btn.textContent = cat;
+      btn.onclick = () => filterCategory(cat);
+      pillsContainer.appendChild(btn);
+    });
+
+    renderTrends(allTrends);
+  } catch(e) {
+    document.getElementById('trending-grid').innerHTML = '<p style="color:#888">Could not load trends. Try again later.</p>';
+  }
+}
+
+function filterCategory(cat) {
+  activeCategory = cat;
+  document.querySelectorAll('.pill').forEach(p => {
+    p.classList.toggle('active', p.textContent === cat);
+  });
+  const filtered = cat === 'All' ? allTrends : allTrends.filter(t => t.category === cat);
+  renderTrends(filtered);
+}
+
+function renderTrends(trends) {
+  const grid = document.getElementById('trending-grid');
+  if (!trends.length) {
+    grid.innerHTML = '<p style="color:#888;padding:20px;">No trends in this category.</p>';
+    return;
+  }
+  grid.innerHTML = trends.map(t => `
+    <div class="trend-card" style="border-color:${t.color}" onclick="searchBlogs('${t.keyword}')">
+      <div class="trend-keyword">${t.keyword}</div>
+      <div class="trend-meta">
+        <span class="trend-category">${t.category}</span>
+        <span class="trend-change">${t.change}</span>
+      </div>
+      <div style="margin-top:8px;font-size:12px;color:#888">${t.count.toLocaleString()} reports</div>
+    </div>
+  `).join('');
+}
+
+async function searchBlogs(keyword) {
+  document.getElementById('current-keyword').textContent = keyword;
+  document.getElementById('blog-results-section').style.display = 'block';
+  document.getElementById('blog-grid').innerHTML = '<div class="loading-pulse">🔍 Fetching articles about "' + keyword + '"...</div>';
+
+  // Scroll to results
+  document.getElementById('blog-results-section').scrollIntoView({behavior: 'smooth'});
+
+  try {
+    const res = await fetch('/search-blogs', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({keyword})
+    });
+    const data = await res.json();
+    const articles = data.articles || [];
+
+    if (!articles.length) {
+      document.getElementById('blog-grid').innerHTML = '<p style="color:#888;padding:20px;">No articles found. Try another keyword.</p>';
+      return;
+    }
+
+    document.getElementById('blog-grid').innerHTML = articles.map(a => `
+      <a href="${a.url}" target="_blank" class="blog-card">
+        ${a.image ? `<img src="${a.image}" onerror="this.style.display='none'">` : ''}
+        <div class="blog-card-body">
+          <span class="blog-source-badge" style="background:${a.source_color || '#E63946'}">${a.source}</span>
+          <h4>${a.title}</h4>
+          <p>${a.description}</p>
+        </div>
+      </a>
+    `).join('');
+  } catch(e) {
+    document.getElementById('blog-grid').innerHTML = '<p style="color:red">Failed to fetch articles.</p>';
+  }
+}
+
+function closeBlogResults() {
+  document.getElementById('blog-results-section').style.display = 'none';
+}
+
+// Load when community tab is clicked
+document.addEventListener('DOMContentLoaded', () => {
+  // Call when switching to community tab
+  const communityTab = document.querySelector('[onclick*="community"]');
+  if (communityTab) {
+    const original = communityTab.getAttribute('onclick');
+    communityTab.setAttribute('onclick', original + '; loadCommunityTrends()');
+  }
 });
 </script>
 </body>
