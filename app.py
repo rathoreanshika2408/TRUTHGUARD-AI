@@ -113,24 +113,33 @@ def analyze():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/ocr", methods=["POST"])
-def ocr():
-    if "image" not in request.files:
-        return jsonify({"error": "No image uploaded"}), 400
-    file = request.files["image"]
-    try:
-        image = Image.open(file.stream).convert("RGB")
-        try:
-            text = pytesseract.image_to_string(image, lang="eng+hin")
-        except Exception:
-            text = pytesseract.image_to_string(image, lang="eng")
-        text = text.strip()
-        if not text:
-            return jsonify({"error": "No text found in image. Try a clearer photo."}), 400
-        return jsonify({"extracted_text": text})
-    except Exception as e:
-        return jsonify({"error": f"OCR failed: {str(e)}"}), 500
+import google.generativeai as genai
+import base64
+from PIL import Image
+import io
 
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+@app.route('/ocr', methods=['POST'])
+def ocr():
+    if 'image' not in request.files:
+        return jsonify({'error': 'No image uploaded'}), 400
+
+    file = request.files['image']
+    img_bytes = file.read()
+    image = Image.open(io.BytesIO(img_bytes))
+
+    try:
+        model = genai.GenerativeModel('gemini-1.5-flash')  # free and fast
+        response = model.generate_content([
+            image,
+            "Extract ALL text visible in this image exactly as written. Include Hindi, English, numbers, URLs, financial claims, everything. Return only the extracted text, nothing else."
+        ])
+        extracted_text = response.text.strip()
+        return jsonify({'text': extracted_text})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route("/chat", methods=["POST"])
 def chat():
