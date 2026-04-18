@@ -113,34 +113,18 @@ def analyze():
         return jsonify({"error": str(e)}), 500
 
 
-from google.cloud import vision as gcloud_vision
 import io
+from PIL import Image
 
 @app.route('/ocr', methods=['POST'])
 def ocr():
     if 'image' not in request.files:
         return jsonify({'error': 'No image uploaded'}), 400
-
     file = request.files['image']
-    img_bytes = file.read()
-
+    image = Image.open(io.BytesIO(file.read()))
     try:
-        client = gcloud_vision.ImageAnnotatorClient()
-        image = gcloud_vision.Image(content=img_bytes)
-
-        # Use DOCUMENT_TEXT_DETECTION — best for screenshots with mixed Hindi/English
-        response = client.document_text_detection(image=image)
-
-        if response.error.message:
-            raise Exception(response.error.message)
-
-        extracted_text = response.full_text_annotation.text.strip()
-
-        if not extracted_text:
-            return jsonify({'text': '', 'message': 'No text found in image'})
-
-        return jsonify({'text': extracted_text})
-
+        text = pytesseract.image_to_string(image, lang='eng+hin')
+        return jsonify({'text': text.strip()})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
