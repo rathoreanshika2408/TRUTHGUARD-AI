@@ -6,64 +6,25 @@
 <title>TruthGuard AI</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
+/* ── CSS VARIABLES (only variables inside :root) ── */
 :root {
-  .community-container { max-width: 900px; margin: 0 auto; padding: 20px; }
-.community-header { margin-bottom: 20px; }
-.community-header h2 { font-size: 24px; font-weight: 700; }
+  --white: #ffffff; --bg: #F2F4F8; --surface: #ffffff; --border: #E4E8F0;
+  --text: #0D1117; --muted: #6B7A99; --red: #E63946; --red-light: #FFF0F1;
+  --red-mid: #FFD6D8; --amber: #FF9F1C; --amber-light: #FFF7ED; --green: #2EC4B6;
+  --green-light: #EDFAF9; --blue: #3B82F6; --blue-light: #EFF6FF; --purple: #8B5CF6;
+  --purple-light: #F5F3FF; --shadow-sm: 0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 4px 16px rgba(0,0,0,0.08); --radius: 20px; --radius-sm: 12px;
+}
 
-.category-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
-.pill {
-  padding: 6px 16px; border-radius: 20px; border: 1.5px solid #ddd;
-  background: white; cursor: pointer; font-size: 13px; font-weight: 500;
-  transition: all 0.2s;
-}
-.pill.active { background: #E63946; color: white; border-color: #E63946; }
-
-.trending-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 14px; margin-bottom: 30px;
-}
-.trend-card {
-  background: white; border-radius: 12px; padding: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08); cursor: pointer;
-  border-left: 4px solid; transition: transform 0.2s, box-shadow 0.2s;
-}
-.trend-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
-.trend-keyword { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
-.trend-meta { font-size: 12px; color: #888; display: flex; justify-content: space-between; }
-.trend-change { font-weight: 600; color: #E63946; }
-.trend-category { background: #f0f0f0; padding: 2px 8px; border-radius: 10px; font-size: 11px; }
-
-.blog-results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-.blog-card {
-  background: white; border-radius: 12px; overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s;
-  text-decoration: none; color: inherit; display: block;
-}
-.blog-card:hover { transform: translateY(-3px); }
-.blog-card img { width: 100%; height: 160px; object-fit: cover; background: #f0f0f0; }
-.blog-card-body { padding: 14px; }
-.blog-source-badge {
-  display: inline-block; padding: 2px 10px; border-radius: 10px;
-  font-size: 11px; font-weight: 700; color: white; margin-bottom: 8px;
-}
-.blog-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; line-height: 1.4; }
-.blog-card p { font-size: 12px; color: #666; line-height: 1.5; }
-.loading-pulse { color: #888; font-size: 14px; padding: 20px; text-align: center; }
---white: #ffffff; --bg: #F2F4F8; --surface: #ffffff; --border: #E4E8F0;
---text: #0D1117; --muted: #6B7A99; --red: #E63946; --red-light: #FFF0F1;
---red-mid: #FFD6D8; --amber: #FF9F1C; --amber-light: #FFF7ED; --green: #2EC4B6;
---green-light: #EDFAF9; --blue: #3B82F6; --blue-light: #EFF6FF; --purple: #8B5CF6;
---purple-light: #F5F3FF; --shadow-sm: 0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
---shadow: 0 4px 16px rgba(0,0,0,0.08); --radius: 20px; --radius-sm: 12px;
-}
+/* ── RESET ── */
 * { margin:0; padding:0; box-sizing:border-box; }
 body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; }
 h1,h2,h3,h4 { font-family:'Sora',sans-serif; }
 ::-webkit-scrollbar { width:4px; }
 ::-webkit-scrollbar-track { background:transparent; }
 ::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
+
+/* ── NAV ── */
 nav { background:var(--white); border-bottom:1px solid var(--border); padding:0 2rem; display:flex; align-items:center; justify-content:space-between; height:68px; position:sticky; top:0; z-index:200; box-shadow:var(--shadow-sm); }
 .nav-brand { display:flex; align-items:center; gap:12px; }
 .nav-logo { width:40px; height:40px; background:linear-gradient(135deg,var(--red) 0%,#C1121F 100%); border-radius:12px; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(230,57,70,0.35); }
@@ -75,6 +36,8 @@ nav { background:var(--white); border-bottom:1px solid var(--border); padding:0 
 .tab-btn { background:none; border:none; color:var(--muted); padding:8px 18px; border-radius:10px; cursor:pointer; font-size:.88rem; font-weight:500; transition:all .2s; font-family:'DM Sans',sans-serif; }
 .tab-btn.active { background:var(--red-light); color:var(--red); font-weight:600; }
 .tab-btn:hover:not(.active) { background:var(--bg); color:var(--text); }
+
+/* ── TICKER ── */
 .ticker { background:var(--text); padding:9px 2rem; display:flex; align-items:center; gap:24px; font-size:11px; color:#9CA3AF; overflow:hidden; }
 .ticker-live { display:flex; align-items:center; gap:6px; }
 .ticker-dot { width:6px; height:6px; background:var(--red); border-radius:50%; animation:blink 1.5s infinite; flex-shrink:0; }
@@ -83,24 +46,34 @@ nav { background:var(--white); border-bottom:1px solid var(--border); padding:0 
 .ticker-text strong { color:#FF9F1C; font-weight:700; }
 .ticker-sep { color:#374151; font-size:14px; }
 .marquee-bar { background:#1a1a1a; color:#fff; padding:8px 0; font-size:12px; overflow:hidden; white-space:nowrap; }
+
+/* ── STATS ── */
 .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; max-width:860px; margin:16px auto; padding:0 16px; }
 .stat-box { background:#fff; border:1px solid #eee; border-radius:12px; padding:16px; text-align:center; }
 .stat-box-num { font-size:22px; font-weight:700; color:var(--red); font-family:'Sora',sans-serif; }
 .stat-box-label { font-size:11px; color:#666; margin-top:4px; }
+
+/* ── HERO ── */
 .hero { background:var(--white); padding:2.5rem 2rem 1rem; text-align:center; border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
 .hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% -20%,rgba(230,57,70,0.06) 0%,transparent 70%); }
 .hero-badge { display:inline-flex; align-items:center; gap:8px; background:var(--red-light); color:var(--red); font-size:.78rem; font-weight:700; padding:6px 16px; border-radius:20px; border:1px solid var(--red-mid); margin-bottom:1.2rem; letter-spacing:.5px; }
 .hero h1 { font-size:2.4rem; font-weight:800; color:var(--text); letter-spacing:-1.5px; line-height:1.1; margin-bottom:.8rem; }
 .hero h1 span { color:var(--red); }
 .hero p { color:var(--muted); font-size:1rem; max-width:520px; margin:0 auto 1.5rem; line-height:1.7; }
+
+/* ── LAYOUT ── */
 .main { max-width:1120px; margin:0 auto; padding:2rem 1.5rem; }
 .layout { display:grid; grid-template-columns:1fr 300px; gap:1.5rem; align-items:start; }
 .page { display:none; }
 .page.active { display:block; }
+
+/* ── CARD ── */
 .card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius); padding:1.5rem; margin-bottom:1.2rem; box-shadow:var(--shadow-sm); transition:box-shadow .2s; }
 .card:hover { box-shadow:var(--shadow); }
 .card-tag { font-size:.68rem; font-weight:700; letter-spacing:1.5px; color:var(--red); text-transform:uppercase; margin-bottom:.6rem; display:flex; align-items:center; gap:6px; }
 .card-tag::before { content:''; display:inline-block; width:3px; height:12px; background:var(--red); border-radius:2px; }
+
+/* ── INPUTS ── */
 .input-top { display:flex; align-items:flex-start; gap:14px; margin-bottom:1.2rem; }
 .input-icon-wrap { width:48px; height:48px; flex-shrink:0; background:var(--red-light); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:22px; }
 .input-heading { font-family:'Sora',sans-serif; font-size:1.15rem; font-weight:700; color:var(--text); margin-bottom:3px; }
@@ -108,11 +81,15 @@ nav { background:var(--white); border-bottom:1px solid var(--border); padding:0 
 textarea { width:100%; background:var(--bg); border:1.5px solid var(--border); border-radius:var(--radius-sm); color:var(--text); padding:1rem 1.1rem; font-size:.92rem; resize:vertical; min-height:110px; font-family:'DM Sans',sans-serif; transition:all .2s; line-height:1.6; margin-bottom:1rem; }
 textarea:focus { outline:none; border-color:var(--red); background:var(--white); box-shadow:0 0 0 3px rgba(230,57,70,0.08); }
 textarea::placeholder { color:#BCC5D6; }
+
+/* ── UPLOAD ── */
 .upload-zone { border:2px dashed var(--border); border-radius:var(--radius-sm); padding:1.2rem; text-align:center; cursor:pointer; transition:all .25s; background:var(--bg); margin:.8rem 0; display:flex; flex-direction:column; align-items:center; gap:6px; }
 .upload-zone:hover { border-color:var(--red); background:var(--red-light); }
 .upload-zone-icon { font-size:28px; }
 .upload-zone-text { font-size:.85rem; font-weight:600; color:var(--muted); }
 .upload-zone-sub { font-size:.74rem; color:#BCC5D6; }
+
+/* ── BUTTONS ── */
 .btn-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:1rem; }
 .btn-primary { background:var(--red); color:white; border:none; padding:11px 26px; border-radius:12px; font-size:.9rem; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 14px rgba(230,57,70,0.3); transition:all .2s; }
 .btn-primary:hover { background:#C1121F; transform:translateY(-1px); }
@@ -123,6 +100,8 @@ textarea::placeholder { color:#BCC5D6; }
 .media-btn { flex:1; min-width:120px; background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:10px; font-size:.82rem; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .2s; display:flex; align-items:center; justify-content:center; gap:6px; }
 .media-btn:hover { border-color:var(--red); background:var(--red-light); color:var(--red); }
 .media-btn.recording { background:var(--red); color:white; border-color:var(--red); }
+
+/* ── RESULT ── */
 .result-top { display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; }
 .score-circle { width:90px; height:90px; border-radius:50%; border:6px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0; transition:all .5s; }
 .score-num { font-family:'Sora',sans-serif; font-size:1.8rem; font-weight:800; line-height:1; }
@@ -145,6 +124,8 @@ textarea::placeholder { color:#BCC5D6; }
 .action-text { font-size:.88rem; color:#E5E7EB; line-height:1.6; font-weight:500; }
 .source-link { display:inline-flex; align-items:center; gap:6px; background:var(--green-light); color:#0D8A82; border:1.5px solid #A7F3D0; padding:6px 14px; border-radius:10px; font-size:.8rem; font-weight:600; margin:4px; text-decoration:none; transition:all .2s; }
 .source-link:hover { background:#D1FAF7; }
+
+/* ── SIDEBAR ── */
 .stat-row { margin-bottom:12px; }
 .stat-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
 .stat-name { font-size:.8rem; font-weight:500; color:var(--text); }
@@ -158,11 +139,15 @@ textarea::placeholder { color:#BCC5D6; }
 .source-name { font-size:.85rem; font-weight:600; color:var(--text); }
 .source-desc { font-size:.74rem; color:var(--muted); margin-top:1px; }
 .source-official { font-size:.65rem; font-weight:700; color:var(--green); background:var(--green-light); padding:2px 7px; border-radius:10px; margin-left:6px; }
+
+/* ── FEATURES ── */
 .feature-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:1.2rem; }
 .feature-item { background:var(--bg); border-radius:var(--radius-sm); padding:14px 10px; text-align:center; border:1.5px solid var(--border); transition:all .2s; }
 .feature-item:hover { border-color:var(--red); background:var(--red-light); }
 .feature-icon { font-size:22px; margin-bottom:6px; }
 .feature-label { font-size:.72rem; font-weight:600; color:var(--muted); line-height:1.3; }
+
+/* ── CHAT ── */
 .chat-box { height:360px; overflow-y:auto; background:var(--bg); border:1.5px solid var(--border); border-radius:var(--radius-sm); padding:1rem; margin-bottom:1rem; display:flex; flex-direction:column; gap:.75rem; }
 .msg { max-width:80%; padding:.75rem 1rem; border-radius:16px; font-size:.88rem; line-height:1.6; }
 .msg.user { background:var(--red); color:white; align-self:flex-end; border-bottom-right-radius:4px; }
@@ -172,6 +157,8 @@ textarea::placeholder { color:#BCC5D6; }
 .chat-row input:focus { outline:none; border-color:var(--red); }
 .suggest-btn { width:100%; background:var(--bg); border:1.5px solid var(--border); border-radius:10px; color:var(--text); padding:10px 14px; margin-bottom:7px; cursor:pointer; text-align:left; font-size:.82rem; font-weight:500; font-family:'DM Sans',sans-serif; transition:all .2s; display:flex; align-items:center; gap:8px; }
 .suggest-btn:hover { border-color:var(--red); background:var(--red-light); color:var(--red); }
+
+/* ── LEARN ── */
 .learn-card { background:white; border:1.5px solid var(--border); border-radius:var(--radius); padding:1.4rem; margin-bottom:1rem; overflow:hidden; position:relative; box-shadow:var(--shadow-sm); }
 .learn-stripe { position:absolute; left:0; top:0; bottom:0; width:5px; }
 .learn-num { font-size:.68rem; font-weight:700; letter-spacing:1.5px; color:var(--muted); margin-bottom:.4rem; text-transform:uppercase; }
@@ -186,39 +173,52 @@ textarea::placeholder { color:#BCC5D6; }
 .rule-num { width:26px; height:26px; border-radius:8px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:.78rem; font-weight:700; font-family:'Sora',sans-serif; }
 .rule-text { font-size:.83rem; color:var(--muted); line-height:1.6; }
 .rule-text strong { color:var(--text); }
+
+/* ── MISC ── */
 .spinner { display:inline-block; width:16px; height:16px; border:2px solid var(--red-mid); border-top-color:var(--red); border-radius:50%; animation:spin .7s linear infinite; vertical-align:middle; }
 @keyframes spin { to { transform:rotate(360deg); } }
 .hidden { display:none !important; }
 .profile-wrap { position:relative; display:inline-block; }
 
-/* ── Image preview with remove button ── */
-.img-preview-wrap {
-  position: relative;
-  display: inline-block;
-  margin-bottom: .8rem;
-  width: 100%;
-}
-.img-remove-btn {
-  position: absolute;
-  top: 6px; right: 6px;
-  width: 26px; height: 26px;
-  background: rgba(0,0,0,0.65);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  font-size: 14px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  z-index: 10;
-  transition: background .2s;
-}
-.img-remove-btn:hover { background: var(--red); }
+/* ── IMAGE PREVIEW ── */
+.img-preview-wrap { position:relative; display:inline-block; margin-bottom:.8rem; width:100%; }
+.img-remove-btn { position:absolute; top:6px; right:6px; width:26px; height:26px; background:rgba(0,0,0,0.65); color:white; border:none; border-radius:50%; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:10; transition:background .2s; }
+.img-remove-btn:hover { background:var(--red); }
 
-/* ── URL result badge ── */
+/* ── URL BADGES ── */
 .url-badge { display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:8px; font-size:.78rem; font-weight:700; margin:3px; }
 .url-badge.trusted { background:#EDFAF9; color:#0D8A82; border:1px solid #A7F3D0; }
 .url-badge.warning { background:#FFF7ED; color:#B45309; border:1px solid #FDE68A; }
 .url-badge.danger  { background:#FFF0F1; color:#C1121F; border:1px solid #FFD6D8; }
+
+/* ── COMMUNITY ── */
+.community-container { max-width:900px; margin:0 auto; padding:20px; }
+.community-header { margin-bottom:20px; }
+.community-header h2 { font-size:24px; font-weight:700; }
+.category-pills { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px; }
+.pill { padding:6px 16px; border-radius:20px; border:1.5px solid #ddd; background:white; cursor:pointer; font-size:13px; font-weight:500; transition:all 0.2s; }
+.pill.active { background:#E63946; color:white; border-color:#E63946; }
+.trending-section { margin-bottom:30px; }
+.trending-section h3 { font-size:18px; font-weight:700; margin-bottom:16px; }
+.trending-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:14px; }
+.trend-card { background:white; border-radius:12px; padding:16px; box-shadow:0 2px 8px rgba(0,0,0,0.08); cursor:pointer; border-left:4px solid; transition:transform 0.2s, box-shadow 0.2s; }
+.trend-card:hover { transform:translateY(-3px); box-shadow:0 6px 20px rgba(0,0,0,0.12); }
+.trend-keyword { font-weight:700; font-size:15px; margin-bottom:6px; }
+.trend-meta { font-size:12px; color:#888; display:flex; justify-content:space-between; }
+.trend-change { font-weight:600; color:#E63946; }
+.trend-category { background:#f0f0f0; padding:2px 8px; border-radius:10px; font-size:11px; }
+.blog-results-section { margin-top:30px; }
+.blog-results-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+.blog-results-header h3 { font-size:18px; font-weight:700; }
+.blog-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px; }
+.blog-card { background:white; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:transform 0.2s; text-decoration:none; color:inherit; display:block; }
+.blog-card:hover { transform:translateY(-3px); }
+.blog-card img { width:100%; height:160px; object-fit:cover; background:#f0f0f0; }
+.blog-card-body { padding:14px; }
+.blog-source-badge { display:inline-block; padding:2px 10px; border-radius:10px; font-size:11px; font-weight:700; color:white; margin-bottom:8px; }
+.blog-card h4 { font-size:14px; font-weight:600; margin-bottom:6px; line-height:1.4; }
+.blog-card p { font-size:12px; color:#666; line-height:1.5; }
+.loading-pulse { color:#888; font-size:14px; padding:20px; text-align:center; }
 
 @media (max-width:768px) {
   .layout { grid-template-columns:1fr; }
@@ -242,7 +242,7 @@ textarea::placeholder { color:#BCC5D6; }
   <div class="nav-tabs">
     <button class="tab-btn active" onclick="showTab('check',this)">Verify</button>
     <button class="tab-btn" onclick="showTab('chat',this)">Chatbot</button>
-    <button class="tab-btn" onclick="window.location.href='community.html'">Community</button>
+    <button class="tab-btn" onclick="showTab('community',this); loadCommunityTrends()">Community</button>
     <button class="tab-btn" onclick="showTab('learn',this)">Learn</button>
   </div>
   <div class="profile-wrap">
@@ -327,7 +327,7 @@ textarea::placeholder { color:#BCC5D6; }
 <!-- MAIN -->
 <div class="main">
 
-  <!-- VERIFY TAB -->
+  <!-- ══ VERIFY TAB ══ -->
   <div id="tab-check" class="page active">
     <div class="layout">
       <div>
@@ -349,7 +349,6 @@ textarea::placeholder { color:#BCC5D6; }
             </div>
           </div>
 
-          <!-- MEDIA BUTTONS -->
           <div class="media-row">
             <button class="media-btn" id="voiceBtn" onclick="startVoice()">🎤 Record Voice</button>
             <button class="media-btn" onclick="document.getElementById('fileInput').click()">🖼️ Upload Image</button>
@@ -359,14 +358,11 @@ textarea::placeholder { color:#BCC5D6; }
 
           <div id="voiceStatus" style="font-size:13px;color:var(--muted);margin-bottom:.5rem;"></div>
 
-          <!-- TEXT INPUT -->
           <textarea id="inputText" placeholder="Paste any suspicious message, news article, or WhatsApp forward here...&#10;&#10;Example: 'सरकार दे रही है ₹5000 फ्री, अभी आवेदन करें'"></textarea>
 
-          <!-- FILE INPUTS (hidden) -->
           <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFileSelect(event)"/>
           <input type="file" id="videoInput" accept="video/*" style="display:none" onchange="handleVideo(event)"/>
 
-          <!-- UPLOAD DROP ZONE -->
           <div class="upload-zone" id="uploadZone"
                onclick="document.getElementById('fileInput').click()"
                ondragover="event.preventDefault()"
@@ -376,7 +372,6 @@ textarea::placeholder { color:#BCC5D6; }
             <div class="upload-zone-sub">PNG, JPG supported · Text extracted automatically via OCR</div>
           </div>
 
-          <!-- IMAGE PREVIEW with ✕ remove button -->
           <div id="imagePreview" style="display:none; margin-bottom:.8rem;">
             <div class="img-preview-wrap">
               <img id="previewImg" style="max-width:100%;border-radius:8px;max-height:200px;object-fit:cover;display:block;"/>
@@ -385,16 +380,13 @@ textarea::placeholder { color:#BCC5D6; }
             <div id="ocrStatus" style="font-size:13px;color:var(--muted);margin-top:6px;"></div>
           </div>
 
-          <!-- CAMERA -->
           <video id="cameraVideo" style="display:none;width:100%;border-radius:8px;" autoplay></video>
           <canvas id="cameraCanvas" style="display:none;"></canvas>
           <button id="captureBtn" onclick="capturePhoto()" style="display:none;width:100%;margin-bottom:.8rem;background:var(--red);color:white;border:none;padding:10px;border-radius:8px;cursor:pointer;font-size:14px;font-family:'DM Sans',sans-serif;">📸 Capture Photo</button>
 
-          <!-- VIDEO STATUS -->
           <div id="videoStatus" style="font-size:13px;color:var(--muted);margin-bottom:.5rem;"></div>
           <video id="videoPlayer" controls style="display:none;width:100%;border-radius:8px;margin-bottom:.8rem;max-height:200px;"></video>
 
-          <!-- URL INPUT -->
           <div style="display:flex;gap:8px;margin-bottom:1rem;">
             <input id="urlInput" type="url" placeholder="Or paste a suspicious URL here..."
               style="flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);outline:none;transition:border-color .2s;"
@@ -402,7 +394,6 @@ textarea::placeholder { color:#BCC5D6; }
             <button onclick="verifyURL()" style="background:var(--red);color:white;border:none;padding:10px 18px;border-radius:10px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;">🔗 Verify URL</button>
           </div>
 
-          <!-- YOUTUBE INPUT -->
           <div style="display:flex;gap:8px;margin-bottom:1rem;">
             <input id="ytInput" type="url" placeholder="Or paste a YouTube video URL to fact-check..."
               style="flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);outline:none;transition:border-color .2s;"
@@ -459,7 +450,6 @@ textarea::placeholder { color:#BCC5D6; }
             <div style="font-size:.72rem;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:.6rem">Verify with trusted sources</div>
             <div id="factSources"></div>
           </div>
-          <!-- URL RESULT (shown only for URL checks) -->
           <div id="urlResultCard" class="card hidden">
             <div class="card-tag">URL safety check</div>
             <div id="urlBadges" style="margin-bottom:.8rem;"></div>
@@ -493,7 +483,7 @@ textarea::placeholder { color:#BCC5D6; }
     </div>
   </div>
 
-  <!-- CHATBOT TAB -->
+  <!-- ══ CHATBOT TAB ══ -->
   <div id="tab-chat" class="page">
     <div class="layout">
       <div>
@@ -527,7 +517,33 @@ textarea::placeholder { color:#BCC5D6; }
     </div>
   </div>
 
-  <!-- LEARN TAB -->
+  <!-- ══ COMMUNITY TAB ══ -->
+  <div id="tab-community" class="page">
+    <div class="community-container">
+      <div class="community-header">
+        <h2>🔥 Community Scam Radar</h2>
+        <p id="trend-month" style="color:#888;font-size:13px;">Loading trends...</p>
+      </div>
+      <div id="category-filter" class="category-pills">
+        <button class="pill active" onclick="filterCategory('All')">All</button>
+      </div>
+      <div class="trending-section">
+        <h3>📈 Trending Right Now</h3>
+        <div id="trending-grid" class="trending-grid">
+          <div class="loading-pulse">Loading real-time trends...</div>
+        </div>
+      </div>
+      <div id="blog-results-section" class="blog-results-section" style="display:none;">
+        <div class="blog-results-header">
+          <h3>📰 Articles about: <span id="current-keyword" style="color:#E63946;"></span></h3>
+          <button onclick="closeBlogResults()" style="background:none;border:1px solid #ccc;padding:6px 14px;border-radius:20px;cursor:pointer;">✕ Close</button>
+        </div>
+        <div id="blog-grid" class="blog-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ LEARN TAB ══ -->
   <div id="tab-learn" class="page">
     <div class="layout">
       <div>
@@ -583,14 +599,15 @@ textarea::placeholder { color:#BCC5D6; }
 <script>
 const API = "https://trustguard-backend-4n2p.onrender.com";
 let chatHistory = [];
-let currentImageFile = null; // ← tracks uploaded image
+let currentImageFile = null;
 
 // ── Wake up backend on load ──
 async function wakeUpBackend() {
-  try { await fetch(API + '/trends', { method: 'GET' }); console.log('Backend awake!'); } catch(e) {}
+  try { await fetch(API + '/trends', { method: 'GET' }); } catch(e) {}
 }
 wakeUpBackend();
 
+// ── TAB SWITCHING ──
 function showTab(name, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -602,7 +619,7 @@ function loadSample() {
   document.getElementById('inputText').value = "🚨 URGENT: सरकार दे रही है सभी परिवारों को ₹8500! PM Kisan Yojana के तहत आज रात 12 बजे से पहले इस लिंक पर क्लिक करें। यह ऑफर सिर्फ 2 घंटे के लिए है। 10 लोगों को forward करें। http://pmkisan-apply.xyz/free-money";
 }
 
-// ─── IMAGE HANDLING ───────────────────────────────────────
+// ── IMAGE HANDLING ──
 function handleFileSelect(e) { const f = e.target.files[0]; if (f) processImage(f); }
 function handleDrop(e) { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) processImage(f); }
 
@@ -612,7 +629,7 @@ function processImage(file) {
   reader.onload = (e) => {
     document.getElementById('previewImg').src = e.target.result;
     document.getElementById('imagePreview').style.display = 'block';
-    document.getElementById('uploadZone').style.display = 'none'; // hide drop zone when image shown
+    document.getElementById('uploadZone').style.display = 'none';
     document.getElementById('ocrStatus').innerHTML = '🔍 Extracting text...';
   };
   reader.readAsDataURL(file);
@@ -622,7 +639,8 @@ function processImage(file) {
   fetch(API + '/ocr', { method: 'POST', body: form })
     .then(r => r.json())
     .then(data => {
-      const text = data.extracted_text || '';
+      // FIX: backend returns 'text', not 'extracted_text'
+      const text = data.text || data.extracted_text || '';
       if (text) {
         document.getElementById('inputText').value = text;
         document.getElementById('ocrStatus').innerHTML = '✅ Text extracted! Click <strong>Analyze Now</strong>.';
@@ -631,11 +649,10 @@ function processImage(file) {
       }
     })
     .catch(() => {
-      document.getElementById('ocrStatus').innerHTML = '❌ OCR failed — backend may be starting up. Try <strong>Analyze Now</strong>.';
+      document.getElementById('ocrStatus').innerHTML = '❌ OCR failed. Try <strong>Analyze Now</strong> anyway.';
     });
 }
 
-// ✕ Remove image
 function removeImage() {
   currentImageFile = null;
   document.getElementById('imagePreview').style.display = 'none';
@@ -646,7 +663,7 @@ function removeImage() {
   document.getElementById('inputText').value = '';
 }
 
-// ─── CAMERA ──────────────────────────────────────────────
+// ── CAMERA ──
 async function openCamera() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
@@ -668,32 +685,18 @@ function capturePhoto() {
   canvas.toBlob(blob => processImage(new File([blob], 'photo.jpg', { type: 'image/jpeg' })));
 }
 
-// ─── VIDEO ───────────────────────────────────────────────
+// ── VIDEO ──
 function handleVideo(e) {
   const file = e.target.files[0];
   if (!file) return;
   const status = document.getElementById('videoStatus');
   const player = document.getElementById('videoPlayer');
-  status.textContent = '🎥 Video loaded. Play to extract audio...';
+  status.textContent = '🎥 Video loaded.';
   player.src = URL.createObjectURL(file);
   player.style.display = 'block';
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { status.textContent = '❌ Speech recognition not supported. Use Chrome.'; return; }
-  const recognition = new SR();
-  recognition.lang = 'hi-IN'; recognition.continuous = true; recognition.interimResults = false;
-  let transcript = '';
-  recognition.onresult = (e) => {
-    for (let i = e.resultIndex; i < e.results.length; i++) transcript += e.results[i][0].transcript + ' ';
-    document.getElementById('inputText').value = transcript;
-    status.textContent = '✅ Audio extracted! Click Analyze Now.';
-  };
-  recognition.onerror = () => { status.textContent = '❌ Could not extract audio.'; };
-  player.onplay = () => recognition.start();
-  player.onpause = () => recognition.stop();
-  player.onended = () => { recognition.stop(); status.textContent = '✅ Done! Click Analyze Now.'; };
 }
 
-// ─── VOICE ───────────────────────────────────────────────
+// ── VOICE ──
 function startVoice() {
   const btn = document.getElementById('voiceBtn');
   const status = document.getElementById('voiceStatus');
@@ -708,16 +711,13 @@ function startVoice() {
   recognition.start();
 }
 
-// ─── ANALYZE ─────────────────────────────────────────────
+// ── ANALYZE ──
 async function analyze() {
   const text = document.getElementById('inputText').value.trim();
-
-  // ✅ FIX: Allow image-only analysis (no text required if image uploaded)
   if (!text && !currentImageFile) {
     alert('Please paste some text or upload an image first.');
     return;
   }
-
   document.getElementById('analyzeBtn').disabled = true;
   document.getElementById('loadingSpinner').classList.remove('hidden');
   document.getElementById('resultSection').classList.add('hidden');
@@ -725,17 +725,14 @@ async function analyze() {
 
   try {
     let analyzeText = text;
-
-    // If no text but image uploaded, try OCR first then analyze
     if (!analyzeText && currentImageFile) {
       const form = new FormData();
       form.append('image', currentImageFile);
       const ocrRes = await fetch(API + '/ocr', { method: 'POST', body: form });
       const ocrData = await ocrRes.json();
-      analyzeText = ocrData.extracted_text || 'Image uploaded for analysis — no text extracted, please describe the image content.';
+      analyzeText = ocrData.text || ocrData.extracted_text || 'Image uploaded — no text extracted.';
       document.getElementById('inputText').value = analyzeText;
     }
-
     const res = await fetch(API + '/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -744,7 +741,6 @@ async function analyze() {
     const data = await res.json();
     if (data.error) throw new Error(data.error);
     renderResult(data);
-
     const count = parseInt(localStorage.getItem('tg_analyses') || '0');
     localStorage.setItem('tg_analyses', count + 1);
   } catch(e) {
@@ -755,15 +751,13 @@ async function analyze() {
   }
 }
 
-// ─── URL VERIFY ──────────────────────────────────────────
+// ── URL VERIFY ──
 async function verifyURL() {
   const url = document.getElementById('urlInput').value.trim();
   if (!url) { alert('Please paste a URL first'); return; }
-
   document.getElementById('analyzeBtn').disabled = true;
   document.getElementById('loadingSpinner').classList.remove('hidden');
   document.getElementById('resultSection').classList.add('hidden');
-
   try {
     const res = await fetch(API + '/verify-url', {
       method: 'POST',
@@ -772,10 +766,7 @@ async function verifyURL() {
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-
     renderResult(data);
-
-    // Show URL-specific badges
     const badges = document.getElementById('urlBadges');
     const meta = document.getElementById('urlMeta');
     badges.innerHTML = '';
@@ -794,16 +785,14 @@ async function verifyURL() {
   }
 }
 
-// ─── YOUTUBE ANALYZE ─────────────────────────────────────
+// ── YOUTUBE ──
 async function analyzeYouTube() {
   const url = document.getElementById('ytInput').value.trim();
   if (!url) { alert('Please paste a YouTube URL first'); return; }
   if (!url.includes('youtube.com') && !url.includes('youtu.be')) { alert('Please enter a valid YouTube URL'); return; }
-
   document.getElementById('analyzeBtn').disabled = true;
   document.getElementById('loadingSpinner').classList.remove('hidden');
   document.getElementById('resultSection').classList.add('hidden');
-
   try {
     const res = await fetch(API + '/analyze-youtube', {
       method: 'POST',
@@ -812,19 +801,17 @@ async function analyzeYouTube() {
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    if (data.transcript_preview) {
-      document.getElementById('inputText').value = data.transcript_preview + '...';
-    }
+    if (data.transcript_preview) document.getElementById('inputText').value = data.transcript_preview + '...';
     renderResult(data);
   } catch(e) {
-    alert('YouTube analysis failed: ' + e.message + '\n\nNote: This feature requires yt-dlp and whisper installed on the backend.');
+    alert('YouTube analysis failed: ' + e.message);
   } finally {
     document.getElementById('analyzeBtn').disabled = false;
     document.getElementById('loadingSpinner').classList.add('hidden');
   }
 }
 
-// ─── RENDER RESULT ────────────────────────────────────────
+// ── RENDER RESULT ──
 function renderResult(d) {
   const score = Number(d.credibility_score) || 0;
   const palettes = {
@@ -857,7 +844,7 @@ function renderResult(d) {
   document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
 }
 
-// ─── CHAT ─────────────────────────────────────────────────
+// ── CHAT ──
 async function sendChat() {
   const input = document.getElementById('chatInput');
   const msg = input.value.trim();
@@ -872,13 +859,13 @@ async function sendChat() {
   try {
     const res = await fetch(API + '/chat', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ message: msg, history: chatHistory }) });
     const data = await res.json();
-    const reply = data.reply || 'Sorry, no response. Try again.';
+    const reply = data.reply || 'Sorry, no response.';
     document.getElementById(typingId)?.remove();
     chatHistory.push({ role: 'assistant', content: reply });
     appendChat(reply, 'bot');
   } catch {
     document.getElementById(typingId)?.remove();
-    appendChat('⚠️ Could not connect to backend. It may be waking up — try again in 30 seconds.', 'bot');
+    appendChat('⚠️ Could not connect. Backend may be waking up — try again in 30 seconds.', 'bot');
   }
 }
 
@@ -890,7 +877,7 @@ function appendChat(msg, type) {
 
 function askSuggested(q) { document.getElementById('chatInput').value = q; sendChat(); }
 
-// ─── QUIZ ────────────────────────────────────────────────
+// ── QUIZ ──
 function quizAnswer(btn, correct) {
   document.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
   btn.classList.add(correct ? 'correct' : 'wrong');
@@ -901,7 +888,7 @@ function quizAnswer(btn, correct) {
   fb.textContent = correct ? '✅ Correct! Always verify on pib.gov.in.' : '❌ This is a scam pattern. Real govt schemes never use WhatsApp forwards.';
 }
 
-// ─── PROFILE ─────────────────────────────────────────────
+// ── PROFILE ──
 function toggleProfile() {
   const dd = document.getElementById('profileDropdown');
   dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
@@ -920,61 +907,26 @@ function loadProfile() {
   }
   document.getElementById('profileAnalyses').textContent = analyses + ' messages verified';
 }
-
-<!-- COMMUNITY SECTION -->
-<div id="community" class="tab-content">
-  <div class="community-container">
-
-    
-    <div class="community-header">
-      <h2>🔥 Community Scam Radar</h2>
-      <p id="trend-month" style="color:#888;font-size:13px;">Loading trends...</p>
-    </div>
-
-    
-    <div id="category-filter" class="category-pills">
-      <button class="pill active" onclick="filterCategory('All')">All</button>
-    </div>
-
-    
-    <div class="trending-section">
-      <h3>📈 Trending Right Now</h3>
-      <div id="trending-grid" class="trending-grid">
-        <div class="loading-pulse">Loading real-time trends...</div>
-      </div>
-    </div>
-
-    
-    <div id="blog-results-section" style="display:none;">
-      <div class="blog-results-header">
-        <h3>📰 Articles about: <span id="current-keyword" style="color:#E63946;"></span></h3>
-        <button onclick="closeBlogResults()" style="background:none;border:1px solid #ccc;padding:6px 14px;border-radius:20px;cursor:pointer;">✕ Close</button>
-      </div>
-      <div id="blog-grid" class="blog-grid"></div>
-    </div>
-
-  </div>
-</div>
-
 function logout() { localStorage.removeItem('tg_user'); window.location.href = 'login.html'; }
 document.addEventListener('click', function(e) {
   const btn = document.getElementById('profileBtn');
   const dd = document.getElementById('profileDropdown');
   if (btn && dd && !btn.contains(e.target) && !dd.contains(e.target)) dd.style.display = 'none';
 });
+
+// ── COMMUNITY ──
 let allTrends = [];
 let activeCategory = 'All';
 
 async function loadCommunityTrends() {
+  const grid = document.getElementById('trending-grid');
+  if (!grid) return;
+  grid.innerHTML = '<div class="loading-pulse">🔄 Loading real-time trends...</div>';
   try {
-    const res = await fetch('/community-trends');
+    const res = await fetch(API + '/community-trends');
     const data = await res.json();
     allTrends = data.trending || [];
-
-    // Update month label
     document.getElementById('trend-month').textContent = `🗓️ Trends for ${data.month} — updates daily`;
-
-    // Build category pills
     const pillsContainer = document.getElementById('category-filter');
     pillsContainer.innerHTML = '';
     (data.categories || ['All']).forEach(cat => {
@@ -984,10 +936,9 @@ async function loadCommunityTrends() {
       btn.onclick = () => filterCategory(cat);
       pillsContainer.appendChild(btn);
     });
-
     renderTrends(allTrends);
   } catch(e) {
-    document.getElementById('trending-grid').innerHTML = '<p style="color:#888">Could not load trends. Try again later.</p>';
+    if (grid) grid.innerHTML = '<p style="color:#888;padding:20px;">Could not load trends. Try again later.</p>';
   }
 }
 
@@ -1002,12 +953,9 @@ function filterCategory(cat) {
 
 function renderTrends(trends) {
   const grid = document.getElementById('trending-grid');
-  if (!trends.length) {
-    grid.innerHTML = '<p style="color:#888;padding:20px;">No trends in this category.</p>';
-    return;
-  }
+  if (!trends.length) { grid.innerHTML = '<p style="color:#888;padding:20px;">No trends in this category.</p>'; return; }
   grid.innerHTML = trends.map(t => `
-    <div class="trend-card" style="border-color:${t.color}" onclick="searchBlogs('${t.keyword}')">
+    <div class="trend-card" style="border-color:${t.color}" onclick="searchBlogs('${t.keyword.replace(/'/g,"\\'")}')">
       <div class="trend-keyword">${t.keyword}</div>
       <div class="trend-meta">
         <span class="trend-category">${t.category}</span>
@@ -1021,28 +969,23 @@ function renderTrends(trends) {
 async function searchBlogs(keyword) {
   document.getElementById('current-keyword').textContent = keyword;
   document.getElementById('blog-results-section').style.display = 'block';
-  document.getElementById('blog-grid').innerHTML = '<div class="loading-pulse">🔍 Fetching articles about "' + keyword + '"...</div>';
-
-  // Scroll to results
-  document.getElementById('blog-results-section').scrollIntoView({behavior: 'smooth'});
-
+  document.getElementById('blog-grid').innerHTML = `<div class="loading-pulse">🔍 Fetching articles about "${keyword}"...</div>`;
+  document.getElementById('blog-results-section').scrollIntoView({behavior:'smooth'});
   try {
-    const res = await fetch('/search-blogs', {
+    const res = await fetch(API + '/search-blogs', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type':'application/json'},
       body: JSON.stringify({keyword})
     });
     const data = await res.json();
     const articles = data.articles || [];
-
     if (!articles.length) {
       document.getElementById('blog-grid').innerHTML = '<p style="color:#888;padding:20px;">No articles found. Try another keyword.</p>';
       return;
     }
-
     document.getElementById('blog-grid').innerHTML = articles.map(a => `
       <a href="${a.url}" target="_blank" class="blog-card">
-        ${a.image ? `<img src="${a.image}" onerror="this.style.display='none'">` : ''}
+        ${a.image ? `<img src="${a.image}" onerror="this.style.display='none'" alt="">` : ''}
         <div class="blog-card-body">
           <span class="blog-source-badge" style="background:${a.source_color || '#E63946'}">${a.source}</span>
           <h4>${a.title}</h4>
@@ -1051,23 +994,13 @@ async function searchBlogs(keyword) {
       </a>
     `).join('');
   } catch(e) {
-    document.getElementById('blog-grid').innerHTML = '<p style="color:red">Failed to fetch articles.</p>';
+    document.getElementById('blog-grid').innerHTML = '<p style="color:red;padding:20px;">Failed to fetch articles.</p>';
   }
 }
 
 function closeBlogResults() {
   document.getElementById('blog-results-section').style.display = 'none';
 }
-
-// Load when community tab is clicked
-document.addEventListener('DOMContentLoaded', () => {
-  // Call when switching to community tab
-  const communityTab = document.querySelector('[onclick*="community"]');
-  if (communityTab) {
-    const original = communityTab.getAttribute('onclick');
-    communityTab.setAttribute('onclick', original + '; loadCommunityTrends()');
-  }
-});
 </script>
 </body>
 </html>
