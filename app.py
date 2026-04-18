@@ -113,12 +113,8 @@ def analyze():
         return jsonify({"error": str(e)}), 500
 
 
-import google.generativeai as genai
-import base64
-from PIL import Image
+from google.cloud import vision as gcloud_vision
 import io
-
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 @app.route('/ocr', methods=['POST'])
 def ocr():
@@ -127,15 +123,22 @@ def ocr():
 
     file = request.files['image']
     img_bytes = file.read()
-    image = Image.open(io.BytesIO(img_bytes))
 
     try:
-        model = genai.GenerativeModel('gemini-1.5-flash')  # free and fast
-        response = model.generate_content([
-            image,
-            "Extract ALL text visible in this image exactly as written. Include Hindi, English, numbers, URLs, financial claims, everything. Return only the extracted text, nothing else."
-        ])
-        extracted_text = response.text.strip()
+        client = gcloud_vision.ImageAnnotatorClient()
+        image = gcloud_vision.Image(content=img_bytes)
+
+        # Use DOCUMENT_TEXT_DETECTION — best for screenshots with mixed Hindi/English
+        response = client.document_text_detection(image=image)
+
+        if response.error.message:
+            raise Exception(response.error.message)
+
+        extracted_text = response.full_text_annotation.text.strip()
+
+        if not extracted_text:
+            return jsonify({'text': '', 'message': 'No text found in image'})
+
         return jsonify({'text': extracted_text})
 
     except Exception as e:
